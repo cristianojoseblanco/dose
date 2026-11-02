@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dose</title>
+<meta name="theme-color" content="#080b24">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dose">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#080b24; --ink2:#0f1438; --ink3:#161c4a; --line:rgba(150,160,255,.15); --line2:rgba(150,160,255,.28);
+  --txt:#e8eaff; --mut:#9096c8; --dim:#5a6094;
+  --mint:#3dffc5; --cyan:#45d2ff; --amber:#ffb547; --pink:#ff4d8d; --lav:#b39bff;
+  --r-lg:22px; --r-md:14px; --r-sm:9px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--ink);color:var(--txt);font-family:"Instrument Sans",system-ui,sans-serif;font-size:15px;line-height:1.45}
+body{min-height:100vh;background:
+  radial-gradient(640px 420px at 100% -10%,rgba(69,210,255,.16),transparent 62%),
+  radial-gradient(520px 420px at -20% 40%,rgba(179,155,255,.13),transparent 62%),var(--ink);background-attachment:fixed}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+h1,h2,h3,.disp{font-family:"Bricolage Grotesque",sans-serif;letter-spacing:-.015em;line-height:1.1}
+.app{max-width:470px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 18px) 18px calc(env(safe-area-inset-bottom) + 104px)}
+
+/* cabeçalho */
+.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.brand{font-family:"Bricolage Grotesque";font-weight:800;font-size:22px;letter-spacing:-.03em;display:flex;align-items:center;gap:9px}
+.brand .pill{width:26px;height:14px;border-radius:99px;background:linear-gradient(90deg,var(--mint) 50%,var(--lav) 50%);box-shadow:0 0 14px rgba(61,255,197,.55);transform:rotate(-30deg)}
+.who{font-size:13px;color:var(--mut);background:none;border:1px solid var(--line);border-radius:99px;padding:6px 12px;cursor:pointer}
+.who b{color:var(--txt);font-weight:600}
+h1{font-size:34px;font-weight:800;margin-bottom:6px}
+h2{font-size:21px;font-weight:700}
+.lede{color:var(--mut);font-size:14px}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:30px 0 12px;gap:12px}
+.sec h3{font-size:17px;font-weight:700}
+.sec small{color:var(--mut);font-size:13px}
+.link{color:var(--cyan);font-size:13px;font-weight:600;cursor:pointer;background:none;border:0;white-space:nowrap;text-decoration:none}
+
+/* botões */
+.btn{font-weight:700;font-size:13px;padding:10px 15px;border-radius:12px;border:1px solid var(--k,var(--mint));color:var(--k,var(--mint));background:transparent;cursor:pointer;white-space:nowrap}
+.btn.fill{background:var(--k,var(--mint));color:#06102a;box-shadow:0 0 22px -6px var(--k,var(--mint))}
+.btn.quiet{border-color:var(--line2);color:var(--mut)}
+.btn.block{width:100%;padding:14px;font-size:15px}
+.btn.sm{padding:7px 11px;font-size:12px;border-radius:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* próxima dose (hero) */
+.now{padding:20px;border-radius:var(--r-lg);background:linear-gradient(150deg,var(--ink3),var(--ink2));border:1px solid var(--line2);position:relative;overflow:hidden}
+.now::before{content:"";position:absolute;inset:auto -60px -80px auto;width:220px;height:220px;border-radius:50%;background:var(--k);opacity:.18;filter:blur(50px)}
+.now .when{font-family:"Bricolage Grotesque";font-weight:800;font-size:54px;letter-spacing:-.04em;line-height:1;color:var(--k);text-shadow:0 0 26px color-mix(in srgb,var(--k) 60%,transparent)}
+.now .what{font-size:18px;font-weight:600;margin-top:8px}
+.now .what span{color:var(--mut);font-weight:400}
+.now .late{display:inline-block;margin-top:10px;font-size:13px;font-weight:600;color:var(--pink)}
+.now .row{margin-top:16px}
+
+/* cartela */
+.foil{border-radius:var(--r-lg);padding:16px 16px 6px;background:
+  repeating-linear-gradient(115deg,rgba(255,255,255,.025) 0 2px,transparent 2px 9px),
+  linear-gradient(160deg,#1b2154,#11163d);border:1px solid var(--line2)}
+.strip{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.strip:last-of-type{border-bottom:0}
+.strip .nm{font-size:13px;font-weight:600;line-height:1.25}
+.strip .nm small{display:block;color:var(--mut);font-weight:400;font-size:11.5px}
+.cells{display:flex;gap:7px;flex-wrap:wrap}
+.cap{width:30px;height:16px;border-radius:99px;position:relative;
+  background:radial-gradient(ellipse at 35% 30%,rgba(255,255,255,.28),rgba(255,255,255,.04) 70%);border:1px solid rgba(255,255,255,.14)}
+.cap.ok{background:var(--k);border-color:transparent;box-shadow:0 0 10px -1px var(--k)}
+.cap.ok::after{content:"";position:absolute;left:50%;top:2px;bottom:2px;width:1px;background:rgba(6,16,42,.35)}
+.cap.late{background:var(--amber);border-color:transparent;box-shadow:0 0 10px -1px var(--amber)}
+.cap.miss{background:transparent;border:1.5px solid var(--pink)}
+.cap.miss::after{content:"";position:absolute;left:6px;right:6px;top:50%;height:1.5px;background:var(--pink);transform:rotate(-20deg)}
+.cap.due{border:1.5px dashed var(--k)}
+.cap.over{border:1.5px solid var(--pink);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 4px rgba(255,77,141,.25)}}
+.key{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--mut);padding:10px 0 8px}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key .cap{width:18px;height:10px}
+
+/* avisos */
+.notes{border-radius:var(--r-lg);border:1px solid var(--line);overflow:hidden;background:rgba(15,20,56,.6)}
+.note{display:grid;grid-template-columns:4px 1fr;gap:14px;padding:14px 16px 14px 0;border-bottom:1px solid var(--line)}
+.note:last-child{border-bottom:0}
+.note i{background:var(--k);box-shadow:0 0 12px var(--k);border-radius:0 4px 4px 0}
+.note h4{font-size:14.5px;font-weight:600;line-height:1.35}
+.note p{color:var(--mut);font-size:13px;margin-top:4px}
+.note .row{margin-top:10px}
+
+/* listas */
+.list{border-radius:var(--r-lg);border:1px solid var(--line);background:rgba(15,20,56,.55);overflow:hidden}
+.item{display:flex;gap:14px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item.tap{cursor:pointer}
+.item .t{font-family:"Bricolage Grotesque";font-weight:700;font-size:18px;width:58px;flex:none;color:var(--k)}
+.item .b{flex:1;min-width:0}
+.item .b strong{font-weight:600;display:block}
+.item .b span{font-size:12.5px;color:var(--mut)}
+.item.done{opacity:.5}
+.tick{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--k);background:transparent;color:var(--k);cursor:pointer;flex:none;font-size:17px}
+.item.done .tick{background:var(--k);color:#06102a}
+.chip{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px;color:var(--k);background:color-mix(in srgb,var(--k) 14%,transparent);white-space:nowrap}
+
+/* remédio */
+.med{padding:18px;border-radius:var(--r-lg);border:1px solid var(--line);background:rgba(15,20,56,.6);margin-bottom:14px}
+.med .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;cursor:pointer}
+.med h2 span{font-family:"Instrument Sans";font-size:14px;font-weight:500;color:var(--mut)}
+.med .sched{font-size:13px;color:var(--mut);margin-top:4px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--k);box-shadow:0 0 10px var(--k);flex:none;margin-top:8px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:16px;border-top:1px solid var(--line)}
+.facts div{padding:12px 0 2px}
+.facts div+div{padding-left:12px;border-left:1px solid var(--line)}
+.facts b{display:block;font-family:"Bricolage Grotesque";font-size:20px;font-weight:700}
+.facts span{font-size:12px;color:var(--mut)}
+.price{margin-top:14px;padding:13px 14px;border-radius:var(--r-md);background:rgba(255,181,71,.07);border:1px solid rgba(255,181,71,.25);font-size:13px}
+.price .pr{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.price .pr b{font-variant-numeric:tabular-nums}
+.price .pr.est b{color:var(--amber)}
+.price small{color:var(--mut);display:block;margin-top:6px;font-size:12px}
+.free{margin-top:14px;font-size:13px;color:var(--mut)}
+.free b{color:var(--cyan)}
+.packs{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:8px}
+.pk{width:26px;height:8px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.pk i{display:block;height:100%;background:var(--k);box-shadow:0 0 6px var(--k)}
+.packs small{font-size:11.5px;color:var(--mut);margin-left:4px;font-variant-numeric:tabular-nums}
+.pkrow{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.pkrow input{width:80px!important}
+.pkrow span{color:var(--mut);font-size:13px}
+.pkrow .x{margin-left:auto;color:var(--dim);background:none;border:0;font-size:20px;cursor:pointer}
+
+/* retiradas */
+.pick{padding:18px;border-radius:var(--r-lg);border:1px solid var(--line2);background:linear-gradient(170deg,var(--ink3),var(--ink2));margin-bottom:16px}
+.place{margin-top:10px;font-size:13px;color:var(--mut);line-height:1.5}
+.place b{color:var(--txt);font-weight:600}
+.track{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:18px 0 6px}
+.track div{font-size:12px;color:var(--dim)}
+.track div::before{content:"";display:block;height:4px;border-radius:9px;background:rgba(255,255,255,.08);margin-bottom:7px}
+.track div.on{color:var(--txt)}
+.track div.on::before{background:var(--k);box-shadow:0 0 10px var(--k)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-radius:var(--r-md);overflow:hidden;margin-top:14px}
+.grid2 div{background:var(--ink2);padding:11px 12px}
+.grid2 span{display:block;font-size:12px;color:var(--mut)}
+.grid2 b{display:block;font-size:14px;font-weight:600;margin-top:2px}
+.grp{margin-top:22px}
+.grp h4{font-family:"Bricolage Grotesque";font-size:15px;font-weight:700;margin-bottom:6px}
+.grp p.help{font-size:12.5px;color:var(--mut);margin-bottom:6px}
+.chk{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer}
+.chk:last-child{border-bottom:0}
+.bx{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--k,var(--mint));flex:none;margin-top:1px;display:grid;place-items:center}
+.chk.on .bx{background:var(--k,var(--mint))}
+.chk.on .bx::after{content:"";width:5px;height:10px;border:solid #06102a;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.chk.on span{color:var(--mut);text-decoration:line-through}
+.chk .x{margin-left:auto;color:var(--dim);background:none;border:0;font-size:18px;cursor:pointer;line-height:1;padding:0 4px}
+.addline{display:flex;gap:8px;margin-top:8px}
+.addline input{flex:1;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.04);outline:none;font-size:14px}
+.box{padding:13px 14px;border-radius:var(--r-md);border:1px solid var(--line);background:rgba(255,255,255,.025);font-size:13.5px;line-height:1.5}
+.box.k{border-color:color-mix(in srgb,var(--k) 40%,transparent);background:color-mix(in srgb,var(--k) 8%,transparent)}
+.box ul{margin:8px 0 0 18px}
+.box li{margin:4px 0}
+.box small{color:var(--dim);display:block;margin-top:6px;font-size:12px}
+
+/* segment */
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:76px;padding:10px 8px;border-radius:12px;border:1px solid var(--line2);background:transparent;color:var(--mut);font-size:13px;cursor:pointer}
+.seg .tabb{min-width:0;line-height:1.2}.seg .tabb b{display:block;font-family:'Bricolage Grotesque';font-size:18px;margin-top:2px}
+.seg button.on{border-color:var(--k,var(--cyan));color:var(--txt);background:color-mix(in srgb,var(--k,var(--cyan)) 18%,transparent)}
+
+/* consultas */
+.appt .t{text-align:center;line-height:1}
+.appt .t small{display:block;font-family:"Instrument Sans";font-size:11px;color:var(--mut);font-weight:500;margin-top:3px}
+
+/* histórico */
+.score{display:flex;align-items:baseline;gap:10px}
+.score b{font-family:"Bricolage Grotesque";font-size:46px;font-weight:800;color:var(--mint);letter-spacing:-.04em;text-shadow:0 0 22px rgba(61,255,197,.4)}
+.split{display:flex;height:8px;border-radius:99px;overflow:hidden;margin:14px 0 8px;background:rgba(255,255,255,.06)}
+.split i{display:block;height:100%}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--mut)}
+.legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--k);margin-right:6px}
+.cal{display:grid;grid-template-columns:repeat(14,1fr);gap:5px;margin-top:16px}
+.cal i{aspect-ratio:1;border-radius:4px;background:rgba(255,255,255,.06)}
+.cal i.ok{background:var(--mint)}.cal i.late{background:var(--amber)}.cal i.miss{background:var(--pink)}
+.empty{text-align:center;color:var(--mut);font-size:14px;padding:26px 16px;border:1px dashed var(--line2);border-radius:var(--r-lg)}
+.fine{font-size:12px;color:var(--dim);margin-top:26px;line-height:1.55}
+
+/* nav */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 12px);width:min(450px,calc(100% - 24px));
+  display:flex;padding:7px;border-radius:22px;background:rgba(10,14,44,.9);border:1px solid var(--line2);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(0,0,0,.55);z-index:20}
+.nav button{flex:1;background:none;border:0;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:500;padding:6px 2px;cursor:pointer;border-radius:14px}
+.nav svg{width:22px;height:22px}
+.nav button.on{color:var(--txt);background:rgba(69,210,255,.08)}
+.nav button.on svg{color:var(--cyan)}
+
+/* folha */
+.scrim{position:fixed;inset:0;background:rgba(3,5,18,.72);backdrop-filter:blur(3px);z-index:40;display:none}
+.scrim.on{display:block}
+.sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,105%);width:min(470px,100%);max-height:90vh;overflow-y:auto;z-index:50;
+  background:#0c1033;border:1px solid var(--line2);border-bottom:0;border-radius:24px 24px 0 0;padding:10px 20px calc(env(safe-area-inset-bottom) + 22px);transition:transform .26s cubic-bezier(.2,.9,.3,1)}
+.sheet.on{transform:translate(-50%,0)}
+.grab{width:40px;height:4px;border-radius:9px;background:var(--dim);margin:4px auto 16px}
+.sheet h2{margin-bottom:16px}
+.fld{margin-bottom:13px}
+.fld label{display:block;font-size:13px;color:var(--mut);margin-bottom:6px;font-weight:500}
+.fld input,.fld select,.fld textarea{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.04);font-size:15px;outline:none;color-scheme:dark}
+.fld textarea{min-height:64px;resize:vertical}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--cyan)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:13px;color:var(--mut);padding:12px 14px;border-radius:12px;border:1px dashed var(--line2);margin-bottom:14px;line-height:1.5}
+.hint b{color:var(--mint)}
+.tgrow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;font-size:14px;gap:12px}
+.tg{width:44px;height:26px;border-radius:99px;background:rgba(255,255,255,.12);position:relative;cursor:pointer;border:0;flex:none}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.tg.on{background:var(--mint)}
+.tg.on::after{left:21px}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 16px);transform:translate(-50%,-140px);z-index:60;padding:11px 16px;border-radius:14px;background:#141a4a;border:1px solid var(--line2);font-size:14px;transition:.3s;max-width:90%}
+.toast.on{transform:translate(-50%,0)}
+/* ===== camada viva: sombra + brilho na base ===== */
+body::before{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:0;
+  background:radial-gradient(28% 22% at 20% 30%,rgba(61,255,197,.10),transparent 70%),radial-gradient(30% 24% at 80% 70%,rgba(179,155,255,.12),transparent 70%),radial-gradient(24% 20% at 60% 10%,rgba(69,210,255,.10),transparent 70%);
+  animation:drift 26s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(4%,-3%) rotate(6deg)}}
+.now,.foil,.notes,.list,.med,.pick,.price,.box.k{
+  --gl:color-mix(in srgb,var(--k,var(--cyan)) 30%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 26px 50px -28px rgba(0,0,0,.9),0 14px 34px -18px var(--gl);
+}
+.med,.pick,.list,.notes{background:radial-gradient(90% 55% at 50% 118%,var(--gl),transparent 70%),linear-gradient(170deg,#141a49,#0d1238)}
+.foil{background:radial-gradient(90% 60% at 50% 120%,var(--gl),transparent 70%),repeating-linear-gradient(115deg,rgba(255,255,255,.025) 0 2px,transparent 2px 9px),linear-gradient(160deg,#1d2358,#11163d)}
+.now{background:radial-gradient(100% 70% at 50% 125%,color-mix(in srgb,var(--k) 42%,transparent),transparent 70%),linear-gradient(150deg,#1a2056,#0f1438)}
+.price{background:radial-gradient(90% 70% at 50% 130%,rgba(255,181,71,.22),transparent 70%),rgba(255,181,71,.05)}
+.btn.fill{box-shadow:0 8px 22px -8px var(--k,var(--mint)),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .12s}
+.btn:active,.tick:active,.item.tap:active,.med .top:active{transform:scale(.97)}
+.item{transition:background .2s}
+.item.tap:hover{background:rgba(255,255,255,.025)}
+
+/* anel do dia */
+.now:has(.ring) .lede,.now:has(.ring) .when{padding-right:88px}
+.ring{position:absolute;right:18px;top:18px;width:74px;height:74px}
+.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:7}
+.ring .bg{stroke:rgba(255,255,255,.08)}
+.ring .fg{stroke:var(--k);stroke-linecap:round;filter:drop-shadow(0 0 6px var(--k));transition:stroke-dashoffset .8s cubic-bezier(.2,.9,.3,1)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:"Bricolage Grotesque";font-size:17px;font-weight:800}
+.ring small{position:absolute;left:0;right:0;bottom:-18px;text-align:center;font-size:11px;color:var(--mut)}
+
+/* ranking de urgência */
+.rank{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:15px 16px 15px 12px;border-bottom:1px solid var(--line);position:relative}
+.rank:last-child{border-bottom:0}
+.rank .pos{display:flex;flex-direction:column;align-items:center;gap:6px}
+.rank .pos b{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;font-family:"Bricolage Grotesque";font-weight:800;font-size:16px;color:#06102a;background:var(--k);box-shadow:0 0 18px -3px var(--k)}
+.rank .pos i{flex:1;width:3px;border-radius:9px;background:linear-gradient(var(--k),transparent);opacity:.5;min-height:10px}
+.rank .lvl{font-size:12px;font-weight:700;color:var(--k)}
+.rank h4{font-size:15px;font-weight:600;line-height:1.35;margin-top:2px}
+.rank p{color:var(--mut);font-size:13px;margin-top:4px}
+.rank .row{margin-top:10px}
+.heat{display:flex;height:6px;border-radius:99px;overflow:hidden;margin:2px 0 12px;gap:2px}
+.heat i{flex:1}
+
+/* celebração */
+.fx{position:fixed;width:16px;height:8px;border-radius:99px;background:var(--c);box-shadow:0 0 10px var(--c);z-index:80;pointer-events:none;
+  animation:fly var(--t,900ms) cubic-bezier(.12,.8,.3,1) forwards}
+@keyframes fly{0%{transform:translate(0,0) rotate(0) scale(.6);opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1);opacity:0}}
+.party{position:fixed;inset:0;z-index:75;display:grid;place-items:center;pointer-events:none}
+.party .card{padding:26px 30px;border-radius:26px;text-align:center;background:radial-gradient(100% 80% at 50% 120%,rgba(61,255,197,.4),transparent 70%),#121a4a;border:1px solid rgba(61,255,197,.5);
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.9),0 0 60px -10px rgba(61,255,197,.5);animation:pop 2.6s cubic-bezier(.2,1.4,.4,1) forwards}
+.party .card b{display:block;font-family:"Bricolage Grotesque";font-size:30px;font-weight:800;letter-spacing:-.03em}
+.party .card span{color:var(--mut);font-size:14px}
+@keyframes pop{0%{transform:scale(.6);opacity:0}12%{transform:scale(1);opacity:1}80%{transform:scale(1);opacity:1}100%{transform:scale(.95);opacity:0}}
+.item.just{animation:flash .9s ease}
+@keyframes flash{0%{background:color-mix(in srgb,var(--k) 30%,transparent)}100%{background:transparent}}
+/* ===== profundidade 3D ===== */
+.head{position:sticky;top:0;z-index:15;margin:-18px -18px 20px;padding:calc(env(safe-area-inset-top) + 12px) 18px 12px;transition:background .3s,box-shadow .3s}
+.head.scrolled{background:rgba(8,11,36,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 12px 30px -14px rgba(0,0,0,.8),inset 0 -1px 0 var(--line)}
+.brand .pill{transition:transform .2s linear}
+.now,.foil,.notes,.list,.med,.pick{
+  border-top-color:rgba(255,255,255,.2)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.14), inset 0 -3px 6px rgba(0,0,0,.35),
+    0 1px 0 #232b78, 0 3px 0 #1a2163, 0 5px 0 #141a52, 0 7px 0 #0f1443, 0 9px 0 #0a0e33, 0 10px 1px #06081f,
+    0 26px 34px -10px rgba(0,0,0,.9), 0 50px 70px -30px rgba(0,0,0,.7),
+    0 50px 70px -36px var(--gl);
+  margin-bottom:24px;
+  transform:perspective(1100px) translateY(var(--py,0px)) rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg)) translateZ(var(--tz,0px));
+  transform-origin:50% 50%;will-change:transform}
+.press{--py:5px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 1px 0 #141a52,0 2px 0 #080b2c,0 10px 16px -8px rgba(0,0,0,.8),0 24px 40px -30px var(--gl)!important}
+.live{transition:transform .2s ease-out,box-shadow .15s}
+.rv:is(.now,.foil,.notes,.list,.med,.pick):not(.in){opacity:0;transform:perspective(900px) translateY(60px) rotateX(28deg) scale(.94)}
+.rv:is(.now,.foil,.notes,.list,.med,.pick){transition:opacity .7s ease,transform .8s cubic-bezier(.16,.9,.24,1)}
+.foil.anim .cap{animation:capin .55s cubic-bezier(.2,1.7,.4,1) backwards;animation-delay:calc(var(--i,0)*55ms + 250ms)}
+@keyframes capin{from{transform:scale(0) rotate(-50deg);opacity:0}}
+.notes.anim .rank{animation:rkin .7s cubic-bezier(.16,.9,.24,1) backwards;animation-delay:calc(var(--i,0)*110ms + 200ms)}
+.notes.anim .rank .pos b{animation:capin .6s cubic-bezier(.2,1.7,.4,1) backwards;animation-delay:calc(var(--i,0)*110ms + 320ms)}
+@keyframes rkin{from{opacity:0;transform:translateX(-30px)}}
+.heat i{transform-origin:left}
+.heat.anim i{animation:grow 1s cubic-bezier(.16,.9,.24,1) backwards;animation-delay:calc(var(--i,0)*140ms)}
+@keyframes grow{from{transform:scaleX(0)}}
+.packs.anim .pk i{animation:fill 1.1s cubic-bezier(.16,.9,.24,1) backwards;animation-delay:calc(var(--i,0)*70ms + 200ms)}
+@keyframes fill{from{width:0}}
+.now.anim .ring .fg{animation:ringin 1.4s cubic-bezier(.16,.9,.24,1) .35s backwards}
+@keyframes ringin{from{stroke-dashoffset:188.5}}
+.grid2.anim div{animation:rkin .6s cubic-bezier(.16,.9,.24,1) backwards}
+.grid2.anim div:nth-child(2){animation-delay:.08s}.grid2.anim div:nth-child(3){animation-delay:.16s}.grid2.anim div:nth-child(4){animation-delay:.24s}.grid2.anim div:nth-child(5){animation-delay:.32s}.grid2.anim div:nth-child(6){animation-delay:.4s}
+
+/* cartela de bolhas */
+.foil.blister{--sheen:40%;display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:18px 8px;padding:22px 14px 18px;border:1px solid rgba(255,255,255,.22);
+  background:
+    linear-gradient(115deg,transparent calc(var(--sheen) - 18%),rgba(255,255,255,.2) var(--sheen),transparent calc(var(--sheen) + 18%)),
+    conic-gradient(from 210deg at 25% 15%,rgba(61,255,197,.22),rgba(69,210,255,.18),rgba(179,155,255,.24),rgba(255,77,141,.16),rgba(61,255,197,.22)),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 4px),
+    linear-gradient(160deg,#3b4396,#1e2466 55%,#151b52)}
+.foil.blister::before{content:"";position:absolute;inset:8px;border:1px dashed rgba(255,255,255,.16);border-radius:18px;pointer-events:none}
+.bub{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;color:var(--txt);padding:0;position:relative;font:inherit}
+.dome{width:62px;height:62px;border-radius:50%;position:relative;display:grid;place-items:center;transition:transform .15s;
+  background:radial-gradient(circle at 34% 26%,rgba(255,255,255,.85) 0 5%,rgba(255,255,255,.25) 16%,rgba(255,255,255,.06) 42%,rgba(10,14,50,.25) 72%,rgba(255,255,255,.16) 100%);
+  box-shadow:0 10px 14px -6px rgba(0,0,0,.7),0 0 0 3px rgba(255,255,255,.07),inset 0 -7px 10px rgba(0,0,0,.4),inset 0 4px 8px rgba(255,255,255,.3),0 0 26px -6px var(--k)}
+.bub:active .dome{transform:scale(.86,.8)}
+.pil{width:38px;height:17px;border-radius:99px;background:linear-gradient(90deg,var(--k) 50%,#eef0ff 50%);transform:rotate(-35deg);
+  box-shadow:inset 0 -3px 5px rgba(0,0,0,.35),inset 0 2px 3px rgba(255,255,255,.65),0 0 14px -2px var(--k)}
+.pil.inj{width:42px;height:12px;background:linear-gradient(90deg,#eef0ff 0 18%,var(--k) 18% 82%,#c9cfee 82%)}
+.lb{font-size:11.5px;color:var(--mut);text-align:center;line-height:1.25;max-width:84px}
+.lb b{display:block;font-family:"Bricolage Grotesque";font-size:16px;font-weight:800;color:var(--txt)}
+.lb em{display:block;font-style:normal;font-size:10.5px;color:var(--mint);margin-top:2px}
+.lb em.lt{color:var(--pink)}
+.bub.late .dome{animation:latepulse 1.5s ease-in-out infinite}
+@keyframes latepulse{50%{box-shadow:0 10px 14px -6px rgba(0,0,0,.7),0 0 0 7px rgba(255,77,141,.35),inset 0 -7px 10px rgba(0,0,0,.4),inset 0 4px 8px rgba(255,255,255,.3),0 0 30px -4px #ff4d8d}}
+.bub.late .lb b{color:var(--pink)}
+.bub.later .dome{filter:saturate(.75) brightness(.9)}
+.bub.taken .dome{background:radial-gradient(circle,#05071c 0 47%,rgba(160,170,230,.35) 49%,transparent 62%);box-shadow:inset 0 5px 12px rgba(0,0,0,.85),0 0 0 3px rgba(255,255,255,.05)}
+.bub.taken .dome::before{content:"";position:absolute;inset:7px;border-radius:50%;
+  background:conic-gradient(rgba(225,232,255,.7) 0 6%,transparent 6% 11%,rgba(225,232,255,.55) 11% 19%,transparent 19% 24%,rgba(225,232,255,.65) 24% 33%,transparent 33% 41%,rgba(225,232,255,.5) 41% 52%,transparent 52% 58%,rgba(225,232,255,.6) 58% 70%,transparent 70% 76%,rgba(225,232,255,.55) 76% 88%,transparent 88% 93%,rgba(225,232,255,.6) 93%);
+  -webkit-mask:radial-gradient(circle,transparent 0 58%,#000 60% 76%,transparent 78%);mask:radial-gradient(circle,transparent 0 58%,#000 60% 76%,transparent 78%)}
+.bub.taken .dome::after{content:"✓";position:absolute;font-size:18px;font-weight:800;color:var(--k);text-shadow:0 0 10px var(--k)}
+.bub.taken .pil{display:none}
+.bub.pop .pil{animation:popout .55s cubic-bezier(.3,.7,.4,1) forwards}
+@keyframes popout{30%{transform:translateY(-14px) rotate(-10deg) scale(1.15)}100%{transform:translateY(-130px) rotate(300deg) scale(1.3);opacity:0}}
+.bub.pop .dome{animation:crush .4s ease forwards}
+@keyframes crush{40%{transform:scale(.8,.66)}100%{transform:scale(.96)}}
+.foil.blister.anim .bub{animation:capin .55s cubic-bezier(.2,1.6,.4,1) backwards}
+.foil.blister.anim .bub:nth-child(2){animation-delay:.07s}.foil.blister.anim .bub:nth-child(3){animation-delay:.14s}.foil.blister.anim .bub:nth-child(4){animation-delay:.21s}.foil.blister.anim .bub:nth-child(5){animation-delay:.28s}.foil.blister.anim .bub:nth-child(n+6){animation-delay:.35s}
+/* kits rápidos: vitrine 3D */
+.kits{display:flex;align-items:flex-start;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 18px 34px;margin:0 -18px;scrollbar-width:none;perspective:1000px}
+.kits::-webkit-scrollbar{display:none}
+.kit{flex:0 0 80%;scroll-snap-align:center;border-radius:24px;padding:18px;position:relative;
+  --gl:color-mix(in srgb,var(--k) 38%,transparent);
+  background:radial-gradient(90% 60% at 50% 120%,var(--gl),transparent 70%),radial-gradient(60% 50% at 0% 0%,color-mix(in srgb,var(--k) 18%,transparent),transparent 70%),linear-gradient(165deg,#1a2158,#0e1339);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 1px 0 #232b78,0 3px 0 #1a2163,0 5px 0 #141a52,0 7px 0 #0d1240,0 22px 30px -10px rgba(0,0,0,.9),0 40px 60px -30px var(--gl);
+  transform:rotateY(var(--ry,0deg)) scale(var(--sc,1));opacity:var(--op,1);transition:transform .12s linear,opacity .12s linear;transform-style:preserve-3d}
+.kit-top{display:flex;gap:12px;align-items:center}
+.kit-ic{width:52px;height:52px;flex:none;border-radius:16px;display:grid;place-items:center;font-size:28px;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.35),transparent 60%),color-mix(in srgb,var(--k) 30%,#0e1339);
+  box-shadow:inset 0 -4px 8px rgba(0,0,0,.35),0 8px 18px -6px var(--k);animation:bob 3.2s ease-in-out infinite}
+@keyframes bob{50%{translate:0 -4px}}
+.kit h4{font-family:"Bricolage Grotesque";font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.kit p{color:var(--mut);font-size:12.5px;margin-top:3px}
+.kit-lbl{font-size:12px;font-weight:600;color:var(--k);margin:14px 0 7px}
+.kit-chips{display:flex;flex-wrap:wrap;gap:6px}
+.kchip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:6px 10px;border-radius:99px;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--txt);cursor:pointer;text-decoration:none}
+.kchip i{width:7px;height:7px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+.kchip.buy{border-color:color-mix(in srgb,var(--k) 45%,transparent);background:color-mix(in srgb,var(--k) 12%,transparent)}
+.kchip.buy::after{content:"";width:6px;height:6px;border-top:1.5px solid currentColor;border-right:1.5px solid currentColor;transform:rotate(45deg);opacity:.6;margin-left:2px}
+.kit-note{margin-top:12px!important;font-size:11.5px!important;color:var(--dim)!important;line-height:1.45}
+.kit-store{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:14px 0 8px}
+.kseg{display:flex;padding:3px;border-radius:99px;background:rgba(0,0,0,.3);box-shadow:inset 0 2px 5px rgba(0,0,0,.5)}
+.kseg button{border:0;background:none;color:var(--mut);font:inherit;font-size:12px;font-weight:700;padding:6px 11px;border-radius:99px;cursor:pointer;transition:background .2s,color .2s}
+.kseg button.on{background:var(--s);color:#fff;box-shadow:0 4px 12px -3px var(--s)}
+/* simulador de viagem */
+.sim{padding:16px;border-radius:18px;background:radial-gradient(90% 70% at 50% 120%,rgba(69,210,255,.18),transparent 70%),rgba(0,0,0,.18);border:1px solid var(--line2);box-shadow:inset 0 2px 8px rgba(0,0,0,.35)}
+.sim .from{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.sim .from button{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.sim .from .loc{flex-basis:100%}
+.sim input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--txt);font:inherit;font-size:14px;outline:none;color-scheme:dark}
+.sim .two{margin-top:8px}
+.route{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;margin:26px 0 16px}
+.route .pt{text-align:center;font-size:12px;font-weight:600;max-width:86px;line-height:1.2}
+.route .pt i{display:block;width:14px;height:14px;border-radius:50%;margin:0 auto 6px;background:var(--c);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 25%,transparent),0 0 14px var(--c)}
+.route .line{position:relative;height:4px;border-radius:9px;background:repeating-linear-gradient(90deg,rgba(69,210,255,.8) 0 8px,transparent 8px 14px);background-size:28px 4px;animation:dash 1.1s linear infinite}
+@keyframes dash{to{background-position:28px 0}}
+.route .line i{position:absolute;top:50%;width:28px;height:13px;border-radius:99px;background:linear-gradient(90deg,var(--mint) 50%,var(--lav) 50%);transform:translate(-50%,-50%) rotate(-8deg);box-shadow:0 0 14px var(--mint);animation:ride 3.6s ease-in-out infinite alternate}
+@keyframes ride{from{left:4%}to{left:96%}}
+.route .km{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:700;white-space:nowrap}
+.legs{display:grid;gap:10px;margin-top:12px}
+.leg{padding:12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.leg b{display:block;font-size:13px;margin-bottom:8px}
+.cfg{margin-top:4px}
+.tot{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:8px;margin-top:12px}
+.tot div{padding:10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.tot .all{background:radial-gradient(100% 80% at 50% 120%,rgba(255,181,71,.3),transparent 70%),rgba(255,181,71,.06);border-color:rgba(255,181,71,.35)}
+.tot span{display:block;font-size:11.5px;color:var(--mut)}
+.tot b{display:block;font-family:"Bricolage Grotesque";font-size:18px;font-weight:800}
+.tot .all b{color:var(--amber)}
+.tot small{font-size:11px;color:var(--dim)}
+.tl{position:relative;margin-top:10px}
+.tl::before{content:"";position:absolute;left:19px;top:12px;bottom:12px;width:2px;background:linear-gradient(var(--cyan),var(--mint));opacity:.35;border-radius:2px}
+.tl-row{display:grid;grid-template-columns:40px 1fr;gap:10px;padding:8px 0;position:relative}
+.tl-ic{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;font-size:19px;position:relative;z-index:1;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.3),transparent 60%),color-mix(in srgb,var(--k) 22%,#10153f);border:1px solid color-mix(in srgb,var(--k) 45%,transparent);box-shadow:0 6px 14px -6px var(--k)}
+.tl-row.stop .tl-ic{width:32px;height:32px;margin-left:4px;font-size:15px;border-radius:50%}
+.tl-row.stop .tl-b{align-self:center;font-size:13px;color:var(--mut)}
+.tl-row.stop strong{font-weight:600;color:var(--k)}
+.tl-h{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.tl-h strong{font-size:14px;font-weight:600;line-height:1.3}
+.tl-sub{font-size:12px;color:var(--mut);line-height:1.4}
+.tl-cost{flex:none;border:1px dashed var(--line2);background:rgba(255,255,255,.04);color:var(--txt);font:inherit;font-weight:700;font-size:13px;padding:4px 9px;border-radius:10px;cursor:pointer;font-variant-numeric:tabular-nums}
+.tl-cost.user{border-style:solid;border-color:rgba(61,255,197,.5);color:var(--mint)}
+.sim.anim .tl-row,.pick.anim .tl-row{animation:rkin .5s cubic-bezier(.16,.9,.24,1) backwards}
+.cfg-l{font-size:12px;font-weight:700;color:var(--cyan);margin:14px 0 6px}
+.cfg-in{margin-top:6px}
+.cp{font-size:11px;opacity:.7}
+/* cápsulas 3D no fundo */
+.floaters{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.app{position:relative;z-index:1}
+.nav{z-index:20}
+.fl{position:absolute;left:0;top:0;width:var(--w);height:calc(var(--w)*.42);border-radius:99px;opacity:var(--o);filter:blur(var(--b));
+  background:linear-gradient(90deg,var(--c1) 50%,var(--c2) 50%);
+  box-shadow:inset 0 calc(var(--w)*-.09) calc(var(--w)*.14) rgba(0,0,0,.45),inset 0 calc(var(--w)*.06) calc(var(--w)*.1) rgba(255,255,255,.55),0 calc(var(--w)*.2) calc(var(--w)*.5) calc(var(--w)*-.12) var(--c1);
+  will-change:transform}
+.fl::after{content:"";position:absolute;left:14%;right:14%;top:16%;height:18%;border-radius:99px;background:rgba(255,255,255,.55);filter:blur(1px)}
+.sync{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:8px;background:var(--dim);vertical-align:middle}
+.sync.ok{background:var(--mint);box-shadow:0 0 8px var(--mint)}.sync.busy{background:var(--cyan);animation:pulse 1s infinite}.sync.off{background:var(--amber)}.sync.err{background:var(--pink)}
+.gate{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:24px;background:radial-gradient(60% 40% at 50% 0%,rgba(61,255,197,.15),transparent 70%),var(--ink)}
+.gate .card{width:min(420px,100%);padding:26px 22px;border-radius:26px;background:linear-gradient(165deg,#1a2158,#0e1339);border:1px solid rgba(255,255,255,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 1px 0 #232b78,0 3px 0 #1a2163,0 5px 0 #141a52,0 7px 0 #0d1240,0 30px 60px -20px rgba(0,0,0,.9)}
+.gate h1{font-size:30px;margin:10px 0 6px}
+.gate .brand{font-size:26px}
+.gate input{width:100%;padding:13px 14px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--txt);font:inherit;font-size:16px;outline:none;margin:12px 0}
+.gate .or{text-align:center;color:var(--dim);font-size:12px;margin:16px 0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="floaters" id="fl" aria-hidden="true"></div>
+<div class="app" id="app"></div>
+<nav class="nav" aria-label="Seções">
+  <button data-v="hoje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Hoje</button>
+  <button data-v="remedios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-35 12 12)"/><path d="M9.2 7.9l5.6 8.2"/></svg>Remédios</button>
+  <button data-v="retiradas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-5 9 5v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-7h6v7"/></svg>Retiradas</button>
+  <button data-v="consultas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Consultas</button>
+  <button data-v="historico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Histórico</button>
+</nav>
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ====================== PARÂMETROS ====================== */
+const KEY = 'dose_pwa_v1';
+const LATE_HOURS_DAILY = 2;       // dose diária vira atrasada depois de 2 h
+const LATE_DAYS_INTERVAL = 1;     // dose espaçada vira atrasada depois de 1 dia
+const BUY_ALERT_DAYS = 10;        // avisar compra quando faltar isso
+const PICKUP_ALERT_DAYS = 10;     // perguntar onde vai estar quando faltar isso
+const CITIES = ['São Carlos','São Paulo'];
+const COLORS = ['var(--mint)','var(--cyan)','var(--lav)','var(--pink)','var(--amber)'];
+const FORMS = ['comprimido','cápsula','seringa','caneta','spray','colírio','pomada','frasco','adesivo','sachê','gota','ml','ampola','unidade'];
+const LEVELS = ['cheio','metade','acabando','vazio'];
+const SITES = ['Abdômen direito','Abdômen esquerdo','Coxa direita','Coxa esquerda','Braço direito','Braço esquerdo','Não informado'];
+const injectable=m=>['seringa','caneta','ampola'].includes(m.form);
+const GROUPS = {continuo:'Contínuo',sempre:'Ter sempre',casa:'Outros em casa'};
+const SUS_DEFAULT = {
+  unit:'Farmácia de Alto Custo de São Carlos', city:'São Carlos',
+  address:'Rua Padre Teixeira, 3756 — Centro', hours:'', phone:''
+};
+const PICKUP_DOCS = [
+  'Documento com foto e CPF do paciente',
+  'Cartão Nacional de Saúde (carteirinha do SUS)',
+  'Carteirinha da farmácia de alto custo, se a unidade usar',
+  'Recibo ou protocolo da última retirada',
+];
+const COLD_DOC = 'Caixa térmica com gelo reciclável (remédio de geladeira)';
+const REP_DOCS = ['Declaração de autorização assinada pela paciente','Documento com foto e CPF de quem vai retirar'];
+const RENEW_DOCS = [
+  'Novo LME preenchido pelo médico (vale 90 dias para entregar)',
+  'Receita médica atualizada',
+  'Exames exigidos pelo protocolo do remédio',
+  'Documento com foto e CPF',
+  'Comprovante de residência com CEP',
+];
+
+/* ====================== DATAS E TEXTO ====================== */
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const isoT=d=>`${iso(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const parse=s=>{const [y,m,d]=s.slice(0,10).split('-').map(Number);const x=new Date(y,m-1,d);if(s.length>10){const [h,mi]=s.slice(11,16).split(':').map(Number);x.setHours(h,mi)}return x};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const addMonths=(d,n)=>{const x=new Date(d);x.setMonth(x.getMonth()+n);return x};
+const today=()=>{const t=new Date();t.setHours(0,0,0,0);return t};
+const dd=(a,b)=>Math.round((parse(iso(a))-parse(iso(b)))/864e5);
+const fD=d=>d.toLocaleDateString('pt-BR',{day:'numeric',month:'short'}).replace('.','');
+const fDW=d=>d.toLocaleDateString('pt-BR',{weekday:'short',day:'numeric',month:'short'}).replace(/\./g,'');
+const rel=d=>{const n=dd(d,today());if(n===0)return'hoje';if(n===1)return'amanhã';if(n===-1)return'ontem';if(n>1&&n<7)return`em ${n} dias`;if(n<0)return`há ${-n} dias`;return fDW(d)};
+const relD=d=>{const n=dd(d,today());return n>=0&&n<7?`${rel(d)}, ${fD(d)}`:fDW(d)};
+const brl=v=>(+v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const plural=(n,s,p)=>`${n} ${n===1?s:(p||s+'s')}`;
+const unit=(m,n)=>{const f=m.form; if(n===1||f==='ml')return f; return f.endsWith('ão')?f.replace(/ão$/,'ões'):f+'s'};
+
+/* ====================== DADOS REAIS (lista de 2 nov 2026) ====================== */
+const PK=(...a)=>a.map(x=>{const [l,z]=x.split('/').map(Number);return{left:l,size:z}});
+const FULL=(n,z)=>Array(n).fill(`${z}/${z}`);
+const REF=(v,src,pack)=>({value:v,source:src,date:'2026-11-02',pack});
+function susBlank(cold){return {...SUS_DEFAULT,cycleDays:28,perPickup:1,lmeStart:null,lmeMonths:6,nextPickup:null,available:false,availableSince:null,pickups:[],call:null,
+  docs:[...PICKUP_DOCS,...(cold?[COLD_DOC]:[])].map(t=>({t,on:false})),rep:{allowed:true,name:(S&&S.profile&&S.profile.helper)||''},renewDocs:RENEW_DOCS.map(t=>({t,on:false}))}}
+function M(o){return Object.assign({id:uid(),strength:'',form:'comprimido',dose:1,color:'var(--cyan)',sched:null,packs:[],stock:0,level:null,unknown:false,
+  cold:false,source:'compra',group:'continuo',rx:false,purchases:[],ref:null,notes:''},o)}
+function seed(){
+  return {profile:{patient:'',helper:'',home:'São Carlos'},where:{city:null,from:null,to:null},example:false,log:[],appts:[],meds:[]};
+}
+let S; try{S=JSON.parse(localStorage.getItem(KEY))||seed()}catch(e){S=seed()}
+const localSave=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const save=()=>{localSave();schedulePush()};
+const UI={view:'hoje',hist:'all'};
+const med=id=>S.meds.find(m=>m.id===id);
+const patient=()=>S.profile.patient||'a paciente';
+const scheduled=()=>S.meds.filter(m=>m.sched);
+const qty=m=>m.packs&&m.packs.length?m.packs.reduce((a,p)=>a+p.left,0):(m.stock||0);
+const packSize=m=>m.packs&&m.packs.length?Math.max(...m.packs.map(p=>p.size)):0;
+const boxUnits=m=>parseInt((m.ref&&m.ref.pack)||'')||m.boxSize||packSize(m)||30;
+function takeUnits(m,n){
+  if(!m.packs||!m.packs.length){m.stock=Math.max(0,(m.stock||0)-n);return}
+  let r=n;
+  while(r>0){const open=m.packs.filter(p=>p.left>0).sort((a,b)=>a.left-b.left)[0];if(!open)break;const k=Math.min(open.left,r);open.left-=k;r-=k}
+  m.packs=m.packs.filter(p=>p.left>0);
+}
+function addUnits(m,n){
+  if(!m.packs||!m.packs.length){if(m.source==='sus'||!packSize(m)){m.stock=(m.stock||0)+n;return}}
+  const notFull=m.packs.filter(p=>p.left<p.size).sort((a,b)=>b.left-a.left)[0];
+  if(notFull&&notFull.left+n<=notFull.size){notFull.left+=n;return}
+  m.packs.push({left:n,size:Math.max(n,packSize(m))});
+}
+function addBox(m,units){
+  if(m.level){m.level='cheio';return}
+  const ps=packSize(m)||units;let r=units;
+  while(r>0){const n=Math.min(ps,r);m.packs.push({left:n,size:ps});r-=n}
+  m.unknown=false;
+}
+function buyStatus(m){
+  if(m.source==='sus')return'ok';
+  if(m.level)return m.level==='vazio'?'out':m.level==='acabando'?'low':'ok';
+  if(m.unknown&&!qty(m))return'check';
+  const q=qty(m);if(q<=0)return'out';
+  if(m.group==='casa')return'ok';
+  if(m.sched)return stockInfo(m).daysLeft<=BUY_ALERT_DAYS?'low':'ok';
+  const ps=packSize(m)||1;
+  if(m.group==='sempre')return (q/m.dose<=3||q/ps<=.3)?'low':'ok';
+  return (q<.5*ps||q<=7)?'low':'ok';
+}
+const STATUS={ok:['em estoque','var(--mint)'],low:['acabando','var(--amber)'],out:['sem estoque','var(--pink)'],check:['conferir','var(--mut)']};
+function stockText(m){
+  if(m.level)return `${m.form==='colírio'?'colírio':m.form} ${m.level}`;
+  if(m.unknown&&!qty(m))return 'quantidade não informada';
+  const q=qty(m),n=m.packs.length;
+  if(!q)return 'sem estoque em casa';
+  return `${plural(q,unit(m,1),unit(m,2))}${n>1?` em ${n} cartelas`:n===1&&m.packs[0].left<m.packs[0].size?`, cartela aberta`:''}`;
+}
+function packsViz(m){
+  if(!m.packs||!m.packs.length)return'';
+  return `<div class="packs" style="--k:${m.color}">${m.packs.map((p,pi)=>`<span class="pk" title="${p.left} de ${p.size}"><i style="--i:${pi};width:${p.left/p.size*100}%"></i></span>`).join('')}<small>${m.packs.map(p=>`${p.left}/${p.size}`).join(' + ')}</small></div>`;
+}
+
+
+/* ====================== AGENDA DE DOSES ====================== */
+function schedText(m){
+  const s=m.sched,q=`${m.dose} ${unit(m,m.dose)}`;
+  if(s.type==='daily') return `${q}, ${s.times.length===1?'todo dia às '+s.times[0]:s.times.length+' vezes ao dia ('+s.times.join(', ')+')'}`;
+  if(s.every===7) return `${q}, uma vez por semana às ${s.time}`;
+  return `${q} a cada ${s.every} dias, às ${s.time}`;
+}
+const lastTaken=m=>S.log.filter(l=>l.medId===m.id&&l.taken).sort((a,b)=>b.taken.localeCompare(a.taken))[0];
+function nextInterval(m){ // conta a partir da última aplicação real
+  const lt=lastTaken(m);
+  const base=lt?parse(lt.taken.slice(0,10)):addDays(parse(m.sched.start),-m.sched.every);
+  const d=addDays(base,m.sched.every); const [h,mi]=m.sched.time.split(':').map(Number); d.setHours(h,mi); return d;
+}
+function dueToday(){
+  const now=new Date(),T=iso(today()),out=[];
+  scheduled().forEach(m=>{
+    if(m.sched.type==='daily'){
+      m.sched.times.forEach(t=>{
+        const sched=`${T}T${t}`, e=S.log.find(l=>l.medId===m.id&&l.sched===sched), sd=parse(sched);
+        const h=(now-sd)/36e5, late=!e&&h>LATE_HOURS_DAILY;
+        out.push({m,sched,sd,e,late,lateTxt:late?`${Math.floor(h)} h de atraso`:''});
+      });
+    }else{
+      const nd=nextInterval(m),diff=dd(today(),nd);
+      if(diff>=0) out.push({m,sched:isoT(nd),sd:nd,e:null,late:diff>=LATE_DAYS_INTERVAL,lateTxt:diff>=LATE_DAYS_INTERVAL?`${plural(diff,'dia')} de atraso`:'',interval:true});
+      const lt=lastTaken(m); if(lt&&lt.taken.slice(0,10)===T) out.push({m,sched:lt.sched,sd:parse(lt.sched),e:lt,interval:true});
+    }
+  });
+  return out.sort((a,b)=>a.sd-b.sd);
+}
+/* cartela: últimas doses + a próxima */
+function capsules(m){
+  const n=m.sched.type==='daily'?Math.min(7,7*m.sched.times.length):5;
+  const past=S.log.filter(l=>l.medId===m.id).sort((a,b)=>a.sched.localeCompare(b.sched));
+  const pend=dueToday().filter(x=>x.m.id===m.id&&!x.e).map(x=>({status:x.late?'over':'due'}));
+  if(!pend.length&&m.sched.type==='interval') pend.push({status:'due'});
+  if(!pend.length&&m.sched.type==='daily') pend.push({status:'due'});
+  return [...past.slice(-(n-pend.length)).map(l=>({status:l.status,l})),...pend];
+}
+function stockInfo(m){
+  let end;
+  const st0=qty(m);
+  if(m.sched.type==='daily') end=addDays(today(),Math.floor(st0/(m.dose*m.sched.times.length))-1);
+  else{const nd=nextInterval(m),k=Math.floor(st0/m.dose); end=k>0?addDays(nd,(k-1)*m.sched.every):addDays(nd,-1)}
+  const gap=m.sched.type==='daily'?1:m.sched.every;
+  const firstMissing=m.sched.type==='daily'?addDays(end,1):(Math.floor(st0/m.dose)>0?addDays(end,gap):nextInterval(m));
+  return {end,firstMissing,daysLeft:Math.max(0,dd(firstMissing,today()))};
+}
+function priceInfo(m){
+  const P=(m.purchases||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
+  const last=P.at(-1), recent=P.slice(-3);
+  const est=recent.length?recent.reduce((a,p)=>a+p.price,0)/recent.length:(m.ref?m.ref.value:0);
+  /* estimativa por caixa */
+  const spent=P.filter(p=>dd(today(),parse(p.date))<=180).reduce((a,p)=>a+p.price*p.boxes,0);
+  return {last,est,spent,n:P.length};
+}
+function lmeInfo(m){
+  const s=m.sus,start=parse(s.lmeStart),end=addDays(addMonths(start,s.lmeMonths),-1);
+  const idx=(today().getFullYear()-start.getFullYear())*12+today().getMonth()-start.getMonth()+1;
+  const toEnd=dd(end,today());
+  return {end,idx:Math.max(1,idx),renew:idx>=s.lmeMonths||toEnd<=35,expired:toEnd<0};
+}
+function adherence(id,days=30){
+  const from=iso(addDays(today(),-days));
+  const L=S.log.filter(l=>(id==='all'||l.medId===id)&&l.sched>=from);
+  const ok=L.filter(l=>l.status==='ok').length,late=L.filter(l=>l.status==='late').length,miss=L.filter(l=>l.status==='miss').length;
+  return {total:L.length,ok,late,miss,pct:L.length?Math.round(ok/L.length*100):100};
+}
+/* onde a família vai estar */
+const away=()=>S.where.city && S.where.city!==S.profile.home;
+function awayOn(date){
+  if(!away())return false;
+  const f=S.where.from?parse(S.where.from):today(), t=S.where.to?parse(S.where.to):null;
+  return date>=f && (!t||date<=t);
+}
+function dosesDuring(m,from,to){ // aplicações espaçadas que caem num intervalo
+  if(m.sched.type!=='interval'||!to)return [];
+  const out=[];let d=nextInterval(m);
+  while(d<=to){if(d>=from)out.push(new Date(d));d=addDays(d,m.sched.every)}
+  return out;
+}
+
+/* ====================== AVISOS ====================== */
+function notices(){
+  const A=[];
+  dueToday().filter(x=>x.late&&!x.e).forEach(x=>A.push({pri:100,
+    h:`Ficou pra trás: ${esc(x.m.name)}, ${x.lateTxt}`,
+    p:'Já tomou? Registra aqui. Não dobre a próxima dose por conta própria; na dúvida, bula ou médico.',
+    acts:[[injectable(x.m)?'Registrar aplicação':'Registrar dose',`takeSheet('${x.m.id}','${x.sched}')`]]}));
+  S.meds.filter(m=>m.source==='sus').forEach(m=>{
+    const s=m.sus,out=m.sched&&qty(m)<m.dose;
+    if(out){const nd=nextInterval(m),dn=dd(nd,today()),late=s.call&&s.call.expected&&parse(s.call.expected)>nd;
+      A.push({pri:dn<=10?96:80,h:`${esc(m.name)} zerou e a aplicação é ${relD(nd)}`,
+        p:s.call&&s.call.expected?`A farmácia disse ${fD(parse(s.call.expected))}${late?'. Chega depois da aplicação: ligue de novo ou avise o médico.':'. Fica de olho na liberação.'}`:`Liga na farmácia de alto custo de ${esc(s.city)} e pergunta se o lote já chegou.`,
+        acts:[[s.call?'Registrar nova ligação':'Já liguei, registrar',`callSheet('${m.id}')`],['Ver retirada',`go('retiradas')`]]});}
+    if(!s.nextPickup){if(!out)A.push({pri:60,h:`Ligar pra farmácia sobre ${esc(m.name)}`,p:`Pergunta quando chega o próximo lote em ${esc(s.city)}.`,acts:[['Registrar ligação',`callSheet('${m.id}')`]]});return}
+    const np=parse(s.nextPickup),L=s.lmeStart?lmeInfo(m):null,d=dd(np,today()),st=m.sched?stockInfo(m):null;
+    if(d<=PICKUP_ALERT_DAYS){
+      if(!S.where.city) A.push({pri:55,h:`Onde vocês vão estar em ${fD(np)}?`,p:`A retirada de ${esc(m.name)} é em ${esc(s.city)}. Se estiverem fora, o app monta a viagem.`,
+        acts:CITIES.map(c=>[c,`setWhere('${c}')`]).concat([['Outra cidade',`whereSheet()`]])});
+      else if(awayOn(np)) A.push({pri:76,h:`Retirada em ${esc(s.city)} ${rel(np)}, e vocês estão em ${esc(S.where.city)}`,
+        p:`Planeje a volta ou peça para ${esc(s.rep.allowed&&s.rep.name?s.rep.name:'um representante')} retirar.`,acts:[['Ver plano da viagem',`go('retiradas')`]]});
+    }
+    if(s.available) A.push({pri:88,h:`${esc(m.name)} liberado! Já dá pra buscar`,p:`Liberado desde ${fD(parse(s.availableSince))} em ${esc(s.unit)}.`,acts:[['Ver o que levar',`go('retiradas')`]]});
+    if(!out&&st&&st.firstMissing<np) A.push({pri:85,h:`${esc(m.name)} não chega até a retirada`,p:`A dose de ${fD(st.firstMissing)} fica sem remédio e a retirada é ${fD(np)}. Ligue para a farmácia ou fale com o médico.`});
+    if(L&&L.expired) A.push({pri:82,h:`O LME de ${esc(m.name)} venceu`,p:'Sem renovar, a farmácia pode não liberar. Leve novo LME e receita.',acts:[['Ver documentos',`go('retiradas')`]]});
+    else if(L&&L.renew){const has=S.appts.some(a=>a.renewLme&&parse(a.date)>=today());
+      A.push({pri:50,h:`Hora de renovar o LME de ${esc(m.name)}`,p:`Mês ${Math.min(L.idx,s.lmeMonths)} de ${s.lmeMonths}, vale até ${fD(L.end)}. Peça novo LME e receita na consulta.`,
+        acts:[[has?'Ver consulta':'Marcar consulta',has?`go('consultas')`:`apptSheet(null,{title:'Consulta para renovar o LME',renewLme:true})`]]});}
+    const lp=s.pickups.at(-1);
+    if(lp&&dd(today(),parse(lp.date))>150) A.push({pri:78,h:`Mais de 5 meses sem retirar ${esc(m.name)}`,p:'Com 6 meses seguidos sem retirada o tratamento pode ser considerado abandonado.'});
+  });
+  const buy=S.meds.filter(m=>['low','out'].includes(buyStatus(m)));
+  if(buy.length){const tot=buy.reduce((a,m)=>a+(priceInfo(m).est||0),0),crit=buy.some(m=>m.group==='continuo');
+    A.push({pri:crit?74:40,h:`Lista de compras: ${plural(buy.length,'item','itens')}`,p:`${buy.slice(0,3).map(m=>esc(m.name)).join(', ')}${buy.length>3?` e mais ${buy.length-3}`:''}. Dá uns ${brl(tot)} com os preços que já temos.`,acts:[['Abrir lista',`UI.medTab='comprar';go('remedios')`]]});}
+  const noS=S.meds.filter(m=>m.group==='continuo'&&!m.sched);
+  if(noS.length) A.push({pri:35,h:noS.length===1?'1 remédio esperando horário':`${noS.length} remédios esperando horário`,p:'Coloque dose e horário: o app passa a lembrar e a contar até quando cada um dura.',acts:[['Definir horários',`UI.medTab='continuo';go('remedios')`]]});
+  const ad=adherence('all',14),bad=ad.late+ad.miss;
+  if(bad>=3) A.push({pri:25,h:`${plural(bad,'dose')} fora do horário em 2 semanas`,p:'Um alarme no celular no horário da dose costuma resolver.',acts:[['Ver histórico',`go('historico')`]]});
+  return A.sort((a,b)=>b.pri-a.pri).map(a=>({...a,...urg(a.pri)}));
+}
+function urg(p){return p>=90?{lvl:'Agora',k:'var(--pink)'}:p>=70?{lvl:'Hoje',k:'var(--amber)'}:p>=45?{lvl:'Esta semana',k:'var(--cyan)'}:{lvl:'Quando der',k:'var(--lav)'}}
+
+/* ====================== TELAS ====================== */
+function header(){
+  return `<div class="head"><div class="brand"><span class="pill"></span>Dose<i class="sync ${SYNC}" title="${SYNC_TXT[SYNC]}"></i></div>
+    <button class="who" onclick="profileSheet()">${S.profile.patient?`<b>${esc(S.profile.patient)}</b>`:'Definir paciente'}${S.where.city?` em ${esc(S.where.city)}`:''}</button></div>`;
+}
+function noticesHTML(A){
+  const cnt=k=>A.filter(a=>a.lvl===k).length;
+  return `<div class="heat">${['Agora','Hoje','Esta semana','Quando der'].map((l,i)=>`<i style="--i:${i};background:${['var(--pink)','var(--amber)','var(--cyan)','var(--lav)'][i]};opacity:${cnt(l)?1:.15};flex:${Math.max(cnt(l),.4)}"></i>`).join('')}</div>
+  <div class="notes">${A.map((a,i)=>`<div class="rank" style="--k:${a.k};--i:${i}"><div class="pos"><b>${i+1}</b>${i<A.length-1?'<i></i>':''}</div><div><div class="lvl">${a.lvl}</div><h4>${a.h}</h4><p>${a.p}</p>
+    ${a.acts?`<div class="row">${a.acts.map(([l,f],j)=>`<button class="btn sm ${j?'quiet':''}" style="--k:${a.k}" onclick="${f}">${l}</button>`).join('')}</div>`:''}</div></div>`).join('')}</div>`;
+}
+function vHoje(){
+  const due=dueToday(), pend=due.filter(x=>!x.e), next=pend[0];
+  const A=notices();
+  const upNext=scheduled().filter(m=>m.sched.type==='interval').map(m=>({m,d:nextInterval(m)})).filter(x=>dd(x.d,today())>0).sort((a,b)=>a.d-b.d);
+  const appt=S.appts.filter(a=>parse(a.date)>=today()).sort((a,b)=>a.date.localeCompare(b.date))[0];
+  return `${header()}
+  ${S.example?`<div class="box" style="margin-bottom:18px;--k:var(--lav)">Estes são remédios de exemplo. Quando a lista real chegar, eles saem.</div>`:''}
+  ${next?`<div class="now" style="--k:${next.late?'var(--pink)':next.m.color}">
+      ${(()=>{const tot=due.length,dn=due.filter(x=>x.e).length,C=2*Math.PI*30;return tot?`<div class="ring" style="--k:${next.late?'var(--pink)':'var(--mint)'}"><svg viewBox="0 0 74 74" width="74" height="74"><circle class="bg" cx="37" cy="37" r="30"/><circle class="fg" cx="37" cy="37" r="30" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-dn/tot)}"/></svg><b>${dn}/${tot}</b><small>hoje</small></div>`:''})()}
+      <div class="lede">${next.late?'Opa, ficou pra trás':pend.length>1?`Faltam ${pend.length} doses hoje. A próxima é`:'Próxima dose'}</div>
+      <div class="when num">${next.interval&&dd(next.sd,today())!==0?fD(next.sd):next.sd.toTimeString().slice(0,5)}</div>
+      <div class="what">${esc(next.m.name)} <span>${esc(next.m.strength)}, ${next.m.dose} ${unit(next.m,next.m.dose)}</span></div>
+      ${next.late?`<div class="late">${next.lateTxt}</div>`:''}
+      ${injectable(next.m)&&nextSite(next.m)?`<div class="lede" style="margin-top:6px">Local sugerido: ${nextSite(next.m).next.toLowerCase()} (a última foi no ${nextSite(next.m).last.toLowerCase()})</div>`:''}
+      <div class="row"><button class="btn fill" style="--k:${next.late?'var(--pink)':next.m.color}" onclick="quickTake('${next.m.id}','${next.sched}')">${injectable(next.m)?'Apliquei':'Tomei agora'}</button>
+        <button class="btn quiet" onclick="takeSheet('${next.m.id}','${next.sched}')">${injectable(next.m)?'Registrar com data e local':'Foi em outro horário'}</button></div>
+    </div>`
+  :scheduled().length?`<div class="now" style="--k:var(--mint)"><div class="lede">${due.length?'Todas as doses de hoje registradas':'Nenhuma dose marcada para hoje'}</div><div class="when" style="font-size:44px">${due.length?'Dia fechado':'Dia livre'}</div><p class="lede" style="margin-top:8px">${upNext.length?`Próxima aplicação: ${esc(upNext[0].m.name)}, ${relD(upNext[0].d)}.`:'Amanhã tem mais.'}</p></div>`:`<div class="now" style="--k:var(--lav)"><div class="lede">Bora começar?</div><div class="what" style="font-size:22px;font-family:'Bricolage Grotesque';font-weight:700">${S.meds.length} itens no armário, nenhum com horário</div><p class="lede" style="margin-top:8px">Coloque dose e horário nos contínuos e o app passa a lembrar cada dose.</p><div class="row"><button class="btn fill" style="--k:var(--lav)" onclick="UI.medTab='continuo';go('remedios')">Definir horários</button></div></div>`}
+
+  ${due.length?`<div class="sec"><h3>Cartela de hoje</h3><small>${due.filter(x=>x.e).length} de ${due.length}, aperte a bolha quando tomar</small></div>
+  <div class="foil blister">${due.map(x=>{const st=x.e?'taken':x.late?'late':(x.sd>new Date()?'later':'now');
+    const when=x.interval&&dd(x.sd,today())!==0?fD(x.sd):x.sd.toTimeString().slice(0,5);
+    return `<button class="bub ${st}" style="--k:${x.m.color}" onclick="${x.e?`undoSheet('${x.e.id}')`:`popDose(this,'${x.m.id}','${x.sched}')`}" aria-label="${esc(x.m.name)}, ${when}${x.e?', já tomada':''}">
+      <span class="dome"><span class="pil ${injectable(x.m)?'inj':''}"></span></span>
+      <span class="lb"><b>${when}</b>${esc(shortName(x.m))}${x.e?`<em>tomada ${x.e.taken.slice(11,16)}</em>`:x.late?`<em class="lt">${x.lateTxt}</em>`:''}</span></button>`}).join('')}</div>`:''}
+
+  ${kitsHTML()}
+
+  ${scheduled().length?`<div class="sec"><h3>Últimas doses</h3><small>como foi cada remédio</small></div>
+  <div class="foil">
+    ${scheduled().map(m=>`<div class="strip" style="--k:${m.color}"><div class="nm">${esc(m.name)}<small>${m.sched.type==='daily'?'diário':'a cada '+m.sched.every+' dias'}</small></div>
+      <div class="cells">${capsules(m).map((c,ci)=>`<span class="cap ${c.status}" style="--i:${ci}" title="${c.l?fDW(parse(c.l.sched)):'próxima'}"></span>`).join('')}</div></div>`).join('')}
+    <div class="key"><span><i class="cap ok" style="--k:var(--mint)"></i>tomada</span><span><i class="cap late"></i>com atraso</span><span><i class="cap miss"></i>não tomada</span><span><i class="cap due" style="--k:var(--mut)"></i>próxima</span></div>
+  </div>`:''}
+
+  ${A.length?`<div class="sec"><h3>Ranking de urgência</h3><small>do mais urgente ao que pode esperar</small></div>${noticesHTML(A)}`:''}
+
+  ${upNext.length?`<div class="sec"><h3>Vem aí</h3><small>próximas aplicações</small></div><div class="list">${upNext.map(x=>`<div class="item" style="--k:${x.m.color}"><div class="t" style="font-size:15px">${fD(x.d)}</div>
+    <div class="b"><strong>${esc(x.m.name)} ${esc(x.m.strength)}</strong><span>${rel(x.d)}, às ${x.m.sched.time}${injectable(x.m)&&nextSite(x.m)?`, ${nextSite(x.m).next.toLowerCase()}`:''}${qty(x.m)<x.m.dose?' — <b style="color:var(--pink)">sem remédio em casa</b>':''}${awayOn(x.d)?` — vocês estarão em ${esc(S.where.city)}`:''}</span></div></div>`).join('')}</div>`:''}
+
+  ${appt?`<div class="sec"><h3>Próxima consulta</h3><button class="link" onclick="go('consultas')">Ver todas</button></div><div class="list">${apptItem(appt)}</div>`:''}
+  <p class="fine">O Dose organiza registros e lembretes. Ele não substitui orientação médica: mudanças de dose sempre com o médico.</p>`;
+}
+
+function moneyBlock(m){
+  const pi=priceInfo(m);
+  if(!pi.last&&!m.ref) return `<div class="row" style="margin-top:14px">${shopLinks(m)}</div><div class="row" style="margin-top:8px"><button class="btn sm quiet" onclick="priceSheet('${m.id}')">Salvar preço achado</button><button class="btn sm quiet" onclick="buySheet('${m.id}')">Registrar compra</button></div>`;
+  return `<div class="price">
+    ${pi.last?`<div class="pr"><span>Última compra, ${fD(parse(pi.last.date))}${pi.last.store?' em '+esc(pi.last.store):''}</span><b>${brl(pi.last.price)}</b></div>`:''}
+    ${m.ref?`<div class="pr"><span>Menor preço pesquisado, ${esc(m.ref.pack||'caixa')}<br><small style="margin:0">${esc(m.ref.source)}, ${fD(parse(m.ref.date))}</small></span><b>${brl(m.ref.value)}</b></div>`:''}
+    <div class="pr est"><span>Próxima compra, estimada</span><b>${pi.est?brl(pi.est):'—'}</b></div>
+    <small>${pi.n?`Pela média das últimas ${Math.min(3,pi.n)} compras. Gasto nos últimos 6 meses: ${brl(pi.spent)}.`:m.ref?'Estimativa pelo preço pesquisado, sem frete. Registre a compra para usar o preço que vocês pagam.':'Registre uma compra ou pesquise o preço para estimar.'}</small>
+    <div class="row" style="margin-top:10px">${shopLinks(m)}</div><div class="row" style="margin-top:8px"><button class="btn sm" style="--k:var(--amber)" onclick="buySheet('${m.id}')">Registrar compra</button><button class="btn sm quiet" onclick="priceSheet('${m.id}')">Salvar preço achado</button></div>
+  </div>`;
+}
+function medCard(m){
+  const st=m.sched?stockInfo(m):null,nx=m.sched&&m.sched.type==='interval'?nextInterval(m):null,bs=buyStatus(m),[sl,sk]=STATUS[bs];
+  const money=m.source==='sus'?`<div class="free">Recebido pelo SUS em <b>${esc(m.sus.city)}</b>, sem custo.${m.sus.nextPickup?` Retirada ${rel(parse(m.sus.nextPickup))}.`:' Falta informar a próxima retirada.'}</div>`:moneyBlock(m);
+  return `<div class="med" style="--k:${m.color}">
+    <div class="top" onclick="medSheet('${m.id}')"><div><h2>${esc(m.name)} <span>${esc(m.strength)}</span></h2>
+      <div class="sched">${m.sched?schedText(m):'<span style="color:var(--lav)">Dose e horário não definidos — toque para definir</span>'}${m.cold?', na geladeira':''}</div></div><span class="chip" style="--k:${sk}">${sl}</span></div>
+    <div class="facts">
+      <div><b class="num">${m.unknown&&!qty(m)?'?':qty(m)}</b><span>${unit(m,2)} em casa</span></div>
+      <div><b class="num">${st?st.daysLeft:m.packs.length||'—'}</b><span>${st?'dias cobertos':m.packs.length===1?'cartela':'cartelas'}</span></div>
+      <div><b>${nx?fD(nx):st?fD(st.end):m.rx?'retida':'—'}</b><span>${nx?'próxima dose':st?'acaba':m.rx?'receita':'previsão'}</span></div>
+    </div>
+    ${packsViz(m)}${money}
+    ${m.notes?`<p class="free">${esc(m.notes)}</p>`:''}
+  </div>`;
+}
+function medRow(m,extra=''){
+  const [sl,sk]=STATUS[buyStatus(m)];
+  return `<div class="item tap" onclick="medSheet('${m.id}')" style="--k:${m.color}"><div class="b"><strong>${esc(m.name)}${m.strength?` <span style="color:var(--mut);font-weight:400">${esc(m.strength)}</span>`:''}</strong><span>${stockText(m)}${extra}</span>${packsViz(m)}</div><span class="chip" style="--k:${sk}">${sl}</span></div>`;
+}
+function vRemedios(){
+  UI.medTab??='continuo';
+  const tab=UI.medTab;
+  const buy=S.meds.filter(m=>['low','out'].includes(buyStatus(m))), check=S.meds.filter(m=>buyStatus(m)==='check');
+  const n=g=>S.meds.filter(m=>m.group===g).length;
+  const tabs=[['continuo','Contínuo',n('continuo')],['sempre','Ter sempre',n('sempre')],['casa','Outros',n('casa')],['comprar','Comprar',buy.length]];
+  let body='';
+  if(tab==='comprar'){
+    const tot=buy.reduce((a,m)=>a+(priceInfo(m).est||0),0), sem=buy.filter(m=>!priceInfo(m).est).length;
+    body=`<div class="foil" style="padding-bottom:14px"><div class="score"><b class="num" style="color:var(--amber);text-shadow:0 0 22px rgba(255,181,71,.4)">${brl(tot)}</b></div>
+        <p class="lede">estimativa para ${plural(buy.length,'item','itens')}, uma caixa de cada${sem?`; ${sem} sem preço ainda`:''}. Preços online, sem frete.</p></div>
+      <div class="sec"><h3>Comprar</h3><small>acabando ou sem estoque</small></div>
+      ${buy.length?`<div class="list">${buy.map(m=>{const e=priceInfo(m).est;return `<div class="item tap" onclick="medSheet('${m.id}')" style="--k:${m.color}"><div class="b"><strong>${esc(m.name)} <span style="color:var(--mut);font-weight:400">${esc(m.strength)}</span></strong><span>${stockText(m)}${m.rx?', receita retida':''}${m.ref?`<br>${esc(m.ref.pack)}`:''}</span><div class="row" style="margin-top:8px;gap:6px">${shopLinks(m)}</div></div><b class="num" style="color:${e?'var(--amber)':'var(--dim)'};white-space:nowrap">${e?brl(e):'sem preço'}</b></div>`}).join('')}</div>`:'<div class="empty">Nada acabando agora.</div>'}
+      ${check.length?`<div class="sec"><h3>Conferir em casa</h3><small>quantidade não informada</small></div><div class="list">${check.map(m=>medRow(m)).join('')}</div>`:''}
+      <p class="fine">Remédios com receita retida precisam da receita original na farmácia. Muitas farmácias só vendem controlados com retirada na loja.</p>`;
+  }else if(tab==='continuo'){
+    const L=S.meds.filter(m=>m.group==='continuo');
+    body=L.map(medCard).join('')||'<div class="empty">Nenhum remédio contínuo.</div>';
+  }else{
+    const L=S.meds.filter(m=>m.group===tab);
+    body=L.length?`<div class="list">${L.map(m=>medRow(m,m.notes?`. ${esc(m.notes)}`:'')).join('')}</div>`:'<div class="empty">Nada aqui ainda.</div>';
+  }
+  return `${header()}<div class="sec" style="margin-top:0"><h1 style="font-size:28px">Remédios</h1><button class="btn sm" onclick="medSheet(null,{group:UI.medTab==='comprar'?'continuo':UI.medTab})">Adicionar</button></div>
+  <div class="seg" style="margin-bottom:16px">${tabs.map(([k,l,c])=>`<button class="tabb ${tab===k?'on':''}" style="--k:${k==='comprar'?'var(--amber)':'var(--cyan)'}" onclick="UI.medTab='${k}';render()">${l}<b>${c}</b></button>`).join('')}</div>
+  ${body}`;
+}
+
+const slug=c=>c.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-');
+function tripLinks(from,to,date,raw){
+  const d=iso(date<today()?today():date),o=slug(from),t=slug(to);
+  const L=[['ClickBus',`https://www.clickbus.com.br/onibus/${o}-sp/${t}-sp?departureDate=${d}`,'var(--pink)'],
+    ['BlaBlaCar',`https://www.blablacar.com.br/search?fn=${encodeURIComponent(from+', SP')}&tn=${encodeURIComponent(to+', SP')}&db=${d}&seats=1`,'var(--cyan)'],
+    ['Buser',`https://www.buser.com.br/onibus/${o}-sp/${t}-sp`,'var(--mint)']];
+  if(raw)return L;
+  return L.map(([l,u,k],i)=>`<a class="btn sm ${i?'':'fill'}" style="--k:${k};text-decoration:none" href="${u}" target="_blank" rel="noopener">${l}</a>`).join('');
+}
+const CITY={'São Carlos':[-22.0175,-47.8908],'São Paulo':[-23.5505,-46.6333],'Campinas':[-22.9056,-47.0608],'Ribeirão Preto':[-21.1775,-47.8103],
+ 'Araraquara':[-21.7845,-48.178],'Rio Claro':[-22.4149,-47.5651],'Piracicaba':[-22.7253,-47.6492],'Limeira':[-22.5649,-47.4017],'Americana':[-22.7374,-47.3331],
+ 'Jundiaí':[-23.1857,-46.8978],'Sorocaba':[-23.5015,-47.4526],'Bauru':[-22.3246,-49.0871],'São José dos Campos':[-23.1896,-45.8841],'Santos':[-23.9608,-46.3336],
+ 'Jaú':[-22.2936,-48.5592],'Ibaté':[-21.955,-47.9967],'Descalvado':[-21.9036,-47.6192],'Porto Ferreira':[-21.8539,-47.4789],'São José do Rio Preto':[-20.8113,-49.3758],
+ 'Rio de Janeiro':[-22.9068,-43.1729],'Belo Horizonte':[-19.9167,-43.9345],'Curitiba':[-25.4284,-49.2733],'Brasília':[-15.7939,-47.8828],'Florianópolis':[-27.5954,-48.548]};
+function hav(a,b){const R=6371,r=x=>x*Math.PI/180,dl=r(b[0]-a[0]),dn=r(b[1]-a[1]);const h=Math.sin(dl/2)**2+Math.cos(r(a[0]))*Math.cos(r(b[0]))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
+const fH=h=>h<1?`${Math.round(h*60)} min`:`${Math.floor(h)}h${Math.round((h%1)*60)?String(Math.round((h%1)*60)).padStart(2,'0'):''}`;
+function simSet(k,v){S.sim=S.sim||{};S.sim[k]=v||null;if(k==='from'){S.sim.lat=null;S.sim.lon=null}save();render()}
+function locate(){
+  if(!navigator.geolocation){toast('Este navegador não oferece localização. Digite a cidade.');return}
+  toast('Buscando sua localização…');
+  navigator.geolocation.getCurrentPosition(p=>{
+    const here=[p.coords.latitude,p.coords.longitude];let best=null,bd=1e9;
+    for(const [n,c] of Object.entries(CITY)){const d=hav(here,c);if(d<bd){bd=d;best=n}}
+    S.sim=S.sim||{};S.sim.from=bd<40?best:`Perto de ${best}`;S.sim.lat=here[0];S.sim.lon=here[1];S.sim.near=best;save();render();
+    toast(bd<40?`Você está em ${best}`:`Você está a ${Math.round(bd)} km de ${best}`);
+  },()=>toast('A localização não foi liberada nesta tela. Escolha ou digite a cidade.'),{timeout:9000,maximumAge:600000});
+}
+/* ===== planejador porta a porta ===== */
+Object.assign(CITY,{'São Bernardo do Campo':[-23.6914,-46.5646],'Santo André':[-23.6639,-46.5383],'São Caetano do Sul':[-23.6229,-46.5548],'Diadema':[-23.6861,-46.6228],'Guarulhos':[-23.4543,-46.5337],'Osasco':[-23.5329,-46.7917],'Mauá':[-23.6677,-46.4613]});
+const PLAN_DEFAULT={toBoard:'uber_metro',station:'jabaquara',trip:'rodoviaria',inSC:'uber',stopHome:true,
+  home:'',
+  board:{rodoviaria:{sp:'tiete',sc:'rodoSC'},buser:{sp:'hebraica',sc:'ibis'},blablacar:{sp:'Estação Jabaquara - São Paulo, SP',sc:'Terminal Rodoviário de São Carlos - SP'}},
+  cost:{metro:5.40,transit:11,bus:95,buser:55,carona:55,uberSC:14,carKm:0.75,pedagio:0},over:{}};
+const plan=()=>{const d=JSON.parse(JSON.stringify(PLAN_DEFAULT));S.plan=Object.assign(d,S.plan||{});S.plan.cost=Object.assign(d.cost,S.plan.cost||{});
+  S.plan.board=Object.assign(d.board,S.plan.board||{});S.plan.over=S.plan.over||{};if(S.plan.mode&&!S.plan.trip)S.plan.trip=S.plan.mode==='carona'?'blablacar':'rodoviaria';return S.plan};
+const PLACES={
+  jabaquara:{n:'Estação Jabaquara',a:'Estação Jabaquara - Metrô, São Paulo - SP',c:[-23.6466,-46.6414]},
+  sacoma:{n:'Estação Sacomã',a:'Estação Sacomã - Metrô, São Paulo - SP',c:[-23.6012,-46.6026]},
+  tiete:{n:'Rodoviária Tietê',a:'Terminal Rodoviário Tietê, Av. Cruzeiro do Sul, 1800 - Santana, São Paulo - SP',c:[-23.5163,-46.6252]},
+  barrafundaRodo:{n:'Terminal Barra Funda',a:'Terminal Rodoviário Barra Funda, R. Jornalista Aloysio Biondi - Barra Funda, São Paulo - SP',c:[-23.5254,-46.6672]},
+  hebraica:{n:'Buser Hebraica-Rebouças',a:'Estação Hebraica-Rebouças, Rua Ofélia - Pinheiros, São Paulo - SP',c:[-23.5717,-46.6936]},
+  barrafundaBuser:{n:'Buser Barra Funda',a:'Av. Mário de Andrade, 563 - Barra Funda, São Paulo - SP',c:[-23.5253,-46.6676]},
+  rodoSC:{n:'Rodoviária de São Carlos',a:'Terminal Rodoviário de São Carlos, R. Jacinto Favoreto, 777 - Jardim Lutfalla, São Carlos - SP',c:[-22.0236,-47.903],sc:true},
+  ibis:{n:'Buser Ibis São Carlos',a:'Ibis São Carlos, Rua Passeio dos Ipês, 140 - Parque Faber, São Carlos - SP',sc:true},
+  graal:{n:'Buser Graal São Carlos',a:'Graal São Carlos - Ceat, São Carlos - SP',sc:true}};
+const BOARD={rodoviaria:{sp:['tiete','barrafundaRodo'],sc:['rodoSC']},buser:{sp:['hebraica','barrafundaBuser'],sc:['ibis','graal','rodoSC']},blablacar:{sp:[],sc:[]}};
+const TRIPS={rodoviaria:['🚌','Ônibus (rodoviária)'],buser:['🟢','Buser'],blablacar:['🚙','BlaBlaCar'],car:['🚘','Carro próprio']};
+const TOBOARD={uber_metro:'Uber + metrô',uber:'Uber direto',transit:'Transporte público'};
+const INSC={uber:'Uber',walk:'A pé',ride:'Alguém busca'};
+function cityIn(t){if(!t)return null;const n=slug(t);let best=null;for(const c of Object.keys(CITY))if(n.includes(slug(c))&&(!best||c.length>best.length))best=c;return best}
+function placeOf(v,side){if(PLACES[v])return PLACES[v];const c=spotC(v);return {n:v.split(',')[0].split(' - ')[0],a:v,c,sc:side==='sc'}}
+function originPlace(){
+  const sim=S.sim||{},t=sim.from||(away()?S.where.city:'');
+  if(!t)return null;
+  if(sim.lat)return {n:sim.near?(t.startsWith('Perto')?t:sim.near):t,a:t,c:[sim.lat,sim.lon],my:true};
+  const c=cityIn(t);return {n:t.length>28?t.slice(0,26)+'…':t,a:/,|\d/.test(t)?t:`${t}, SP`,c:c?CITY[c]:null};
+}
+const enc=encodeURIComponent;
+function uberLink(a,b){
+  const pick=a.my||!a.a?'pickup=my_location':`pickup[formatted_address]=${enc(a.a)}${a.c?`&pickup[latitude]=${a.c[0]}&pickup[longitude]=${a.c[1]}`:''}`;
+  return `https://m.uber.com/ul/?action=setPickup&${pick}&dropoff[formatted_address]=${enc(b.a)}${b.c?`&dropoff[latitude]=${b.c[0]}&dropoff[longitude]=${b.c[1]}`:''}`;
+}
+const mapsLink=(a,b,mode)=>`https://www.google.com/maps/dir/?api=1${a&&!a.my&&a.a?`&origin=${enc(a.a)}`:''}&destination=${enc(b.a)}&travelmode=${mode}`;
+const wazeLink=b=>`https://waze.com/ul?q=${enc(b.a)}&navigate=yes`;
+function rideLinks(a,b){return [['Uber',uberLink(a,b),'#e8e8ff',b.a,'Uber'],['Maps',mapsLink(a,b,'driving'),'var(--lav)'],['Waze',wazeLink(b),'var(--cyan)']]}
+function uberEst(a,b){
+  if(a.c&&b.c&&!(a.sc&&b.sc)){const km=hav(a.c,b.c)*1.35;return {cost:Math.max(10,5+2.1*km),min:Math.round(km/24*60+5),km}}
+  return {cost:plan().cost.uberSC,min:12,km:null};
+}
+function spotC(t){const n=slug(t);for(const k of Object.keys(PLACES)){const nm=slug(PLACES[k].n.replace('Estação ','').replace('Buser ',''));if(nm&&n.includes(nm))return PLACES[k].c}const c=cityIn(t);return c?CITY[c]:null}
+function busLinks(trip,fromSC,d,copy){
+  const dd2=iso(d<today()?today():d),A=fromSC?'sao-carlos-sp':'sao-paulo-sp',B=fromSC?'sao-paulo-sp':'sao-carlos-sp',txt=`${fromSC?'São Carlos → São Paulo':'São Paulo → São Carlos'}, ${fD(d)}`;
+  if(trip==='buser')return [['Buser',`https://www.buser.com.br/onibus/${A}/${B}?ida=${dd2}`,'var(--mint)']];
+  if(trip==='blablacar')return [['BlaBlaCar',`https://www.blablacar.com.br/search?fn=${enc(fromSC?'São Carlos, SP':'São Paulo, SP')}&tn=${enc(fromSC?'São Paulo, SP':'São Carlos, SP')}&db=${dd2}&seats=1`,'var(--cyan)',txt,'BlaBlaCar']];
+  return [['ClickBus',`https://www.clickbus.com.br/onibus/${A}/${B}?departureDate=${dd2}`,'var(--pink)',txt,'ClickBus'],['Buser (rodoviária)',`https://www.buser.com.br/onibus/${A}/${B}?ida=${dd2}`,'var(--mint)']];
+}
+function planLegs(m,dir,date){
+  const P=plan(),s=m.sus,o=originPlace();if(!o)return [];
+  const home={n:'Casa',a:P.home,sc:true},farm={n:'Farmácia de alto custo',a:`${s.address.replace(/\s*—\s*/g,', ')}, ${s.city} - SP`,sc:true};
+  const st=PLACES[P.station];
+  const bSP=P.trip==='car'?null:placeOf(P.board[P.trip].sp,'sp'),bSC=P.trip==='car'?null:placeOf(P.board[P.trip].sc,'sc');
+  const uber=(a,b,key)=>{const e=uberEst(a,b);return {key,type:'uber',ic:'🚗',k:'#e8e8ff',t:`Uber até ${b.n}`,a,b,min:e.min,est:e.cost,links:rideLinks(a,b)}};
+  const transit=(a,b,key,metroOnly)=>{const km=a.c&&b.c?hav(a.c,b.c)*1.3:15;return {key,type:'metro',ic:'🚇',k:'#45d2ff',t:`${metroOnly?'Metrô/trem':'Transporte público'} até ${b.n}`,a,b,
+      min:Math.round(km*2.4+12),est:metroOnly?P.cost.metro:P.cost.transit,note:'O Maps mostra as linhas e baldeações exatas',links:[['Rota no Maps',mapsLink(a,b,'transit'),'var(--cyan)']]}};
+  const walk=(a,b,key)=>({key,type:'walk',ic:'🚶',k:'#3dffc5',t:`A pé até ${b.n}`,a,b,min:15,est:0,links:[['Rota a pé',mapsLink(a,b,'walking'),'var(--mint)']]});
+  const ride=(a,b,key)=>({key,type:'ride',ic:'🤝',k:'#ffb547',t:`Carona até ${b.n}`,a,b,min:12,est:0,links:[['Mandar endereço',mapsLink(a,b,'driving'),'var(--amber)']]});
+  const toB=(a,b,kk)=>P.toBoard==='uber'?[uber(a,b,kk+'a')]:P.toBoard==='transit'?[transit(a,b,kk+'a')]:[uber(a,st,kk+'a'),transit(st,b,kk+'b',true)];
+  const fromB=(a,b,kk)=>P.toBoard==='uber'?[uber(a,b,kk+'a')]:P.toBoard==='transit'?[transit(a,b,kk+'a')]:[transit(a,st,kk+'b',true),uber(st,b,kk+'a')];
+  const inSC=(a,b,kk)=>P.inSC==='walk'?walk(a,b,kk):P.inSC==='ride'?ride(a,b,kk):uber(a,b,kk);
+  const big=(a,b,key,d,fromSC)=>{const T=TRIPS[P.trip],min={rodoviaria:210,buser:180,blablacar:180}[P.trip],est={rodoviaria:P.cost.bus,buser:P.cost.buser,blablacar:P.cost.carona}[P.trip];
+      return {key,type:'trip',ic:T[0],k:P.trip==='buser'?'#3dffc5':P.trip==='blablacar'?'#45d2ff':'#ff4d8d',t:`${T[1].replace(' (rodoviária)','')} até ${b.n}`,a,b,min,est,note:`Embarque em ${a.n}, ${fD(d)}`,links:busLinks(P.trip,fromSC,d)}};
+  const car=(a,b,key)=>{const km=a.c&&b.c?hav(a.c,b.c)*1.25:260;return {key,type:'car',ic:'🚘',k:'#ffb547',t:`Carro até ${b.n}`,a,b,min:Math.round(km/80*60),est:km*P.cost.carKm+P.cost.pedagio,note:`~${Math.round(km)} km`,links:[['Waze',wazeLink(b),'var(--cyan)'],['Maps',mapsLink(a,b,'driving'),'var(--lav)']]}};
+  const stop=(where,txt)=>({type:'stop',ic:where==='home'?'🏠':'💊',k:where==='home'?'#ffb547':'#3dffc5',t:txt});
+  const L=[],first=P.stopHome?home:farm;
+  if(dir==='ida'){
+    if(P.trip==='car'){L.push(car(o,first,'i3'))}
+    else{L.push(...toB(o,bSP,'i1'),big(bSP,bSC,'i3',date,false));L.push(inSC(bSC,first,'i4'))}
+    if(P.stopHome){L.push(stop('home','Passa em casa'),inSC(home,farm,'i5'))}
+    L.push(stop('farm',`Retirada na farmácia${s.hours?': '+esc(s.hours):', confirme o horário antes'}`));
+  }else{
+    L.push(stop('farm','Saindo da farmácia com o remédio'+(m.cold?' na caixa térmica':'')));
+    if(P.stopHome){L.push(inSC(farm,home,'v1'),stop('home','Passa em casa'))}
+    if(P.trip==='car')L.push(car(P.stopHome?home:farm,o,'v3'));
+    else{L.push(inSC(P.stopHome?home:farm,bSC,'v2'),big(bSC,bSP,'v3',date,true),...fromB(bSP,o,'v5'))}
+  }
+  L.forEach(l=>{if(l.key){const ov=P.over[l.key];l.cost=ov!=null?ov:l.est;l.user=ov!=null}});
+  return L;
+}
+function legSheet(key,label,est){
+  const P=plan();
+  openSheet(`<h2>${esc(label)}</h2><div class="hint">Estimativa do app: <b>${brl(est)}</b>. Coloque o valor que aparecer no app para o total ficar certo.</div>
+    <div class="fld"><label>Valor (R$)</label><input type="number" id="lgV" step="0.01" value="${P.over[key]!=null?P.over[key]:est.toFixed(2)}"></div>
+    <button class="btn fill block" onclick="plan().over['${key}']=+lgV.value;save();closeSheet();render()">Salvar valor</button>
+    <button class="btn block quiet" style="margin-top:8px" onclick="delete plan().over['${key}'];save();closeSheet();render()">Voltar para a estimativa</button>`);
+}
+function planSheet(){
+  const P=plan(),c=P.cost;
+  const f=(id,l,v)=>`<div class="fld"><label>${l}</label><input type="number" step="0.01" id="${id}" value="${v}"></div>`;
+  openSheet(`<h2>Valores e endereços</h2>
+    <div class="fld"><label>Casa em São Carlos</label><input id="pH" value="${esc(P.home)}"></div>
+    <div class="two">${f('cM','Metrô/trem (R$)',c.metro)}${f('cT','Transporte público (R$)',c.transit)}</div>
+    <div class="two">${f('cB','Ônibus rodoviária (R$)',c.bus)}${f('cU','Buser (R$)',c.buser)}</div>
+    <div class="two">${f('cC','BlaBlaCar (R$)',c.carona)}${f('cS','Uber em São Carlos (R$)',c.uberSC)}</div>
+    <div class="two">${f('cK','Carro: R$ por km',c.carKm)}${f('cP','Carro: pedágios (R$)',c.pedagio)}</div>
+    <button class="btn fill block" onclick="const P=plan();P.home=pH.value.trim()||P.home;P.cost={metro:+cM.value,transit:+cT.value,bus:+cB.value,buser:+cU.value,carona:+cC.value,uberSC:+cS.value,carKm:+cK.value,pedagio:+cP.value};save();closeSheet();render();toast('Plano atualizado')">Salvar</button>`);
+}
+function setPlan(k,v){plan()[k]=v;save();render()}
+function setBoard(side,v){const P=plan();P.board[P.trip][side]=v;save();render()}
+function linkBtn([n,u,k,cp,app],j){
+  return `<a class="btn sm ${j?'quiet':'fill'}" style="--k:${k};text-decoration:none" href="${u}" target="_blank" rel="noopener"${cp?` data-copy="${esc(cp)}" data-app="${esc(app)}" onclick="copyGo(this)"`:''}>${n}${cp?' <span class="cp">⧉</span>':''}</a>`;
+}
+function copyGo(a){const t=a.dataset.copy,app=a.dataset.app;if(!app||!t)return;try{navigator.clipboard.writeText(t).then(()=>toast(`Copiado: "${t.length>40?t.slice(0,38)+'…':t}". Cole no ${app}`),()=>{})}catch(e){}}
+function legsHTML(L){
+  return `<div class="tl">${L.map(l=>l.type==='stop'
+    ?`<div class="tl-row stop" style="--k:${l.k}"><span class="tl-ic">${l.ic}</span><div class="tl-b"><strong>${l.t}</strong></div></div>`
+    :`<div class="tl-row" style="--k:${l.k}"><span class="tl-ic">${l.ic}</span><div class="tl-b">
+        <div class="tl-h"><strong>${l.t}</strong>${l.est||l.user?`<button class="tl-cost ${l.user?'user':''}" onclick="legSheet('${l.key}','${esc(l.t).replace(/'/g,'')}',${l.est})">${l.user?'':'≈ '}${brl(l.cost)}</button>`:'<span class="tl-cost">grátis</span>'}</div>
+        <span class="tl-sub">${esc(l.a.n)} → ${esc(l.b.n)}, ${l.min>=60?fH(l.min/60):l.min+' min'}${l.note?`<br>${esc(l.note)}`:''}</span>
+        <div class="row" style="margin-top:8px;gap:6px">${l.links.map(linkBtn).join('')}</div>
+      </div></div>`).join('')}</div>`;
+}
+function simBlock(m){
+  const s=m.sus,sim=S.sim||{},dest=s.city,P=plan();
+  const from=sim.from||(away()?S.where.city:null);
+  const np=s.nextPickup?parse(s.nextPickup):null,nd=m.sched?nextInterval(m):null,out=m.sched&&qty(m)<m.dose;
+  const date=sim.date?parse(sim.date):(np?addDays(np,-1):addDays(today(),1));
+  const back=sim.back?parse(sim.back):addDays(date,1);
+  const stage=s.available?'liberado':s.nextPickup?'aguardando':'ligar';
+  const stageTxt=stage==='ligar'?'Ainda sem data do lote. Simule com qualquer data e ajuste depois da ligação.':stage==='aguardando'?`Lote previsto para ${fD(np)}. A ida sugerida é no dia anterior.`:'Já está liberado: dá pra ir quando quiserem.';
+  const chooser=`<div class="from">
+      <button class="btn sm loc" style="--k:var(--cyan)" onclick="locate()">📍 Usar minha localização</button>
+      ${['São Bernardo do Campo','São Paulo'].map(c=>`<button class="btn sm ${from===c?'fill':'quiet'}" style="--k:var(--cyan)" onclick="simSet('from','${c}')">${c.replace(' do Campo','')}</button>`).join('')}</div>
+    <div class="fld" style="margin:0"><label class="lede" style="font-size:12px">Saindo de (cidade ou endereço)</label><input list="cityList" value="${esc(from||'')}" placeholder="Ex.: Rua X, 100 - São Bernardo do Campo" onchange="simSet('from',this.value.trim())"></div>
+    <div class="two"><div><label class="lede" style="font-size:12px">Ida em</label><input type="date" value="${iso(date)}" onchange="simSet('date',this.value)"></div>
+      <div><label class="lede" style="font-size:12px">Volta em</label><input type="date" value="${iso(back)}" onchange="simSet('back',this.value)"></div></div>
+    <datalist id="cityList">${Object.keys(CITY).filter(c=>c!==dest).map(c=>`<option value="${c}">`).join('')}</datalist>`;
+  let body='';
+  const o=originPlace();
+  if(!o) body=`<p class="help" style="margin-top:10px">Escolha de onde vocês sairiam para montar o trajeto.</p>`;
+  else if(cityIn(o.a)===dest) body=`<div class="box k" style="--k:var(--mint);margin-top:12px">Saindo de ${esc(dest)} mesmo: só o Uber até a farmácia.</div><div class="row" style="margin-top:8px"><a class="btn sm fill" style="--k:#e8e8ff;text-decoration:none" target="_blank" rel="noopener" href="${uberLink(o,{a:`${s.address}, ${s.city} - SP`})}">Uber até a farmácia</a></div>`;
+  else{
+    UI.legDir=UI.legDir||'ida';
+    const Li=planLegs(m,'ida',date),Lv=planLegs(m,'volta',back);
+    const sum=L=>L.reduce((a,l)=>a+(l.cost||0),0),tmin=L=>L.reduce((a,l)=>a+(l.min||0),0);
+    const c0=o.c,cd=CITY[dest],km=c0&&cd?Math.round(hav(c0,cd)*1.25):null;
+    const L=UI.legDir==='ida'?Li:Lv;
+    const tips=[
+      m.cold?`Volta com caixa térmica e gelo: o ${esc(m.name.toLowerCase())} precisa ficar entre 2 e 8 °C durante umas ${fH(tmin(Lv)/60)} de trajeto.`:null,
+      out&&nd&&nd<date?`A aplicação de ${fD(nd)} vem antes da viagem e não há seringa em casa: fale com o médico.`:null,
+      nd&&nd>=date&&dd(nd,back)<=1?`A aplicação de ${fD(nd)} cai colada na viagem: dá pra aplicar logo depois de retirar.`:null,
+      s.docs.some(d=>!d.on)?`Separe os ${s.docs.filter(d=>!d.on).length} itens do checklist "O que levar".`:null,
+      s.rep.allowed&&s.rep.name?`Plano B: ${esc(s.rep.name)} retira com a declaração assinada.`:null].filter(Boolean);
+    body=`<div class="route"><div class="pt" style="--c:var(--cyan)"><i></i>${esc(o.n.length>22?o.n.slice(0,20)+'…':o.n)}</div>
+        <div class="line"><i></i>${km?`<span class="km">~${km} km</span>`:''}</div><div class="pt" style="--c:var(--mint)"><i></i>${esc(dest)}</div></div>
+      <div class="cfg">
+        <div class="cfg-l">Como viajar</div>
+        <div class="seg">${Object.entries(TRIPS).map(([k,[ic,l]])=>`<button class="${P.trip===k?'on':''}" onclick="setPlan('trip','${k}')">${ic} ${l.replace(' (rodoviária)','')}</button>`).join('')}</div>
+        ${P.trip!=='car'?`
+        <div class="cfg-l">Embarque em São Paulo</div>
+        <div class="seg">${BOARD[P.trip].sp.map(k=>`<button class="${P.board[P.trip].sp===k?'on':''}" onclick="setBoard('sp','${k}')">${PLACES[k].n.replace('Buser ','')}</button>`).join('')}</div>
+        <input class="cfg-in" value="${PLACES[P.board[P.trip].sp]?'':esc(P.board[P.trip].sp)}" placeholder="${P.trip==='blablacar'?'Ponto combinado com o motorista':'Outro ponto (endereço)'}" onchange="this.value.trim()&&setBoard('sp',this.value.trim())">
+        <div class="cfg-l">Desembarque em São Carlos</div>
+        <div class="seg">${BOARD[P.trip].sc.map(k=>`<button class="${P.board[P.trip].sc===k?'on':''}" onclick="setBoard('sc','${k}')">${PLACES[k].n.replace('Buser ','').replace(' de São Carlos','').replace(' São Carlos','')}</button>`).join('')}</div>
+        <input class="cfg-in" value="${PLACES[P.board[P.trip].sc]?'':esc(P.board[P.trip].sc)}" placeholder="${P.trip==='blablacar'?'Ponto de chegada combinado':'Outro ponto (endereço)'}" onchange="this.value.trim()&&setBoard('sc',this.value.trim())">
+        <div class="cfg-l">Até o embarque</div>
+        <div class="seg">${Object.entries(TOBOARD).map(([k,l])=>`<button class="${P.toBoard===k?'on':''}" onclick="setPlan('toBoard','${k}')">${l}</button>`).join('')}</div>
+        ${P.toBoard==='uber_metro'?`<div class="seg" style="margin-top:6px"><button class="${P.station==='jabaquara'?'on':''}" onclick="setPlan('station','jabaquara')">Metrô Jabaquara</button><button class="${P.station==='sacoma'?'on':''}" onclick="setPlan('station','sacoma')">Metrô Sacomã</button></div>`:''}
+        <div class="cfg-l">Dentro de São Carlos</div>
+        <div class="seg">${Object.entries(INSC).map(([k,l])=>`<button class="${P.inSC===k?'on':''}" onclick="setPlan('inSC','${k}')">${l}</button>`).join('')}</div>`:''}
+        <div class="tgrow">Passar em casa antes da farmácia (e na volta)<button class="tg ${P.stopHome?'on':''}" onclick="setPlan('stopHome',!plan().stopHome)" aria-label="Passar em casa"></button></div>
+      </div>
+      ${P.stopHome&&!P.home?`<div class="box k" style="--k:var(--amber);margin-top:10px">Coloque o endereço de casa em <b>Valores e endereços</b> para os trechos até lá saírem certos.</div>`:''}
+      <div class="tot"><div><span>Ida</span><b>${brl(sum(Li))}</b><small>${fH(tmin(Li)/60)}</small></div><div><span>Volta</span><b>${brl(sum(Lv))}</b><small>${fH(tmin(Lv)/60)}</small></div><div class="all"><span>Total</span><b>${brl(sum(Li)+sum(Lv))}</b><small>por pessoa</small></div></div>
+      <div class="seg" style="margin:14px 0 4px"><button class="${UI.legDir==='ida'?'on':''}" onclick="UI.legDir='ida';render()">Ida, ${fD(date)}</button><button class="${UI.legDir==='volta'?'on':''}" onclick="UI.legDir='volta';render()">Volta, ${fD(back)}</button></div>
+      ${legsHTML(L)}
+      <div class="row" style="margin-top:6px"><button class="btn sm quiet" onclick="planSheet()">Valores e endereços</button>${S.where.city!==from&&from&&!from.startsWith('Perto')&&cityIn(from)?`<button class="link" onclick="setWhere('${esc(cityIn(from))}')">Estamos em ${esc(cityIn(from))} agora</button>`:''}</div>
+      ${tips.length?`<ul class="lede" style="font-size:13px;margin:12px 0 0 18px;line-height:1.55">${tips.map(t=>`<li>${t}</li>`).join('')}</ul>`:''}
+      <p class="help" style="margin-top:10px">≈ é estimativa: Uber pela distância, metrô R$ 5,40, ônibus R$ 95, Buser R$ 55. Toque no valor para pôr o preço real. Botões com ⧉ copiam o endereço ou a busca: é só colar no app.</p>`;
+  }
+  return `<div class="grp"><div class="sim"><h4>Simular viagem até ${esc(dest)}</h4><p class="help">${stageTxt}</p>${chooser}${body}</div></div>`;
+}
+function travelBlock(m){
+  const s=m.sus,np=parse(s.nextPickup),st=m.sched?stockInfo(m):null;
+  const seg=`<div class="seg" style="margin-top:8px">${CITIES.map(c=>`<button class="${S.where.city===c?'on':''}" onclick="setWhere('${c}')">${c}</button>`).join('')}
+    <button class="${S.where.city&&!CITIES.includes(S.where.city)?'on':''}" onclick="whereSheet()">${S.where.city&&!CITIES.includes(S.where.city)?esc(S.where.city):'Outra'}</button></div>`;
+  if(!S.where.city) return `<div class="grp"><h4>Onde vocês vão estar em ${fD(np)}?</h4>${seg}</div>`;
+  if(!awayOn(np)) return `<div class="grp"><h4>Onde vocês vão estar em ${fD(np)}?</h4>${seg}<div class="box k" style="--k:var(--mint);margin-top:10px">Em ${esc(S.where.city)}, mesma cidade da farmácia. Nada de viagem para planejar.</div></div>`;
+  const to=S.where.to?parse(S.where.to):null, back=to?addDays(to,1):null;
+  const during=dosesDuring(m,today(),to);
+  const tips=[
+    back&&back>np?`A volta está marcada para ${fD(back)}, depois da retirada. Combine com a farmácia ou peça para ${esc(s.rep.allowed&&s.rep.name?s.rep.name:'um representante')} retirar.`:`Volte a ${esc(s.city)} até ${fD(addDays(np,-1))} para chegar com folga.`,
+    s.hours?`A farmácia atende ${esc(s.hours)}. Chegue cedo.`:'Ligue para a farmácia antes e confirme o horário de atendimento.',
+    m.cold?`Leve a caixa térmica com gelo na viagem de volta de ${esc(S.where.city)}: o remédio precisa ficar entre 2 e 8 °C.`:null,
+    during.length?`${plural(during.length,'aplicação','aplicações')} cai${during.length>1?'em':''} durante a viagem (${during.map(fD).join(', ')}). Leve ${m.cold?'na caixa térmica':'junto'}.`:null,
+    st&&st.firstMissing<=(to||np)?`O estoque em casa cobre só até ${fD(st.end)}: confira se dá para esperar a volta.`:null,
+    s.rep.allowed?`Plano B: ${esc(s.rep.name||'o representante')} retira com a declaração assinada e documento com foto e CPF.`:null,
+  ].filter(Boolean);
+  return `<div class="grp"><h4>Onde vocês vão estar em ${fD(np)}?</h4>${seg}
+    <div class="box k" style="--k:var(--amber);margin-top:10px"><b>Preparar a viagem</b>: vocês estão em ${esc(S.where.city)}${to?` até ${fD(to)}`:''} e a retirada é em ${esc(s.city)}.
+      <ul>${tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+      <div style="margin-top:12px;font-weight:600">Passagem de ${esc(S.where.city)} para ${esc(s.city)}, ${fD(addDays(np,-1))}</div>
+      <div class="row" style="margin-top:8px">${tripLinks(S.where.city,s.city,addDays(np,-1))}</div></div>
+    <div class="row" style="margin-top:8px"><button class="link" onclick="whereSheet()">Ajustar datas da viagem</button></div></div>`;
+}
+function vRetiradas(){
+  const sus=S.meds.filter(m=>m.source==='sus');
+  return `${header()}<h1 style="font-size:28px">Retiradas</h1><p class="lede">Remédios que ${esc(patient())} recebe do SUS pela farmácia de alto custo.</p>
+  <div style="height:18px"></div>
+  ${sus.length?sus.map(m=>{
+    const s=m.sus;
+    const track=`<div class="track"><div class="${s.call?'on':''}">Ligar</div><div class="${s.nextPickup?'on':''}">Aguardando</div><div class="${s.available?'on':''}">Liberado</div><div>Retirado</div></div>`;
+    const callBox=s.call?`<div class="box" style="margin-top:12px">Ligação em ${fD(parse(s.call.date))}${s.call.expected?`: lote previsto para <b>${fD(parse(s.call.expected))}</b>`:': sem previsão'}${s.call.notes?`<br><span style="color:var(--mut)">${esc(s.call.notes)}</span>`:''}</div>`:'';
+    if(!s.nextPickup) return `<div class="pick" style="--k:${m.color}"><h2>${esc(m.name)} <span style="font-family:'Instrument Sans';font-size:14px;color:var(--mut);font-weight:500">${esc(m.strength)}</span></h2>
+      <div class="place"><b>${esc(s.unit)}</b><br>${esc(s.address)}, ${esc(s.city)}<br>${s.hours?esc(s.hours):'Horário não informado: confirme por telefone.'}</div>
+      ${track}
+      <div class="box k" style="--k:${qty(m)<m.dose?'var(--pink)':'var(--cyan)'};margin-top:10px">${qty(m)<m.dose?`<b>Acabou.</b> ${m.sched?`Próxima aplicação ${relD(nextInterval(m))}. `:''}`:''}Ligue para a farmácia e pergunte se o lote já chegou ou quando chega. Ao registrar a previsão, o app passa a acompanhar a retirada.
+        <ul><li>Diga o nome completo e o CPF da paciente</li><li>Pergunte a data prevista e se precisa levar algum documento novo</li><li>Pergunte se o LME está em dia ou precisa renovar</li><li>Anote com quem falou</li></ul></div>
+      ${callBox}
+      <div class="row" style="margin-top:12px"><button class="btn fill" style="--k:var(--cyan)" onclick="callSheet('${m.id}')">Registrar ligação</button><button class="btn quiet" onclick="susSheet('${m.id}')">Dados da farmácia</button></div>
+      ${simBlock(m)}
+      <div class="grp"><h4>O que levar</h4>${s.docs.map((d,i)=>`<div class="chk ${d.on?'on':''}" onclick="toggleDoc('${m.id}','docs',${i})"><span class="bx"></span><span>${esc(d.t)}</span></div>`).join('')}</div></div>`;
+    const np=parse(s.nextPickup),L=s.lmeStart?lmeInfo(m):null,st=m.sched?stockInfo(m):null,total=s.pickups.reduce((a,p)=>a+p.units,0);
+    return `<div class="pick" style="--k:${m.color}">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><h2>${esc(m.name)} <span style="font-family:'Instrument Sans';font-size:14px;color:var(--mut);font-weight:500">${esc(m.strength)}</span></h2>
+        <button class="btn sm quiet" onclick="susSheet('${m.id}')">Editar</button></div>
+      <div class="place"><b>${esc(s.unit)}</b><br>${esc(s.address)}, ${esc(s.city)}${s.phone?`<br>Telefone ${esc(s.phone)}`:''}${s.hours?`<br>${esc(s.hours)}`:'<br>Horário não informado: confirme por telefone.'}</div>
+      ${track}${callBox}
+      <div class="grid2">
+        <div><span>Próxima retirada</span><b>${relD(np)}</b></div>
+        <div><span>Liberação do governo</span><b style="color:${s.available?'var(--mint)':'var(--amber)'}">${s.available?'Liberado em '+fD(parse(s.availableSince)):'Ainda não liberado'}</b></div>
+        <div><span>Já recebido</span><b>${plural(total,unit(m,1),unit(m,2))} em ${plural(s.pickups.length,'retirada')}</b></div>
+        <div><span>${st?'Em casa cobre até':'Em casa'}</span><b style="color:${st&&st.firstMissing<np?'var(--pink)':'inherit'}">${qty(m)<m.dose?'<span style="color:var(--pink)">nada em casa</span>':st?fD(st.end)+(st.firstMissing<np?', antes da retirada':''):plural(qty(m),unit(m,1),unit(m,2))}</b></div>
+        <div><span>Cada retirada</span><b>${plural(s.perPickup,unit(m,1),unit(m,2))}, a cada ${s.cycleDays} dias</b></div>
+        <div><span>LME</span><b style="color:${!L?'var(--mut)':L.expired?'var(--pink)':L.renew?'var(--lav)':'inherit'}">${L?`mês ${Math.min(L.idx,s.lmeMonths)} de ${s.lmeMonths}, até ${fD(L.end)}`:'início não informado'}</b></div>
+      </div>
+      <div class="row" style="margin-top:14px">${s.available
+        ?`<button class="btn fill" onclick="pickupSheet('${m.id}')">Registrar retirada</button><button class="btn quiet" onclick="setAvail('${m.id}',false)">Desfazer liberação</button>`
+        :`<button class="btn fill" style="--k:var(--cyan)" onclick="setAvail('${m.id}',true)">O governo liberou</button><button class="btn quiet" onclick="callSheet('${m.id}')">Registrar ligação</button>`}</div>
+
+      ${simBlock(m)}
+
+      <div class="grp"><h4>O que levar</h4>
+        ${s.docs.map((d,i)=>`<div class="chk ${d.on?'on':''}" onclick="toggleDoc('${m.id}','docs',${i})"><span class="bx"></span><span>${esc(d.t)}</span><button class="x" aria-label="Remover" onclick="event.stopPropagation();rmDoc('${m.id}','docs',${i})">×</button></div>`).join('')}
+        <div class="addline"><input id="nd_${m.id}_docs" placeholder="Adicionar item" onkeydown="if(event.key==='Enter')addDoc('${m.id}','docs')"><button class="btn sm" onclick="addDoc('${m.id}','docs')">Adicionar</button></div></div>
+
+      <div class="grp"><h4>Quem pode retirar</h4>
+        <div class="box">${s.rep.allowed
+          ?`Outra pessoa pode retirar${s.rep.name?`: <b>${esc(s.rep.name)}</b>`:''}. Leva também:<ul>${REP_DOCS.map(t=>`<li>${t}</li>`).join('')}</ul>`
+          :`Só ${esc(patient())} retira. Marcado como não permitido para representante.`}
+          <small>As regras mudam por unidade. Confirme na farmácia de ${esc(s.city)}.</small></div></div>
+
+      <div class="grp"><h4>Renovação do LME${L&&L.renew?' — agora':''}</h4>
+        <p class="help">O LME cobre até ${s.lmeMonths} meses de retirada. A renovação é feita no último mês, com documentos novos.</p>
+        ${s.renewDocs.map((d,i)=>`<div class="chk ${d.on?'on':''}" style="--k:var(--lav)" onclick="toggleDoc('${m.id}','renewDocs',${i})"><span class="bx"></span><span>${esc(d.t)}</span><button class="x" aria-label="Remover" onclick="event.stopPropagation();rmDoc('${m.id}','renewDocs',${i})">×</button></div>`).join('')}
+        <div class="row" style="margin-top:10px"><button class="btn sm" style="--k:var(--lav)" onclick="renewLme('${m.id}')">LME renovado</button></div></div>
+
+      <div class="grp"><h4>Retiradas anteriores</h4>
+        ${s.pickups.slice().reverse().map(p=>`<div class="chk" style="cursor:default"><span>${fDW(parse(p.date))}</span><b class="num" style="margin-left:auto;color:${m.color}">+${p.units}</b></div>`).join('')||'<p class="help">Nenhuma ainda.</p>'}</div>
+    </div>`}).join('')
+  :`<div class="empty">Nenhum remédio do SUS. Ao cadastrar um remédio, escolha a origem SUS.</div>`}`;
+}
+
+function apptItem(a){
+  const d=parse(a.date),past=d<today(),k=past?'var(--dim)':a.kind==='exame'?'var(--cyan)':'var(--lav)',pend=a.bring.filter(b=>!b.on).length;
+  const trip=!past&&a.city&&awayOn(d);
+  return `<div class="item tap appt" style="--k:${k};${past?'opacity:.55':''}" onclick="apptSheet('${a.id}')">
+    <div class="t">${d.getDate()}<small>${d.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</small></div>
+    <div class="b"><strong>${esc(a.title)}</strong><span>${esc(a.who)}${a.time?', '+a.time:''}${a.city?', '+esc(a.city):''}</span>
+      <div class="row" style="margin-top:6px;gap:6px">${a.renewLme?'<span class="chip" style="--k:var(--lav)">renovar LME</span>':''}
+      ${!past&&a.bring.length?`<span class="chip" style="--k:${pend?'var(--amber)':'var(--mint)'}">${pend?plural(pend,'item','itens')+' para levar':'tudo separado'}</span>`:''}
+      ${trip?`<span class="chip" style="--k:var(--pink)">vocês estarão fora</span>`:''}
+      ${!past?`<button class="btn sm" style="--k:var(--cyan);padding:4px 10px" onclick="event.stopPropagation();apptRoute('${a.id}')">🚗 Como chegar</button>`:''}</div></div></div>`;
+}
+function apptDest(a){const t=[a.place,a.city].filter(Boolean).join(', ');const c=cityIn(t)||cityIn(a.city||'');return {n:a.title,a:t||a.title,c:c?CITY[c]:null,city:c}}
+function apptOrigin(){const r=S.apptFrom||{kind:'home'};
+  if(r.kind==='loc'&&r.lat)return {n:r.near?`perto de ${r.near}`:'sua localização',a:'',c:[r.lat,r.lon],my:true,city:r.near};
+  if(r.kind==='typed'&&r.text){const c=cityIn(r.text);return {n:r.text,a:r.text,c:c?CITY[c]:null,city:c}}
+  const P=plan();return {n:'Casa',a:P.home,c:CITY['São Carlos'],city:'São Carlos'};}
+function apptLocate(id){
+  if(!navigator.geolocation){toast('Sem localização neste navegador. Digite o endereço.');return}
+  navigator.geolocation.getCurrentPosition(p=>{const here=[p.coords.latitude,p.coords.longitude];let best=null,bd=1e9;for(const [n,c] of Object.entries(CITY)){const d=hav(here,c);if(d<bd){bd=d;best=n}}
+    S.apptFrom={kind:'loc',lat:here[0],lon:here[1],near:best};save();apptRoute(id);toast(`Localização: perto de ${best}`)},
+    ()=>toast('A localização não foi liberada nesta tela. Digite o endereço.'),{timeout:9000,maximumAge:600000});
+}
+function apptRoute(id){
+  const a=S.appts.find(x=>x.id===id),r=S.apptFrom||{kind:'home'},o=apptOrigin(),d=apptDest(a);
+  let est=null;
+  if(o.c&&d.c){if(o.city&&d.city&&o.city===d.city)est={cost:plan().cost.uberSC,min:15,same:true};else{const km=hav(o.c,d.c)*1.3;est=km>80?{cost:km*plan().cost.carKm+plan().cost.pedagio,min:Math.round(km/80*60),km,far:true}:{cost:Math.max(10,5+2.1*km),min:Math.round(km/24*60+5),km}}}
+  const leave=est&&a.time?(()=>{const t=parse(`${a.date}T${a.time}`);t.setMinutes(t.getMinutes()-est.min-15);return t.toTimeString().slice(0,5)})():null;
+  const links=[['Uber',uberLink(o,d),'#e8e8ff',d.a,'Uber'],['Maps de carro',mapsLink(o,d,'driving'),'var(--lav)'],['Transporte público',mapsLink(o,d,'transit'),'var(--cyan)'],['Waze',wazeLink(d),'var(--cyan)']];
+  openSheet(`<h2>Como chegar: ${esc(a.title)}</h2>
+    <div class="hint">${fDW(parse(a.date))}${a.time?' às '+a.time:''}<br><b style="color:var(--txt)">${esc(d.a||'Endereço não informado')}</b></div>
+    ${!a.place?`<div class="box k" style="--k:var(--amber);margin-bottom:12px">Coloque o endereço da consulta para o Uber e o mapa irem direto. <button class="link" onclick="apptSheet('${a.id}')">Editar consulta</button></div>`:''}
+    <div class="fld"><label>Saindo de</label><div class="seg">
+      <button class="${r.kind==='loc'?'on':''}" onclick="apptLocate('${id}')">📍 Localização</button>
+      <button class="${r.kind==='home'?'on':''}" onclick="S.apptFrom={kind:'home'};save();apptRoute('${id}')">🏠 Casa</button>
+      <button class="${r.kind==='typed'?'on':''}" onclick="S.apptFrom={kind:'typed',text:(S.apptFrom&&S.apptFrom.text)||''};save();apptRoute('${id}')">✏️ Outro</button></div></div>
+    ${r.kind==='typed'?`<div class="fld"><input list="cityList2" value="${esc(r.text||'')}" placeholder="Endereço ou cidade de saída" onchange="S.apptFrom={kind:'typed',text:this.value.trim()};save();apptRoute('${id}')"><datalist id="cityList2">${Object.keys(CITY).map(c=>`<option value="${c}">`).join('')}</datalist></div>`:''}
+    ${est?`<div class="tot" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:12px"><div><span>${est.far?'Carro, combustível':'Uber, estimado'}</span><b>${brl(est.cost)}</b><small>${est.same?'dentro da cidade':`~${Math.round(est.km)} km`}</small></div><div><span>Tempo</span><b>${est.min>=60?fH(est.min/60):est.min+' min'}</b><small>de carro</small></div><div class="all"><span>Saia até</span><b>${leave||'—'}</b><small>com 15 min de folga</small></div></div>`
+      :`<p class="help" style="margin-bottom:12px">Sem estimativa para esse endereço, mas os botões abrem a rota certa.</p>`}
+    ${est&&est.far?`<div class="box k" style="--k:var(--amber);margin-bottom:12px">Longe demais para Uber. Para ônibus, Buser ou carona, use o simulador de viagem na aba Retiradas, que tem a mesma lógica porta a porta.</div>`:''}
+    <div class="row">${links.map(linkBtn).join('')}</div>
+    <p class="help" style="margin-top:12px">⧉ copia o endereço da consulta: no Uber, toque em "Para onde?" e cole.</p>`);
+}
+function vConsultas(){
+  const fut=S.appts.filter(a=>parse(a.date)>=today()).sort((a,b)=>a.date.localeCompare(b.date));
+  const past=S.appts.filter(a=>parse(a.date)<today()).sort((a,b)=>b.date.localeCompare(a.date));
+  return `${header()}<div class="sec" style="margin-top:0"><h1 style="font-size:28px">Consultas</h1><button class="btn sm" style="--k:var(--lav)" onclick="apptSheet()">Adicionar</button></div>
+  ${fut.length?`<div class="list">${fut.map(apptItem).join('')}</div>`:'<div class="empty">Nenhuma consulta marcada.</div>'}
+  ${past.length?`<div class="sec"><h3>Anteriores</h3></div><div class="list">${past.map(apptItem).join('')}</div>`:''}`;
+}
+
+function vHistorico(){
+  const id=UI.hist,a=adherence(id,30),cells=[];
+  for(let i=27;i>=0;i--){const d=iso(addDays(today(),-i));const L=S.log.filter(l=>(id==='all'||l.medId===id)&&l.sched.slice(0,10)===d);
+    cells.push(`<i class="${!L.length?'':L.some(l=>l.status==='miss')?'miss':L.some(l=>l.status==='late')?'late':'ok'}" title="${fD(parse(d))}"></i>`)}
+  const L=S.log.filter(l=>id==='all'||l.medId===id).sort((x,y)=>y.sched.localeCompare(x.sched)).slice(0,30);
+  const w=n=>a.total?n/a.total*100:0;
+  return `${header()}<h1 style="font-size:28px">Histórico</h1>
+  <div class="seg" style="margin:16px 0">${[['all','Todos']].concat(S.meds.map(m=>[m.id,m.name])).map(([k,l])=>`<button class="${id===k?'on':''}" onclick="UI.hist='${k}';render()">${esc(l)}</button>`).join('')}</div>
+  <div class="foil" style="padding-bottom:16px">
+    <div class="score"><b class="num">${a.pct}%</b><span class="lede">no horário nos últimos 30 dias, ${a.ok} de ${a.total} doses</span></div>
+    <div class="split"><i style="width:${w(a.ok)}%;background:var(--mint)"></i><i style="width:${w(a.late)}%;background:var(--amber)"></i><i style="width:${w(a.miss)}%;background:var(--pink)"></i></div>
+    <div class="legend"><span style="--k:var(--mint)">${a.ok} no horário</span><span style="--k:var(--amber)">${a.late} com atraso</span><span style="--k:var(--pink)">${a.miss} não tomadas</span></div>
+    <div class="cal">${cells.join('')}</div>
+  </div>
+  <div class="sec"><h3>Registros</h3><small>toque para corrigir</small></div>
+  <div class="list">${L.map(l=>{const m=med(l.medId);if(!m)return'';
+    const k=l.status==='ok'?'var(--mint)':l.status==='late'?'var(--amber)':'var(--pink)';
+    const t=l.status==='miss'?'não tomada':l.status==='late'?delay(l):'no horário';
+    return `<div class="item tap" onclick="logSheet('${l.id}')"><div class="b"><strong>${esc(m.name)}</strong><span>${l.site?esc(l.site)+'; ':''}prevista ${fDW(parse(l.sched))}, ${l.sched.slice(11,16)}${l.taken?`; tomada ${l.taken.slice(0,10)===l.sched.slice(0,10)?'às '+l.taken.slice(11,16):fD(parse(l.taken))}`:''}</span></div><span class="chip" style="--k:${k}">${t}</span></div>`}).join('')||'<div class="item"><div class="b"><span>Sem registros ainda.</span></div></div>'}</div>`;
+}
+function delay(l){const h=(parse(l.taken)-parse(l.sched))/36e5;return h>=24?`${Math.round(h/24)} d depois`:`${Math.round(h)} h depois`}
+
+/* ====================== AÇÕES ====================== */
+function go(v){UI.view=v;UI.anim=true;scrollTo({top:0});render()}
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2400)}
+function openSheet(h){const s=document.getElementById('sheet');s.innerHTML='<div class="grab"></div>'+h;s.classList.add('on');document.getElementById('scrim').classList.add('on')}
+function closeSheet(){document.getElementById('sheet').classList.remove('on');document.getElementById('scrim').classList.remove('on')}
+document.getElementById('scrim').onclick=closeSheet;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+
+function statusFor(m,sched,taken){
+  if(!taken)return'miss';
+  const h=(parse(taken)-parse(sched))/36e5;
+  return m.sched.type==='daily'?(h>LATE_HOURS_DAILY?'late':'ok'):(h/24>=LATE_DAYS_INTERVAL?'late':'ok');
+}
+function nextSite(m){
+  const last=S.log.filter(l=>l.medId===m.id&&l.site&&l.site!=='Não informado').sort((a,b)=>b.sched.localeCompare(a.sched))[0];
+  if(!last)return null;
+  const flip=last.site.includes('direit')?last.site.replace('direito','esquerdo').replace('direita','esquerda'):last.site.replace('esquerdo','direito').replace('esquerda','direita');
+  return {last:last.site,next:flip};
+}
+const KITS=[
+  {ic:'💧',k:'#45d2ff',t:'Precisa de hidratação?',sub:'Calor, enjoo, diarreia ou treino puxado',home:[],
+   buy:['Hidralyte','Gatorade','Água de coco','Pedialyte','Powerade'],note:'Soro de reidratação repõe água e sais; isotônico é a opção para treino e calor.'},
+  {ic:'🤧',k:'#b39bff',t:'Gripou?',sub:'Nariz entupido, corpo mole, garganta',home:['Benegrip','Dipirona','Fexofenadina','Winter AP'],
+   buy:['Soro fisiológico nasal','Lenço de papel','Mel','Chá de gengibre'],note:'Febre em quem usa imunossupressor pede contato com o médico.'},
+  {ic:'🫠',k:'#3dffc5',t:'Enjoo ou estômago',sub:'Náusea, azia, gases',home:['Ondansetrona','Simeticona','Hidróxido de alumínio','Pantoprazol'],
+   buy:['Hidralyte','Bolacha de água e sal','Gengibre'],note:'Se o enjoo não passa e não para nada no estômago, vale falar com o médico.'},
+  {ic:'🤕',k:'#ffb547',t:'Dor de cabeça ou no corpo',sub:'Enxaqueca, dor muscular, pancada',home:['Neosaldina','Dipirona','Dorflex Max','Salonpas','Acheflan'],
+   buy:['Bolsa térmica de gel','Compressa fria'],note:'Use os remédios como o médico orientou.'},
+  {ic:'👁️',k:'#ff4d8d',t:'Olhos secos ou irritados',sub:'Tela, vento, ar-condicionado',home:['Lágrima artificial','Terolac','Maxidex','Hiluropt'],
+   buy:['Lenço umedecido para olhos','Compressa ocular'],note:'Colírio com corticoide (como Maxidex) só com orientação médica.'},
+  {ic:'🦷',k:'#3dffc5',t:'Boca e gengiva',sub:'Afta, gengiva sensível, mau hálito',home:['Spray de clorexidina','Periotrate','Pasta Colgate'],
+   buy:['Fio dental','Enxaguante sem álcool'],note:''},
+];
+const findMed=n=>S.meds.find(m=>m.name.toLowerCase().startsWith(n.toLowerCase()));
+const ifood=q=>`https://www.ifood.com.br/busca?q=${encodeURIComponent(q)}`;
+const raia=q=>`https://www.drogaraia.com.br/search?w=${encodeURIComponent(q)}`;
+function kitsHTML(){
+  return `<div class="sec"><h3>Kits rápidos</h3><small>deslize para os lados</small></div>
+  <div class="kits" id="kits">${KITS.map((k,i)=>{
+    const home=k.home.map(findMed).filter(Boolean);
+    const low=home.filter(m=>['low','out'].includes(buyStatus(m)));
+    return `<article class="kit" style="--k:${k.k}">
+      <div class="kit-top"><span class="kit-ic">${k.ic}</span><div><h4>${k.t}</h4><p>${k.sub}</p></div></div>
+      ${home.length?`<div class="kit-lbl">Em casa${low.length?`, ${low.length} acabando ou em falta`:''}</div>
+        <div class="kit-chips">${home.map(m=>{const [sl,sk]=STATUS[buyStatus(m)];return `<button class="kchip" style="--c:${sk}" onclick="medSheet('${m.id}')"><i></i>${esc(shortName(m))}</button>`}).join('')}</div>`:''}
+      ${(()=>{const st=(UI.kitStore||{})[i]||'ifood',U=st==='raia'?raia:ifood;return `
+      <div class="kit-store"><span class="kit-lbl" style="margin:0">${home.length?'Comprar':'Peça agora'} no</span>
+        <div class="kseg"><button class="${st==='ifood'?'on':''}" style="--s:#ea1d2c" onclick="kitStore(this,${i},'ifood')">iFood</button><button class="${st==='raia'?'on':''}" style="--s:#45d2ff" onclick="kitStore(this,${i},'raia')">Droga Raia</button></div></div>
+      <div class="kit-chips">${[...low.map(m=>m.name.split(' (')[0]+' '+m.strength),...k.buy].map(q=>`<a class="kchip buy" data-q="${esc(q.trim())}" data-copy="${esc(q.trim())}" data-app="${st==='raia'?'':'iFood'}" onclick="copyGo(this)" href="${U(q.trim())}" target="_blank" rel="noopener">${esc(q.trim())}</a>`).join('')}</div>
+      <p class="kit-note" style="margin-top:8px!important">Toque em cada produto para abrir ${st==='raia'?'na Droga Raia':'no iFood'}.</p>`})()}
+      ${k.note?`<p class="kit-note">${k.note}</p>`:''}
+    </article>`}).join('')}</div>`;
+}
+function kitStore(btn,i,st){
+  (UI.kitStore||(UI.kitStore={}))[i]=st;
+  const card=btn.closest('.kit');
+  card.querySelectorAll('.kseg button').forEach(b=>b.classList.toggle('on',b===btn));
+  card.querySelectorAll('a[data-q]').forEach(a=>{a.href=(st==='raia'?raia:ifood)(a.dataset.q);a.dataset.app=st==='raia'?'':'iFood'});
+  const n=card.querySelector('.kit-note');if(n&&n.textContent.startsWith('Toque'))n.textContent=`Toque em cada produto para abrir ${st==='raia'?'na Droga Raia':'no iFood'}.`;
+  toast(st==='raia'?'Produtos abrindo na Droga Raia':'Produtos abrindo no iFood');
+}
+function kitTick(){
+  const box=document.getElementById('kits');if(!box||REDUCED)return;
+  const c=box.getBoundingClientRect(),mid=c.left+c.width/2;
+  box.querySelectorAll('.kit').forEach(el=>{const r=el.getBoundingClientRect(),o=Math.max(-1.4,Math.min(1.4,(r.left+r.width/2-mid)/r.width));
+    el.style.setProperty('--ry',(o*-28).toFixed(1)+'deg');el.style.setProperty('--sc',(1-Math.abs(o)*.1).toFixed(3));el.style.setProperty('--op',(1-Math.abs(o)*.35).toFixed(2))});
+}
+const shortName=m=>{const n=m.name.split(' (')[0];return n.length>13?n.slice(0,12)+'…':n};
+function popDose(el,id,sched){
+  const m=med(id);
+  if(injectable(m))return takeSheet(id,sched);
+  if(el.classList.contains('pop'))return;
+  el.classList.add('pop');
+  setTimeout(()=>recordTake(id,sched,isoT(new Date())),430);
+}
+function undoSheet(logId){
+  const l=S.log.find(x=>x.id===logId),m=med(l.medId);
+  openSheet(`<h2>${esc(m.name)}</h2><div class="hint">Registrada às <b>${l.taken.slice(11,16)}</b>${l.site?`, ${esc(l.site.toLowerCase())}`:''}. Marcou sem querer?</div>
+    <button class="btn block" style="--k:var(--pink)" onclick="closeSheet();undo('${logId}')">Desfazer registro</button>
+    <button class="btn block quiet" style="margin-top:8px" onclick="closeSheet();logSheet('${logId}')">Corrigir horário</button>`);
+}
+const CHEERS=['Mandou bem!','Check!','Mais uma na conta!','Isso aí!','Feito!'];
+let tapRect=null;
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(b)tapRect=b.getBoundingClientRect()},true);
+function burst(r,big){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cx=r?r.left+r.width/2:innerWidth/2,cy=r?r.top+r.height/2:innerHeight/2;
+  const cols=['#3dffc5','#45d2ff','#b39bff','#ff4d8d','#ffb547'],n=big?46:16;
+  for(let i=0;i<n;i++){const el=document.createElement('i');el.className='fx';
+    const a=Math.random()*Math.PI*2,d=(big?140:70)+Math.random()*(big?220:90);
+    el.style.left=cx+'px';el.style.top=cy+'px';el.style.setProperty('--c',cols[i%5]);
+    el.style.setProperty('--dx',Math.cos(a)*d+'px');el.style.setProperty('--dy',Math.sin(a)*d-(big?60:30)+'px');
+    el.style.setProperty('--rot',(Math.random()*720-360)+'deg');el.style.setProperty('--t',(700+Math.random()*(big?900:400))+'ms');
+    document.body.appendChild(el);setTimeout(()=>el.remove(),1800)}
+}
+function party(){
+  const w=document.createElement('div');w.className='party';
+  w.innerHTML=`<div class="card"><b>Dia fechado 💚</b><span>Todas as doses de hoje registradas.</span></div>`;
+  document.body.appendChild(w);burst(null,true);setTimeout(()=>burst(null,true),350);setTimeout(()=>w.remove(),2700);
+}
+function recordTake(medId,sched,taken,site){
+  const r=tapRect;
+  const m=med(medId),status=statusFor(m,sched,taken);
+  S.log=S.log.filter(l=>!(l.medId===medId&&l.sched===sched));
+  S.log.push({id:uid(),medId,sched,taken,status,...(site?{site}:{})});
+  if(taken)takeUnits(m,m.dose);
+  UI.just=S.log.at(-1).id;
+  save();render();
+  if(!taken){toast(`Anotado: ${m.name} ficou sem tomar. Amanhã a gente acerta.`);return}
+  burst(r,false);
+  const d=dueToday();
+  if(d.length&&d.every(x=>x.e))setTimeout(party,250);
+  else toast(status==='late'?`Registrado. Antes tarde do que nunca: ${m.name}`:`${CHEERS[Math.floor(Math.random()*CHEERS.length)]} ${m.name} registrado`);
+}
+function quickTake(id,sched){if(injectable(med(id)))return takeSheet(id,sched);recordTake(id,sched,isoT(new Date()))}
+function undo(logId){const l=S.log.find(x=>x.id===logId),m=med(l.medId);if(l.taken)addUnits(m,m.dose);S.log=S.log.filter(x=>x.id!==logId);save();render();toast('Registro desfeito')}
+function takeSheet(id,sched){
+  const m=med(id);
+  openSheet(`<h2>${esc(m.name)} ${esc(m.strength)}</h2>
+    <div class="hint">Prevista para <b>${fDW(parse(sched))}, ${sched.slice(11,16)}</b>. Informe quando foi tomada.</div>
+    <div class="fld"><label>Tomada em</label><input type="datetime-local" id="tkAt" value="${isoT(new Date())}"></div>
+    ${injectable(m)?(()=>{const ns=nextSite(m);return `<div class="fld"><label>Local da aplicação${ns?` (a última foi no ${ns.last.toLowerCase()})`:''}</label><select id="tkSite">${SITES.map(x=>`<option ${ns&&ns.next===x?'selected':''}>${x}</option>`).join('')}</select></div>`})():''}
+    <button class="btn fill block" onclick="recordTake('${id}','${sched}',tkAt.value,window.tkSite?tkSite.value:null);closeSheet()">Registrar ${injectable(m)?'aplicação':'dose'}</button>
+    <button class="btn block" style="--k:var(--pink);margin-top:8px" onclick="recordTake('${id}','${sched}',null);closeSheet()">Não tomou esta dose</button>`);
+}
+function logSheet(id){
+  const l=S.log.find(x=>x.id===id),m=med(l.medId);
+  openSheet(`<h2>Corrigir registro</h2><div class="hint">${esc(m.name)}, prevista ${fDW(parse(l.sched))} às ${l.sched.slice(11,16)}</div>
+    <div class="fld"><label>Tomada em (deixe vazio se não tomou)</label><input type="datetime-local" id="lgAt" value="${l.taken||''}"></div>
+    <button class="btn fill block" onclick="editLog('${id}',lgAt.value||null)">Salvar correção</button>
+    <button class="btn block" style="--k:var(--pink);margin-top:8px" onclick="S.log=S.log.filter(x=>x.id!=='${id}');save();closeSheet();render();toast('Registro apagado')">Apagar registro</button>`);
+}
+function editLog(id,taken){const l=S.log.find(x=>x.id===id);l.taken=taken;l.status=statusFor(med(l.medId),l.sched,taken);save();closeSheet();render();toast('Correção salva')}
+
+/* perfil e localização */
+function profileSheet(){
+  openSheet(`<h2>Paciente e cidade</h2>
+    <div class="fld"><label>Nome da paciente</label><input id="pfN" value="${esc(S.profile.patient)}" placeholder="Nome"></div>
+    <div class="fld"><label>Quem ajuda / representante</label><input id="pfH" value="${esc(S.profile.helper)}"></div>
+    <div class="fld"><label>Cidade de casa</label><input id="pfC" value="${esc(S.profile.home)}"></div>
+    <div class="fld"><label>Onde estão agora</label><div class="seg">${CITIES.map(c=>`<button class="${S.where.city===c?'on':''}" onclick="setWhere('${c}',true)">${c}</button>`).join('')}<button onclick="whereSheet()">Outra</button></div></div>
+    <button class="btn fill block" onclick="S.profile.patient=pfN.value.trim();S.profile.helper=pfH.value.trim();S.profile.home=pfC.value.trim()||'São Carlos';save();closeSheet();render();toast('Perfil salvo')">Salvar perfil</button>
+    ${HH?`<div class="box k" style="--k:var(--mint);margin-top:14px">Casa <b>${esc(HH.name)}</b>. Código para convidar: <b class="num" style="font-size:18px;letter-spacing:.12em">${esc(HH.invite_code)}</b><br><small>Quem entrar com esse código vê e marca tudo junto.</small></div>
+      <button class="btn block" style="--k:var(--mint);margin-top:8px" onclick="copyInvite()">Copiar convite</button>`:''}
+    <button class="btn block" style="--k:var(--cyan);margin-top:8px" onclick="importSheet()">Importar dados</button>
+    <button class="btn block quiet" style="margin-top:8px" onclick="exportData()">Copiar backup dos dados</button>
+    ${SESSION?`<button class="btn block quiet" style="margin-top:8px" onclick="signOut()">Sair (${esc(SESSION.user.email||'')})</button>`:''}
+    ${S.example?`<button class="btn block quiet" style="margin-top:8px" onclick="clearExample()">Apagar remédios de exemplo</button>`:''}`);
+}
+function exportData(){
+  const out=JSON.stringify({dose:1,meds:S.meds,log:S.log,appts:S.appts,profile:S.profile,plan:S.plan,where:S.where,sim:S.sim,apptFrom:S.apptFrom});
+  try{navigator.clipboard.writeText(out).then(()=>toast(`Copiado: ${S.meds.length} remédios, ${S.log.length} registros. Cole no app instalado.`),()=>toast('Não consegui copiar aqui.'))}catch(e){toast('Não consegui copiar aqui.')}
+}
+function setWhere(c,keep){S.where={city:c,from:iso(today()),to:c===S.profile.home?null:S.where.to};save();if(!keep)closeSheet();render();toast(c===S.profile.home?`Em ${c}`:`Fora de casa: ${c}`)}
+function whereSheet(){
+  openSheet(`<h2>Viagem</h2>
+    <div class="fld"><label>Cidade</label><input id="wC" value="${esc(S.where.city&&S.where.city!==S.profile.home?S.where.city:'')}" placeholder="Ex.: São Paulo"></div>
+    <div class="two"><div class="fld"><label>De</label><input type="date" id="wF" value="${S.where.from||iso(today())}"></div>
+    <div class="fld"><label>Até (volta para casa no dia seguinte)</label><input type="date" id="wT" value="${S.where.to||''}"></div></div>
+    <button class="btn fill block" onclick="if(!wC.value.trim()){toast('Informe a cidade');return}S.where={city:wC.value.trim(),from:wF.value,to:wT.value||null};save();closeSheet();render();toast('Viagem salva')">Salvar viagem</button>
+    <button class="btn block quiet" style="margin-top:8px" onclick="setWhere(S.profile.home)">Estamos em ${esc(S.profile.home)}</button>`);
+}
+function clearExample(){S.meds=[];S.log=[];S.appts=[];S.example=false;save();closeSheet();render();toast('Exemplos apagados')}
+
+/* remédio */
+let md=null;
+function medSheet(id,preset={}){
+  const m=id?med(id):null;
+  md=m?JSON.parse(JSON.stringify(m)):M({group:'continuo',color:COLORS[S.meds.length%COLORS.length],...preset});
+  md._mode=md.level?'level':md.source==='sus'?'count':'packs';
+  drawMed();
+}
+function setSched(t){
+  if(t==='none'){md._last=md.sched||md._last;md.sched=null}
+  else{const base=md.sched||md._last||{};md.sched={type:t,times:base.times||['08:00'],every:base.every||14,time:base.time||'09:00',start:base.start||iso(today())}}
+  drawMed();
+}
+function drawMed(){
+  const d=md,s=d.sched,st=s?s.type:'none';
+  openSheet(`<h2>${d.id?esc(d.name)||'Editar remédio':'Novo remédio'}</h2>
+    <div class="fld"><label>Grupo</label><div class="seg">${Object.entries(GROUPS).map(([k,l])=>`<button class="${d.group===k?'on':''}" onclick="md.group='${k}';drawMed()">${l}</button>`).join('')}</div></div>
+    <div class="two"><div class="fld"><label>Nome</label><input value="${esc(d.name)}" placeholder="Ex.: Gabapentina" oninput="md.name=this.value"></div>
+      <div class="fld"><label>Concentração</label><input value="${esc(d.strength)}" placeholder="300 mg" oninput="md.strength=this.value"></div></div>
+    <div class="two"><div class="fld"><label>Forma</label><select onchange="md.form=this.value">${FORMS.map(f=>`<option ${d.form===f?'selected':''}>${f}</option>`).join('')}</select></div>
+      <div class="fld"><label>Unidades por dose</label><input type="number" min="0.5" step="0.5" value="${d.dose}" oninput="md.dose=+this.value"></div></div>
+
+    <div class="fld"><label>Quando toma</label><div class="seg">
+      <button class="${st==='daily'?'on':''}" onclick="setSched('daily')">Todo dia</button>
+      <button class="${st==='interval'?'on':''}" onclick="setSched('interval')">A cada X dias</button>
+      <button class="${st==='none'?'on':''}" onclick="setSched('none')">Quando precisa</button></div></div>
+    ${st==='daily'?`<div class="fld"><label>Horários, separados por vírgula</label><input value="${s.times.join(', ')}" placeholder="08:00, 20:00" oninput="md.sched.times=this.value.split(',').map(x=>x.trim()).filter(x=>/^\\d{1,2}:\\d{2}$/.test(x)).map(x=>x.padStart(5,'0'))"></div>`:''}
+    ${st==='interval'?`<div class="two"><div class="fld"><label>A cada quantos dias</label><input type="number" min="2" value="${s.every}" oninput="md.sched.every=+this.value"></div>
+        <div class="fld"><label>Horário</label><input type="time" value="${s.time}" oninput="md.sched.time=this.value"></div></div>
+        <div class="fld"><label>Data da próxima dose</label><input type="date" value="${s.start}" oninput="md.sched.start=this.value"></div>`:''}
+
+    <div class="fld"><label>Origem</label><div class="seg"><button class="${d.source==='compra'?'on':''}" onclick="md.source='compra';if(md._mode==='count')md._mode='packs';drawMed()">Compra própria</button><button class="${d.source==='sus'?'on':''}" onclick="md.source='sus';md._mode='count';drawMed()">SUS, alto custo</button></div></div>
+
+    ${d.source==='sus'?`<div class="fld"><label>Quantas ${unit(d,2)} tem em casa</label><input type="number" min="0" value="${d.stock||0}" oninput="md.stock=+this.value;md.unknown=false"></div>`
+    :`<div class="fld"><label>Como contar o estoque</label><div class="seg"><button class="${d._mode==='packs'?'on':''}" onclick="md._mode='packs';md.level=null;drawMed()">Por cartela ou caixa</button><button class="${d._mode==='level'?'on':''}" onclick="md._mode='level';md.level=md.level||'cheio';md.packs=[];drawMed()">Por nível (frasco, pomada)</button></div></div>
+      ${d._mode==='level'
+        ?`<div class="fld"><div class="seg">${LEVELS.map(l=>`<button class="${d.level===l?'on':''}" style="--k:${l==='vazio'?'var(--pink)':l==='acabando'?'var(--amber)':'var(--mint)'}" onclick="md.level='${l}';md.unknown=false;drawMed()">${l}</button>`).join('')}</div></div>`
+        :`<div class="fld"><label>Cartelas em casa: quantas restam de quantas</label>
+          ${d.packs.map((p,i)=>`<div class="pkrow"><input type="number" min="0" value="${p.left}" oninput="md.packs[${i}].left=+this.value" aria-label="Restam"><span>de</span><input type="number" min="1" value="${p.size}" oninput="md.packs[${i}].size=+this.value" aria-label="Total"><button class="x" onclick="md.packs.splice(${i},1);drawMed()" aria-label="Remover">×</button></div>`).join('')||'<p class="lede" style="font-size:13px">Nenhuma cartela registrada.</p>'}
+          <div class="row" style="margin-top:8px"><button class="btn sm" onclick="const z=packSize(md)||10;md.packs.push({left:z,size:z});md.unknown=false;drawMed()">Adicionar cartela</button></div></div>`}`}
+
+    <div class="tgrow">Receita retida na compra (controlado)<button class="tg ${d.rx?'on':''}" onclick="md.rx=!md.rx;this.classList.toggle('on')" aria-label="Receita retida"></button></div>
+    <div class="tgrow">Guardar na geladeira<button class="tg ${d.cold?'on':''}" onclick="md.cold=!md.cold;this.classList.toggle('on')" aria-label="Geladeira"></button></div>
+    <div class="fld"><label>Observações</label><textarea oninput="md.notes=this.value" placeholder="Ex.: depois do café">${esc(d.notes)}</textarea></div>
+    <button class="btn fill block" onclick="saveMed()">Salvar remédio</button>
+    ${d.id?`<button class="btn block" style="--k:var(--pink);margin-top:8px" onclick="S.meds=S.meds.filter(m=>m.id!==md.id);S.log=S.log.filter(l=>l.medId!==md.id);save();closeSheet();render();toast('Remédio apagado')">Apagar remédio</button>`:''}`);
+}
+function saveMed(){
+  const d=md;
+  if(!d.name.trim()){toast('Informe o nome do remédio');return}
+  if(d.sched&&d.sched.type==='daily'&&!d.sched.times.length){toast('Informe pelo menos um horário');return}
+  d.packs=(d.packs||[]).filter(p=>p.size>0);
+  if(d.packs.length||d.level)d.unknown=false;
+  if(d.source==='sus'&&!d.sus)d.sus=susBlank(d.cold);
+  delete d._mode;delete d._last;
+  if(d.id&&med(d.id))Object.assign(med(d.id),d);else{d.id=d.id||uid();S.meds.push(d)}
+  save();closeSheet();render();toast('Remédio salvo');
+}
+function buySheet(id){
+  const m=med(id),pi=priceInfo(m);
+  openSheet(`<h2>Compra de ${esc(m.name)}</h2>
+    <div class="two"><div class="fld"><label>Data</label><input type="date" id="bD" value="${iso(today())}"></div><div class="fld"><label>Caixas</label><input type="number" id="bN" min="1" value="1"></div></div>
+    <div class="two"><div class="fld"><label>Preço pago por caixa (R$)</label><input type="number" id="bP" step="0.01" value="${pi.est?pi.est.toFixed(2):''}"></div><div class="fld"><label>Farmácia</label><input id="bS" placeholder="Opcional"></div></div>
+    <div class="fld"><label>Unidades por caixa</label><input type="number" id="bU" min="1" value="${boxUnits(m)}"></div><div class="hint">O estoque soma as caixas novas e o preço entra na estimativa da próxima compra.</div>
+    <button class="btn fill block" style="--k:var(--amber)" onclick="saveBuy('${id}')">Registrar compra</button>`);
+}
+function saveBuy(id){
+  const m=med(id),n=+bN.value||1,p=+bP.value;
+  if(!p){toast('Informe o preço pago');return}
+  m.purchases.push({date:bD.value,boxes:n,price:p,store:bS.value.trim()});const u=+bU.value||boxUnits(m);for(let i=0;i<n;i++)addBox(m,u);
+  save();closeSheet();render();burst(tapRect,false);toast(`Compra registrada: ${brl(p*n)}. Estoque atualizado`);
+}
+function shopLinks(m,small=true){
+  const q=encodeURIComponent(`${m.name.split(' (')[0]} ${m.strength}`.trim()),qb=encodeURIComponent(`${m.name.replace(/[()]/g,'')} ${m.strength}`.trim());
+  const t=`${m.name.split(' (')[0]} ${m.strength}`.trim();
+  const L=[['Droga Raia',`https://www.drogaraia.com.br/search?w=${q}`,'var(--cyan)'],['iFood',`https://www.ifood.com.br/busca?q=${q}`,'var(--pink)',t,'iFood'],['Google Shopping',`https://www.google.com/search?tbm=shop&q=${qb}`,'var(--lav)']];
+  return (small?L.slice(0,2):L).map((x,i)=>linkBtn(x,small?1:i)).join('');
+}
+function priceSheet(id){
+  const m=med(id),q=encodeURIComponent(`${m.name} ${m.strength}`);
+  openSheet(`<h2>Preço de ${esc(m.name)} ${esc(m.strength)}</h2>
+    <div class="hint">Abre a busca já com o nome do remédio. Com o app da Raia ou do iFood instalado, o celular costuma abrir direto nele. Achou um preço bom? Salve aqui embaixo.</div>
+    <div class="row" style="margin-bottom:16px">
+      ${shopLinks(m,false)}</div>
+    <div class="two"><div class="fld"><label>Menor preço por caixa (R$)</label><input type="number" id="rV" step="0.01" value="${m.ref?m.ref.value:''}"></div><div class="fld"><label>Onde</label><input id="rS" value="${m.ref?esc(m.ref.source):''}" placeholder="Farmácia ou site"></div></div>
+    <button class="btn fill block" style="--k:var(--amber)" onclick="if(!+rV.value){toast('Informe o preço');return}med('${id}').ref={value:+rV.value,source:rS.value.trim()||'pesquisa',date:iso(today())};save();closeSheet();render();toast('Preço de referência salvo')">Salvar preço de referência</button>`);
+}
+
+/* SUS */
+function setAvail(id,v){const s=med(id).sus;s.available=v;s.availableSince=v?iso(today()):null;save();render();toast(v?'Marcado como liberado':'Liberação desfeita')}
+function pickupSheet(id){
+  const m=med(id),s=m.sus;
+  openSheet(`<h2>Retirada de ${esc(m.name)}</h2>
+    <div class="two"><div class="fld"><label>Data</label><input type="date" id="pD" value="${iso(today())}"></div><div class="fld"><label>${unit(m,2)} recebidas</label><input type="number" id="pU" min="1" value="${s.perPickup}"></div></div>
+    <div class="fld"><label>Próxima retirada prevista</label><input type="date" id="pN" value="${iso(addDays(today(),s.cycleDays))}"></div>
+    <div class="hint">As doses entram no estoque e o checklist volta desmarcado para a próxima vez.</div>
+    <button class="btn fill block" onclick="savePickup('${id}')">Registrar retirada</button>`);
+}
+function savePickup(id){
+  const m=med(id),s=m.sus,u=+pU.value||0;
+  s.pickups.push({date:pD.value,units:u});addUnits(m,u);m.unknown=false;s.nextPickup=pN.value;s.available=false;s.availableSince=null;s.docs.forEach(d=>d.on=false);
+  save();closeSheet();render();burst(tapRect,true);toast(`Buscado! +${u} ${unit(m,u)} em casa. Próxima retirada ${fD(parse(s.nextPickup))}`);
+}
+function toggleDoc(id,k,i){const d=med(id).sus[k][i];d.on=!d.on;save();render()}
+function rmDoc(id,k,i){med(id).sus[k].splice(i,1);save();render()}
+function addDoc(id,k){const el=document.getElementById(`nd_${id}_${k}`),t=el.value.trim();if(!t)return;med(id).sus[k].push({t,on:false});save();render()}
+function renewLme(id){const s=med(id).sus;s.lmeStart=iso(addMonths(today(),1)).slice(0,8)+'01';s.renewDocs.forEach(d=>d.on=false);save();render();toast('LME renovado: nova vigência começa no mês que vem')}
+function callSheet(id){
+  const m=med(id),s=m.sus;
+  openSheet(`<h2>Ligação sobre ${esc(m.name)}</h2>
+    <div class="hint">Farmácia de ${esc(s.city)}${s.phone?`, telefone <b>${esc(s.phone)}</b>`:'. Depois de ligar, salve o telefone em Dados da farmácia'}.</div>
+    <div class="two"><div class="fld"><label>Data da ligação</label><input type="date" id="cD" value="${iso(today())}"></div>
+    <div class="fld"><label>Previsão do lote</label><input type="date" id="cE" value="${s.call&&s.call.expected||''}"></div></div>
+    <div class="tgrow">Já está liberado para retirar<button class="tg" id="cA" onclick="this.classList.toggle('on')" aria-label="Liberado"></button></div>
+    <div class="fld"><label>Telefone da farmácia</label><input id="cP" value="${esc(s.phone)}" placeholder="(16) ..."></div>
+    <div class="fld"><label>Anotações</label><textarea id="cN" placeholder="Com quem falou, documentos pedidos...">${s.call?esc(s.call.notes):''}</textarea></div>
+    <button class="btn fill block" style="--k:var(--cyan)" onclick="saveCall('${id}')">Salvar ligação</button>`);
+}
+function saveCall(id){
+  const s=med(id).sus,lib=cA.classList.contains('on');
+  s.call={date:cD.value,expected:cE.value||null,notes:cN.value.trim()};
+  if(cP.value.trim())s.phone=cP.value.trim();
+  if(lib){s.available=true;s.availableSince=iso(today());s.nextPickup=s.nextPickup||iso(today())}
+  else if(cE.value)s.nextPickup=cE.value;
+  save();closeSheet();render();toast(lib?'Liberado: pode retirar':cE.value?`Lote previsto para ${fD(parse(cE.value))}`:'Ligação registrada');
+}
+let sd=null;
+function susSheet(id){
+  const m=med(id);sd=JSON.parse(JSON.stringify(m.sus));
+  openSheet(`<h2>Farmácia e ciclo</h2>
+    <div class="fld"><label>Farmácia</label><input value="${esc(sd.unit)}" oninput="sd.unit=this.value"></div>
+    <div class="two"><div class="fld"><label>Cidade</label><input value="${esc(sd.city)}" oninput="sd.city=this.value"></div><div class="fld"><label>Telefone</label><input value="${esc(sd.phone)}" oninput="sd.phone=this.value"></div></div>
+    <div class="fld"><label>Endereço</label><input value="${esc(sd.address)}" oninput="sd.address=this.value"></div>
+    <div class="fld"><label>Horário de atendimento</label><input value="${esc(sd.hours)}" placeholder="Ex.: seg a sex, 8h às 16h" oninput="sd.hours=this.value"></div>
+    <div class="two"><div class="fld"><label>${unit(m,2)} por retirada</label><input type="number" min="1" value="${sd.perPickup}" oninput="sd.perPickup=+this.value"></div><div class="fld"><label>Ciclo em dias</label><input type="number" min="7" value="${sd.cycleDays}" oninput="sd.cycleDays=+this.value"></div></div>
+    <div class="fld"><label>Próxima retirada</label><input type="date" value="${sd.nextPickup||''}" oninput="sd.nextPickup=this.value||null"></div>
+    <div class="two"><div class="fld"><label>LME vale a partir de</label><input type="month" value="${sd.lmeStart?sd.lmeStart.slice(0,7):''}" oninput="sd.lmeStart=this.value?this.value+'-01':null"></div><div class="fld"><label>Meses de vigência</label><input type="number" min="1" max="6" value="${sd.lmeMonths}" oninput="sd.lmeMonths=+this.value"></div></div>
+    <div class="tgrow">Outra pessoa pode retirar<button class="tg ${sd.rep.allowed?'on':''}" onclick="sd.rep.allowed=!sd.rep.allowed;this.classList.toggle('on')" aria-label="Representante"></button></div>
+    <div class="fld"><label>Quem retira no lugar</label><input value="${esc(sd.rep.name)}" oninput="sd.rep.name=this.value"></div>
+    <button class="btn fill block" onclick="med('${id}').sus=sd;save();closeSheet();render();toast('Farmácia salva')">Salvar</button>`);
+}
+
+/* consultas */
+let ad=null;
+function apptSheet(id,preset={}){
+  const a=id?S.appts.find(x=>x.id===id):null;
+  ad=a?JSON.parse(JSON.stringify(a)):{id:null,title:'',who:'',date:iso(addDays(today(),7)),time:'',place:'',city:S.profile.home,kind:'consulta',renewLme:false,bring:[],notes:'',...preset};
+  if(ad.renewLme&&!ad.bring.length)ad.bring=['Pedir novo LME','Pedir receita atualizada','Exames recentes'].map(t=>({t,on:false}));
+  drawAppt();
+}
+function drawAppt(){
+  const a=ad;
+  openSheet(`<h2>${a.id?'Consulta':'Nova consulta'}</h2>
+    <div class="fld"><div class="seg"><button class="${a.kind==='consulta'?'on':''}" style="--k:var(--lav)" onclick="ad.kind='consulta';drawAppt()">Consulta</button><button class="${a.kind==='exame'?'on':''}" onclick="ad.kind='exame';drawAppt()">Exame</button></div></div>
+    <div class="fld"><label>Especialidade ou exame</label><input value="${esc(a.title)}" placeholder="Reumatologista" oninput="ad.title=this.value"></div>
+    <div class="two"><div class="fld"><label>Médico ou local</label><input value="${esc(a.who)}" oninput="ad.who=this.value"></div><div class="fld"><label>Cidade</label><input value="${esc(a.city||'')}" oninput="ad.city=this.value"></div></div>
+    <div class="fld"><label>Endereço</label><input value="${esc(a.place)}" oninput="ad.place=this.value"></div>
+    <div class="two"><div class="fld"><label>Data</label><input type="date" value="${a.date}" oninput="ad.date=this.value"></div><div class="fld"><label>Hora</label><input type="time" value="${a.time}" oninput="ad.time=this.value"></div></div>
+    <div class="tgrow">Renovar o LME nesta consulta<button class="tg ${a.renewLme?'on':''}" onclick="ad.renewLme=!ad.renewLme;this.classList.toggle('on')" aria-label="Renovar LME"></button></div>
+    <div class="fld"><label>O que levar ou pedir</label>
+      ${a.bring.map((b,i)=>`<div class="chk ${b.on?'on':''}" onclick="ad.bring[${i}].on=!ad.bring[${i}].on;drawAppt()"><span class="bx"></span><span>${esc(b.t)}</span><button class="x" onclick="event.stopPropagation();ad.bring.splice(${i},1);drawAppt()">×</button></div>`).join('')}
+      <div class="addline"><input id="abN" placeholder="Adicionar item" onkeydown="if(event.key==='Enter'&&this.value.trim()){ad.bring.push({t:this.value.trim(),on:false});drawAppt()}"><button class="btn sm" onclick="if(abN.value.trim()){ad.bring.push({t:abN.value.trim(),on:false});drawAppt()}">Adicionar</button></div></div>
+    <div class="fld"><label>Anotações da consulta</label><textarea oninput="ad.notes=this.value">${esc(a.notes)}</textarea></div>
+    <button class="btn fill block" style="--k:var(--lav)" onclick="saveAppt()">Salvar consulta</button>
+    ${a.id?`<button class="btn block" style="--k:var(--pink);margin-top:8px" onclick="S.appts=S.appts.filter(x=>x.id!=='${a.id}');save();closeSheet();render();toast('Consulta apagada')">Apagar consulta</button>`:''}`);
+}
+function saveAppt(){if(!ad.title.trim()){toast('Informe a especialidade');return}
+  if(ad.id)Object.assign(S.appts.find(x=>x.id===ad.id),ad);else{ad.id=uid();S.appts.push(ad)}
+  save();closeSheet();render();toast('Consulta salva')}
+
+/* ====================== RENDER ====================== */
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const CARDS=['.now','.foil','.notes','.list','.med','.pick'];
+const RVSEL=[...CARDS,'.heat','.packs','.grid2'].map(x=>'#app '+x).join(',');
+let io=null,ticking=false;
+function countUp(e){
+  e.querySelectorAll('.facts b.num').forEach(b=>{const v=parseInt(b.textContent);if(!(v>1))return;const t0=performance.now();
+    const f=t=>{const k=Math.min(1,(t-t0)/900),ease=1-Math.pow(1-k,3);b.textContent=Math.round(v*ease);if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)});
+}
+function wire(){
+  const els=[...document.querySelectorAll(RVSEL)];
+  if(io)io.disconnect();
+  if(!UI.anim||REDUCED){els.forEach(e=>e.classList.add('in','live'));tick();return}
+  UI.anim=false;
+  els.forEach(e=>e.classList.add('rv'));
+  io=new IntersectionObserver(es=>{let k=0;es.forEach(en=>{if(!en.isIntersecting)return;const e=en.target;io.unobserve(e);
+      const d=Math.min(k++,5)*90;e.style.transitionDelay=d+'ms';
+      requestAnimationFrame(()=>{e.classList.add('in','anim');countUp(e)});
+      setTimeout(()=>{e.style.transitionDelay='';e.classList.add('live');tick()},850+d)})},
+    {threshold:.08,rootMargin:'0px 0px -4% 0px'});
+  els.forEach(e=>io.observe(e));
+}
+/* cápsulas do fundo */
+const FL=[[70,'#3dffc5','#b39bff',.12,.75,0,.08,30],[46,'#45d2ff','#ff4d8d',.3,.5,2,.55,-20],[96,'#b39bff','#45d2ff',.78,.35,5,.25,50],
+  [38,'#ffb547','#3dffc5',.6,.7,1,.78,-35],[58,'#ff4d8d','#ffb547',.9,.45,3,.92,15],[30,'#3dffc5','#45d2ff',.2,.6,1.5,.4,70],[80,'#45d2ff','#b39bff',.05,.3,6,.7,-10]];
+(function(){const box=document.getElementById('fl');box.innerHTML=FL.map(([w,c1,c2,x,o,b])=>`<i class="fl" style="--w:${w}px;--c1:${c1};--c2:${c2};--o:${o};--b:${b}px"></i>`).join('')})();
+function tick(){
+  ticking=false;const h=innerHeight,y=scrollY,W=innerWidth;
+  const head=document.querySelector('#app .head');if(head){head.classList.toggle('scrolled',y>8);const pl=head.querySelector('.pill');if(pl)pl.style.transform=`rotate(${-30+y*.35}deg)`}
+  if(REDUCED)return;
+  document.querySelectorAll('#app .live:is(.now,.foil,.notes,.list,.med,.pick)').forEach(e=>{
+    if(e.matches(':hover')&&e._tilt)return;
+    const r=e.getBoundingClientRect();if(r.bottom<-50||r.top>h+50)return;
+    const c=Math.max(-1,Math.min(1,((r.top+r.height/2)-h/2)/(h*.65))),amp=Math.min(1,320/r.height);
+    e.style.setProperty('--tx',(c*-9*amp).toFixed(2)+'deg');e.style.setProperty('--tz',(-Math.abs(c)*36*amp).toFixed(1)+'px');
+  });
+  document.querySelectorAll('#app .blister').forEach(b=>{const r=b.getBoundingClientRect();b.style.setProperty('--sheen',(130-(r.top/h)*110).toFixed(1)+'%')});
+  document.querySelectorAll('#fl .fl').forEach((el,i)=>{const [w,,,x,,b,y0,r0]=FL[i],sp=.15+(6-b)*.07,span=h+200;
+    const top=(((y0*span-y*sp)%span)+span)%span-100;
+    el.style.transform=`translate3d(${x*(W-w)}px,${top}px,0) rotate(${r0+y*sp*.25}deg)`});
+}
+addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(tick)}},{passive:true});
+addEventListener('resize',()=>requestAnimationFrame(tick));
+/* inclinação com o ponteiro (computador) e afundar ao tocar */
+document.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||REDUCED)return;const c=e.target.closest&&e.target.closest('#app .live:is(.now,.med,.pick,.foil)');
+  document.querySelectorAll('#app [data-tilt]').forEach(x=>{if(x!==c){x.removeAttribute('data-tilt');x._tilt=false;x.style.setProperty('--ty','0deg')}});
+  if(!c)return;const r=c.getBoundingClientRect(),px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5,amp=Math.min(1,300/r.height);
+  c._tilt=true;c.setAttribute('data-tilt','');c.style.setProperty('--ty',(px*10*amp).toFixed(2)+'deg');c.style.setProperty('--tx',(-py*8*amp).toFixed(2)+'deg')});
+document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('#app :is(.now,.foil,.notes,.list,.med,.pick)');if(c){c.classList.add('press');const up=()=>{c.classList.remove('press');removeEventListener('pointerup',up);removeEventListener('pointercancel',up)};addEventListener('pointerup',up);addEventListener('pointercancel',up)}});
+/* ====================== SUPABASE ====================== */
+const SB_URL='https://untfnrynobarljjwkoxa.supabase.co',SB_KEY='sb_publishable_Bi0ilEANsJ-0DDqogzmP7Q_TL88ca6L';
+let sb=null,SESSION=null,HH=null,SYNC='off',pushT=null,pushing=false,chan=null;
+const SYNC_TXT={ok:'Sincronizado',busy:'Sincronizando',off:'Sem conexão',err:'Erro ao sincronizar'};
+let snap={meds:{},appts:{},log:{},settings:''};
+const stable=v=>Array.isArray(v)?'['+v.map(stable).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).sort().filter(k=>v[k]!==undefined).map(k=>JSON.stringify(k)+':'+stable(v[k])).join(',')+'}':JSON.stringify(v===undefined?null:v);
+const settingsOf=()=>({profile:S.profile,plan:S.plan||null,sim:S.sim||null,where:S.where,apptFrom:S.apptFrom||null});
+const rowToLog=r=>({id:r.id,medId:r.med_id,sched:String(r.sched).slice(0,16),taken:r.taken?String(r.taken).slice(0,16):null,status:r.status,...(r.site?{site:r.site}:{})});
+const logToRow=l=>({id:l.id,household_id:HH.id,med_id:l.medId,sched:l.sched,taken:l.taken,status:l.status,site:l.site||null});
+function setSync(v){SYNC=v;document.querySelectorAll('.sync').forEach(e=>{e.className='sync '+v;e.title=SYNC_TXT[v]})}
+function mapOf(arr){return Object.fromEntries(arr.map(x=>[x.id,stable(x)]))}
+function takeSnap(){snap={meds:mapOf(S.meds),appts:mapOf(S.appts),log:mapOf(S.log),settings:stable(settingsOf())}}
+function schedulePush(){if(!sb||!HH)return;clearTimeout(pushT);pushT=setTimeout(push,500)}
+async function push(){
+  if(!sb||!HH)return;if(!navigator.onLine){setSync('off');return}
+  if(pushing){schedulePush();return}pushing=true;setSync('busy');
+  try{
+    const cur={meds:mapOf(S.meds),appts:mapOf(S.appts),log:mapOf(S.log)};
+    const ch=k=>Object.keys(cur[k]).filter(id=>cur[k][id]!==snap[k][id]),gone=k=>Object.keys(snap[k]).filter(id=>!(id in cur[k]));
+    const mU=ch('meds'),aU=ch('appts'),lU=ch('log'),mD=gone('meds'),aD=gone('appts'),lD=gone('log');
+    const ok=r=>{if(r.error)throw r.error};
+    if(mU.length)ok(await sb.from('meds').upsert(S.meds.filter(m=>mU.includes(m.id)).map(m=>({id:m.id,household_id:HH.id,data:m}))));
+    if(aU.length)ok(await sb.from('appts').upsert(S.appts.filter(a=>aU.includes(a.id)).map(a=>({id:a.id,household_id:HH.id,data:a}))));
+    if(lU.length)ok(await sb.from('dose_log').upsert(S.log.filter(l=>lU.includes(l.id)&&S.meds.some(m=>m.id===l.medId)).map(logToRow)));
+    if(lD.length)ok(await sb.from('dose_log').delete().in('id',lD));
+    if(mD.length)ok(await sb.from('meds').delete().in('id',mD));
+    if(aD.length)ok(await sb.from('appts').delete().in('id',aD));
+    const st=stable(settingsOf());
+    if(st!==snap.settings)ok(await sb.from('settings').upsert({household_id:HH.id,data:settingsOf()}));
+    snap={...cur,settings:st};setSync('ok');
+  }catch(e){console.warn(e);setSync('err');toast('Não consegui sincronizar agora. Tento de novo sozinho.');setTimeout(schedulePush,8000)}
+  finally{pushing=false}
+}
+async function pull(){
+  setSync('busy');
+  const q=t=>sb.from(t).select('*').eq('household_id',HH.id);
+  const [m,l,a,st]=await Promise.all([q('meds'),q('dose_log').order('sched'),q('appts'),sb.from('settings').select('data').eq('household_id',HH.id).maybeSingle()]);
+  for(const r of [m,l,a,st])if(r.error)throw r.error;
+  S.meds=m.data.map(r=>r.data);S.log=l.data.map(rowToLog);S.appts=a.data.map(r=>r.data);
+  if(st.data&&st.data.data&&Object.keys(st.data.data).length){const d=st.data.data;['profile','plan','sim','where','apptFrom'].forEach(k=>{if(d[k]!=null)S[k]=d[k]})}
+  S.profile=S.profile||{patient:'',helper:'',home:'São Carlos'};S.where=S.where||{city:null,from:null,to:null};
+  takeSnap();localSave();setSync('ok');
+}
+function applyRemote(t,p){
+  const del=p.eventType==='DELETE',row=del?p.old:p.new;if(!row)return;
+  const upd=(arr,key,obj)=>{const i=S[arr].findIndex(x=>x.id===row.id);if(del){if(i>=0)S[arr].splice(i,1);delete snap[key][row.id]}else{if(i>=0)S[arr][i]=obj;else S[arr].push(obj);snap[key][row.id]=stable(obj)}};
+  if(t==='meds')upd('meds','meds',row.data);
+  else if(t==='appts')upd('appts','appts',row.data);
+  else if(t==='dose_log')upd('log','log',del?null:rowToLog(row));
+  else if(t==='settings'&&!del){const d=row.data||{};['profile','plan','sim','where','apptFrom'].forEach(k=>{if(d[k]!=null)S[k]=d[k]});snap.settings=stable(settingsOf())}
+  localSave();
+  if(!document.getElementById('sheet').classList.contains('on'))render();
+}
+function subscribe(){
+  if(chan)sb.removeChannel(chan);
+  chan=sb.channel('casa-'+HH.id);
+  ['meds','dose_log','appts','settings'].forEach(t=>chan.on('postgres_changes',{event:'*',schema:'public',table:t,filter:`household_id=eq.${HH.id}`},p=>applyRemote(t,p)));
+  chan.subscribe();
+}
+async function loadHousehold(){
+  const r=await sb.from('household_members').select('household_id,households(id,name,invite_code)').limit(1);
+  if(r.error)throw r.error;
+  HH=r.data&&r.data[0]?r.data[0].households:null;return HH;
+}
+async function enterHousehold(fresh){
+  if(fresh){snap={meds:{},appts:{},log:{},settings:''};localSave();await push()}
+  else await pull();
+  subscribe();hideGate();UI.anim=true;render();
+}
+/* portão: login por código no e-mail */
+function gate(html){let g=document.getElementById('gate');if(!g){g=document.createElement('div');g.id='gate';g.className='gate';document.body.appendChild(g)}g.innerHTML=`<div class="card"><div class="brand"><span class="pill"></span>Dose</div>${html}</div>`}
+function hideGate(){const g=document.getElementById('gate');if(g)g.remove()}
+function gateEmail(msg){
+  gate(`<h1>Entrar</h1><p class="lede">Você recebe um código no e-mail. Sem senha.</p>
+    <input id="gE" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com" value="${esc(localStorage.getItem('dose_email')||'')}">
+    <button class="btn fill block" onclick="sendCode()">Enviar código</button>${msg?`<p class="help" style="margin-top:12px">${msg}</p>`:''}`);
+}
+async function sendCode(){
+  const e=gE.value.trim();if(!/.+@.+\..+/.test(e)){toast('Confira o e-mail');return}
+  localStorage.setItem('dose_email',e);
+  const {error}=await sb.auth.signInWithOtp({email:e,options:{shouldCreateUser:true,emailRedirectTo:location.origin+location.pathname}});
+  if(error){toast('Não consegui enviar: '+error.message);return}
+  gate(`<h1>Confira seu e-mail</h1><p class="lede">Mandamos um código para <b>${esc(e)}</b>. Digite aqui:</p>
+    <input id="gC" inputmode="numeric" autocomplete="one-time-code" placeholder="Código" maxlength="10">
+    <button class="btn fill block" onclick="verifyCode()">Entrar</button>
+    <button class="btn block quiet" style="margin-top:8px" onclick="gateEmail()">Trocar e-mail</button>
+    <p class="help" style="margin-top:12px">Não chegou? Olhe o spam. Se vier um link em vez de código, toque nele pelo navegador.</p>`);
+}
+async function verifyCode(){
+  const e=localStorage.getItem('dose_email'),t=gC.value.trim();
+  const {data,error}=await sb.auth.verifyOtp({email:e,token:t,type:'email'});
+  if(error){toast('Código inválido ou vencido');return}
+  SESSION=data.session;await afterLogin();
+}
+function gateHouse(){
+  const has=S.meds.length;
+  gate(`<h1>Sua casa</h1><p class="lede">Os dados ficam numa "casa" que vocês dois compartilham.</p>
+    <input id="gN" placeholder="Nome da casa (ex.: Casa Blanco)">
+    <button class="btn fill block" onclick="newHouse()">Criar casa${has?` com os ${has} remédios deste aparelho`:''}</button>
+    <div class="or">ou</div>
+    <input id="gI" placeholder="Código de convite" style="text-transform:uppercase">
+    <button class="btn block" style="--k:var(--cyan)" onclick="joinHouse()">Entrar na casa</button>`);
+}
+async function newHouse(){
+  const {data,error}=await sb.rpc('create_household',{p_name:gN.value.trim()||'Casa'});
+  if(error){toast('Erro: '+error.message);return}
+  HH=Array.isArray(data)?data[0]:data;toast('Casa criada! O código de convite está no seu perfil.');await enterHousehold(true);
+}
+async function joinHouse(){
+  const {data,error}=await sb.rpc('join_household',{p_code:gI.value.trim()});
+  if(error){toast(error.message.includes('inválido')?'Código inválido':'Erro: '+error.message);return}
+  HH=Array.isArray(data)?data[0]:data;toast(`Você entrou na casa ${HH.name}`);await enterHousehold(false);
+}
+async function afterLogin(){
+  try{await loadHousehold()}catch(e){toast('Não consegui falar com o servidor.');console.warn(e);return}
+  if(!HH){gateHouse();return}
+  try{await enterHousehold(false)}catch(e){console.warn(e);setSync('err');hideGate();render()}
+}
+async function signOut(){await sb.auth.signOut();if(chan)sb.removeChannel(chan);SESSION=null;HH=null;S=seed();localSave();closeSheet();gateEmail('Você saiu.')}
+function copyInvite(){const t=`Entra no Dose com o código ${HH.invite_code}: ${location.origin+location.pathname}`;try{navigator.clipboard.writeText(t).then(()=>toast('Convite copiado. Manda pra ela!'))}catch(e){}}
+function importSheet(){
+  openSheet(`<h2>Importar dados</h2><div class="hint">Na versão antiga (dentro do Claude), abra o perfil e toque em <b>Copiar dados para o app instalado</b>. Depois cole aqui.</div>
+    <div class="fld"><textarea id="imT" style="min-height:140px" placeholder="Cole aqui"></textarea></div>
+    <button class="btn fill block" onclick="doImport()">Importar</button>`);
+}
+function doImport(){
+  let d;try{d=JSON.parse(imT.value)}catch(e){toast('Isso não parece o texto copiado do app');return}
+  if(!d||!Array.isArray(d.meds)){toast('Não achei remédios nesse texto');return}
+  const byId=(a,b)=>{const m=new Map(a.map(x=>[x.id,x]));b.forEach(x=>m.set(x.id,x));return [...m.values()]};
+  S.meds=byId(S.meds,d.meds);S.log=byId(S.log,d.log||[]);S.appts=byId(S.appts,d.appts||[]);
+  ['profile','plan','where','sim','apptFrom'].forEach(k=>{if(d[k])S[k]=d[k]});
+  save();closeSheet();UI.anim=true;render();toast(`Importado: ${d.meds.length} remédios e ${(d.log||[]).length} registros`);
+}
+async function boot(){
+  if(!window.supabase){render();setSync('off');toast('Sem conexão com o servidor: usando os dados deste aparelho.');return}
+  sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const {data}=await sb.auth.getSession();SESSION=data.session;
+  sb.auth.onAuthStateChange((ev,ses)=>{SESSION=ses});
+  if(!SESSION){gateEmail();return}
+  render();await afterLogin();
+}
+addEventListener('online',()=>{setSync('busy');schedulePush()});
+addEventListener('offline',()=>setSync('off'));
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+function render(){
+  const V={hoje:vHoje,remedios:vRemedios,retiradas:vRetiradas,consultas:vConsultas,historico:vHistorico};
+  document.getElementById('app').innerHTML=V[UI.view]();
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===UI.view));
+  wire();
+  const kb=document.getElementById('kits');if(kb){kb.addEventListener('scroll',()=>requestAnimationFrame(kitTick),{passive:true});kitTick()}
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+boot();
+</script>
+</body>
+</html>
