@@ -1609,27 +1609,28 @@ async function enterHousehold(fresh){
 /* portão: login por código no e-mail */
 function gate(html){let g=document.getElementById('gate');if(!g){g=document.createElement('div');g.id='gate';g.className='gate';document.body.appendChild(g)}g.innerHTML=`<div class="card"><div class="brand"><span class="pill"></span>Dose</div>${html}</div>`}
 function hideGate(){const g=document.getElementById('gate');if(g)g.remove()}
-function gateEmail(msg){
-  gate(`<h1>Entrar</h1><p class="lede">Você recebe um código no e-mail. Sem senha.</p>
+function gateEmail(msg,mode){
+  mode=mode||localStorage.getItem('dose_mode')||'login';
+  gate(`<h1>${mode==='login'?'Entrar':'Criar conta'}</h1><p class="lede">${mode==='login'?'Use o e-mail e a senha da sua conta do Dose.':'Cada pessoa cria a própria conta. Depois vocês se juntam na mesma casa.'}</p>
     <input id="gE" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com" value="${esc(localStorage.getItem('dose_email')||'')}">
-    <button class="btn fill block" onclick="sendCode()">Enviar código</button>${msg?`<p class="help" style="margin-top:12px">${msg}</p>`:''}`);
+    <input id="gP" type="password" autocomplete="${mode==='login'?'current-password':'new-password'}" placeholder="Senha (mínimo 6 caracteres)" style="margin-top:0">
+    <button class="btn fill block" onclick="${mode==='login'?'doLogin()':'doSignup()'}">${mode==='login'?'Entrar':'Criar conta'}</button>
+    <button class="btn block quiet" style="margin-top:8px" onclick="localStorage.setItem('dose_mode','${mode==='login'?'signup':'login'}');gateEmail()">${mode==='login'?'Ainda não tenho conta':'Já tenho conta'}</button>
+    ${msg?`<p class="help" style="margin-top:12px">${msg}</p>`:''}`);
 }
-async function sendCode(){
-  const e=gE.value.trim();if(!/.+@.+\..+/.test(e)){toast('Confira o e-mail');return}
-  localStorage.setItem('dose_email',e);
-  const {error}=await sb.auth.signInWithOtp({email:e,options:{shouldCreateUser:true,emailRedirectTo:location.origin+location.pathname}});
-  if(error){toast('Não consegui enviar: '+error.message);return}
-  gate(`<h1>Confira seu e-mail</h1><p class="lede">Mandamos um código para <b>${esc(e)}</b>. Digite aqui:</p>
-    <input id="gC" inputmode="numeric" autocomplete="one-time-code" placeholder="Código" maxlength="10">
-    <button class="btn fill block" onclick="verifyCode()">Entrar</button>
-    <button class="btn block quiet" style="margin-top:8px" onclick="gateEmail()">Trocar e-mail</button>
-    <p class="help" style="margin-top:12px">Não chegou? Olhe o spam. Se vier um link em vez de código, toque nele pelo navegador.</p>`);
+function creds(){const e=gE.value.trim(),p=gP.value;if(!/.+@.+\..+/.test(e)){toast('Confira o e-mail');return null}if(p.length<6){toast('A senha precisa ter pelo menos 6 caracteres');return null}localStorage.setItem('dose_email',e);return {email:e,password:p}}
+async function doLogin(){
+  const c=creds();if(!c)return;
+  const {data,error}=await sb.auth.signInWithPassword(c);
+  if(error){toast(/invalid/i.test(error.message)?'E-mail ou senha incorretos':/confirm/i.test(error.message)?'Conta ainda não confirmada: desligue "Confirm email" no Supabase':'Erro: '+error.message);return}
+  SESSION=data.session;localStorage.setItem('dose_mode','login');await afterLogin();
 }
-async function verifyCode(){
-  const e=localStorage.getItem('dose_email'),t=gC.value.trim();
-  const {data,error}=await sb.auth.verifyOtp({email:e,token:t,type:'email'});
-  if(error){toast('Código inválido ou vencido');return}
-  SESSION=data.session;await afterLogin();
+async function doSignup(){
+  const c=creds();if(!c)return;
+  const {data,error}=await sb.auth.signUp(c);
+  if(error){toast(/registered|exists/i.test(error.message)?'Esse e-mail já tem conta: toque em "Já tenho conta"':'Erro: '+error.message);return}
+  if(!data.session){gateEmail('Conta criada, mas o Supabase pediu confirmação por e-mail. Desligue "Confirm email" em Authentication → Sign In / Providers → Email e tente entrar.','login');return}
+  SESSION=data.session;localStorage.setItem('dose_mode','login');toast('Conta criada!');await afterLogin();
 }
 function gateHouse(){
   const has=S.meds.length;
