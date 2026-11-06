@@ -39,7 +39,7 @@ create table public.dose_log (
   med_id text not null references public.meds(id) on delete cascade,
   sched timestamp not null,
   taken timestamp,
-  status text not null check (status in ('ok','late','miss')),
+  status text not null check (status in ('ok','late','miss','auto','skip')),
   site text,
   created_by uuid default auth.uid(),
   created_at timestamptz not null default now()
