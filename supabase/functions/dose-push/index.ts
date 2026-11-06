@@ -40,7 +40,8 @@ Deno.serve(async (req) => {
     if (s.type === "daily") (s.times || []).forEach((t: string) => slots.push(t));
     else {
       const last = L.filter((l) => l.taken).sort((a, b) => String(b.taken).localeCompare(String(a.taken)))[0];
-      const next = last ? addDays(String(last.taken).slice(0, 10), s.every) : s.start;
+      const base = last ? addDays(String(last.taken).slice(0, 10), s.every) : s.start;
+      const next = s.delay && s.delay.to && s.delay.from === base ? s.delay.to : base;
       if (next && next <= date && s.time) slots.push(s.time);
     }
     for (const t of slots) {

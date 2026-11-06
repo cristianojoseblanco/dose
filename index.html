@@ -734,7 +734,38 @@ const lastTaken=m=>S.log.filter(l=>l.medId===m.id&&l.taken).sort((a,b)=>b.taken.
 function nextInterval(m){ // conta a partir da última aplicação real
   const lt=lastTaken(m);
   const base=lt?parse(lt.taken.slice(0,10)):addDays(parse(m.sched.start),-m.sched.every);
-  const d=addDays(base,m.sched.every); const [h,mi]=m.sched.time.split(':').map(Number); d.setHours(h,mi); return d;
+  let d=addDays(base,m.sched.every);const dl=m.sched.delay;if(dl&&dl.to&&dl.from===iso(d))d=parse(dl.to);
+  const [h,mi]=m.sched.time.split(':').map(Number); d.setHours(h,mi); return d;
+}
+function plannedInterval(m){const lt=lastTaken(m);const base=lt?parse(lt.taken.slice(0,10)):addDays(parse(m.sched.start),-m.sched.every);return addDays(base,m.sched.every)}
+const delayOn=m=>{const dl=m.sched&&m.sched.delay;return dl&&dl.to&&dl.from===iso(plannedInterval(m))?dl:null};
+const DELAY_WHY=['Atraso do alto custo','Orientação médica','Outro motivo'];
+function delaySheet(id,to){
+  const m=med(id),P=plannedInterval(m),dl=delayOn(m),s=m.sus||{},exp=s.call&&s.call.expected;
+  UI.dly=UI.dly&&UI.dly.id===id?UI.dly:{id,to:dl?dl.to:iso(addDays(P,7)),why:dl?dl.why:DELAY_WHY[0],note:dl?dl.note||'':''};
+  if(to)UI.dly.to=to;const D=UI.dly,days=dd(parse(D.to),P);
+  const chip=(lbl,v)=>`<button class="${D.to===v?'on':''}" style="--k:var(--amber)" onclick="delaySheet('${id}','${v}')">${lbl}</button>`;
+  openSheet(`<h2>Adiar aplicação</h2><div class="hint">${esc(m.name)}: a aplicação estava prevista para <b>${fDW(P)}</b>. Quando o alto custo atrasa, mude a data aqui; os avisos, o calendário e o estoque passam a contar pela nova data. Depois da aplicação, a seguinte volta a contar ${m.sched.every} dias a partir do dia em que aplicar.</div>
+    <div class="fld"><label>Nova data</label><div class="tags" style="margin-bottom:8px">${chip('+3 dias',iso(addDays(P,3)))}${chip('+7 dias',iso(addDays(P,7)))}${chip('+14 dias',iso(addDays(P,14)))}${exp&&parse(exp)>P?chip(`Quando o lote chega (${fD(parse(exp))})`,exp):''}</div>
+      <input type="date" value="${D.to}" min="${iso(addDays(P,1))}" onchange="delaySheet('${id}',this.value)"></div>
+    <div class="fld"><label>Motivo</label><div class="seg">${DELAY_WHY.map(w=>`<button class="${D.why===w?'on':''}" onclick="UI.dly.why='${w}';delaySheet('${id}')">${w}</button>`).join('')}</div></div>
+    <div class="fld"><label>Anotação</label><input value="${esc(D.note)}" oninput="UI.dly.note=this.value" placeholder="Ex.: farmácia disse que o lote chega dia 15"></div>
+    <div class="box k" style="--k:var(--amber);margin-bottom:12px">Fica <b>${plural(days,'dia')}</b> sem aplicar além do previsto. Se o atraso for grande, vale avisar a médica: ela pode orientar o que fazer.</div>
+    <button class="btn fill block" style="--k:var(--amber)" onclick="saveDelay('${id}')">Adiar para ${fD(parse(D.to))}</button>
+    ${dl?`<button class="btn block quiet" style="margin-top:8px" onclick="undoDelay('${id}')">Voltar para a data original (${fD(P)})</button>`:''}`);
+}
+function saveDelay(id){
+  const m=med(id),D=UI.dly,P=iso(plannedInterval(m));if(!D||D.to<=P){toast('Escolha uma data depois da prevista');return}
+  m.sched.delay={from:P,to:D.to,why:D.why,note:D.note,at:iso(today())};
+  m.delays=(m.delays||[]).filter(x=>x.from!==P).concat({from:P,to:D.to,days:dd(parse(D.to),parse(P)),why:D.why,note:D.note});
+  UI.dly=null;save();closeSheet();render();toast(`Aplicação de ${m.name} adiada para ${fD(parse(D.to))}`);
+}
+function undoDelay(id){const m=med(id),P=iso(plannedInterval(m));delete m.sched.delay;m.delays=(m.delays||[]).filter(x=>x.from!==P);UI.dly=null;save();closeSheet();render();toast('Data original de volta')}
+function delayBlock(m){
+  if(!m.sched||m.sched.type!=='interval')return'';
+  const dl=delayOn(m),nx=nextInterval(m);
+  return `<div class="box k" style="--k:${dl?'var(--amber)':'var(--lav)'};margin-top:12px;display:flex;gap:10px;align-items:center;justify-content:space-between"><span>${dl?`Aplicação adiada de <s>${fD(parse(dl.from))}</s> para <b>${fDW(nx)}</b><br><small style="color:var(--mut)">${esc(dl.why)}${dl.note?`: ${esc(dl.note)}`:''}</small>`:`Próxima aplicação <b>${relD(nx)}</b>`}</span>
+    <button class="btn sm" style="--k:var(--amber)" onclick="UI.dly=null;delaySheet('${m.id}')">${dl?'Mudar':'Adiar'}</button></div>`;
 }
 function dueToday(){
   const now=new Date(),T=iso(today()),out=[];
@@ -811,13 +842,13 @@ function notices(){
   dueToday().filter(x=>x.late&&!x.e).forEach(x=>A.push({pri:100,
     h:`Ficou pra trás: ${esc(x.m.name)}, ${x.lateTxt}`,
     p:'Já tomou? Registra aqui. Não dobre a próxima dose por conta própria; na dúvida, bula ou médico.',
-    acts:[[injectable(x.m)?'Registrar aplicação':'Registrar dose',`takeSheet('${x.m.id}','${x.sched}')`]]}));
+    acts:[[injectable(x.m)?'Registrar aplicação':'Registrar dose',`takeSheet('${x.m.id}','${x.sched}')`],...(x.interval&&x.m.source==='sus'?[['Adiar (atraso do alto custo)',`UI.dly=null;delaySheet('${x.m.id}')`]]:[])]}));
   S.meds.filter(m=>m.source==='sus').forEach(m=>{
     const s=m.sus,out=m.sched&&qty(m)<m.dose;
     if(out){const nd=nextInterval(m),dn=dd(nd,today()),late=s.call&&s.call.expected&&parse(s.call.expected)>nd;
       A.push({pri:dn<=10?96:80,h:`${esc(m.name)} zerou e a aplicação é ${relD(nd)}`,
         p:s.call&&s.call.expected?`A farmácia disse ${fD(parse(s.call.expected))}${late?'. Chega depois da aplicação: ligue de novo ou avise o médico.':'. Fica de olho na liberação.'}`:`Liga na farmácia de alto custo de ${esc(s.city)} e pergunta se o lote já chegou.`,
-        acts:[[s.call?'Registrar nova ligação':'Já liguei, registrar',`callSheet('${m.id}')`],['Ver retirada',`go('retiradas')`]]});}
+        acts:[[s.call?'Registrar nova ligação':'Já liguei, registrar',`callSheet('${m.id}')`],...(m.sched&&m.sched.type==='interval'?[['Adiar aplicação',`UI.dly=null;delaySheet('${m.id}')`]]:[]),['Ver retirada',`go('retiradas')`]]});}
     if(!s.nextPickup){if(!out)A.push({pri:60,h:`Ligar pra farmácia sobre ${esc(m.name)}`,p:`Pergunta quando chega o próximo lote em ${esc(s.city)}.`,acts:[['Registrar ligação',`callSheet('${m.id}')`]]});return}
     const np=parse(s.nextPickup),L=s.lmeStart?lmeInfo(m):null,d=dd(np,today()),st=m.sched?stockInfo(m):null;
     if(d<=PICKUP_ALERT_DAYS){
@@ -1206,7 +1237,7 @@ function vRetiradas(){
       ${track}
       <div class="box k" style="--k:${qty(m)<m.dose?'var(--pink)':'var(--cyan)'};margin-top:10px">${qty(m)<m.dose?`<b>Acabou.</b> ${m.sched?`Próxima aplicação ${relD(nextInterval(m))}. `:''}`:''}Ligue para a farmácia e pergunte se o lote já chegou ou quando chega. Ao registrar a previsão, o app passa a acompanhar a retirada.
         <ul><li>Diga o nome completo e o CPF da paciente</li><li>Pergunte a data prevista e se precisa levar algum documento novo</li><li>Pergunte se o LME está em dia ou precisa renovar</li><li>Anote com quem falou</li></ul></div>
-      ${callBox}
+      ${callBox}${delayBlock(m)}
       <div class="row" style="margin-top:12px"><button class="btn fill" style="--k:var(--cyan)" onclick="callSheet('${m.id}')">Registrar ligação</button><button class="btn quiet" onclick="susSheet('${m.id}')">Dados da farmácia</button></div>
       ${simBlock(m)}
       <div class="grp"><h4>O que levar</h4>${s.docs.map((d,i)=>`<div class="chk ${d.on?'on':''}" onclick="toggleDoc('${m.id}','docs',${i})"><span class="bx"></span><span>${esc(d.t)}</span></div>`).join('')}</div></div>`;
@@ -1215,7 +1246,7 @@ function vRetiradas(){
       <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><h2>${esc(m.name)} <span style="font-family:'Instrument Sans';font-size:14px;color:var(--mut);font-weight:500">${esc(m.strength)}</span></h2>
         <button class="btn sm quiet" onclick="susSheet('${m.id}')">Editar</button></div>
       <div class="place"><b>${esc(s.unit)}</b><br>${esc(s.address)}, ${esc(s.city)}${s.phone?`<br>Telefone ${esc(s.phone)}`:''}${s.hours?`<br>${esc(s.hours)}`:'<br>Horário não informado: confirme por telefone.'}</div>
-      ${track}${callBox}
+      ${track}${callBox}${delayBlock(m)}
       <div class="grid2">
         <div><span>Próxima retirada</span><b>${relD(np)}</b></div>
         <div><span>Liberação do governo</span><b style="color:${s.available?'var(--mint)':'var(--amber)'}">${s.available?'Liberado em '+fD(parse(s.availableSince)):'Ainda não liberado'}</b></div>
@@ -1541,6 +1572,7 @@ function drawMed(){
     ${rxFields(d)}
     <div class="tgrow">Guardar na geladeira<button class="tg ${d.cold?'on':''}" onclick="md.cold=!md.cold;this.classList.toggle('on')" aria-label="Geladeira"></button></div>
     <div class="fld"><label>Observações</label><textarea oninput="md.notes=this.value" placeholder="Ex.: depois do café">${esc(d.notes)}</textarea></div>
+    ${d.id&&med(d.id)&&med(d.id).sched&&med(d.id).sched.type==='interval'?`<button class="btn block" style="--k:var(--amber);margin-bottom:8px" onclick="UI.dly=null;delaySheet('${d.id}')">Adiar a próxima aplicação</button>`:''}
     ${d.id&&med(d.id)?`<button class="btn block" style="--k:var(--cyan);margin-bottom:8px" onclick="editWithForm('${d.id}')">Editar passo a passo</button>`:''}
     <button class="btn fill block" onclick="saveMed()">Salvar remédio</button>
     ${d.id?`<button class="btn block" style="--k:var(--pink);margin-top:8px" onclick="S.meds=S.meds.filter(m=>m.id!==md.id);S.log=S.log.filter(l=>l.medId!==md.id);S.appts=S.appts.filter(a=>!(a.rec==='take'&&a.medId===md.id));save();closeSheet();render();toast('Remédio apagado')">Apagar remédio</button>`:''}`);
@@ -1886,7 +1918,8 @@ function reportData(days){
   const ask=nx?nx.bring.filter(b=>!b.on&&!/^Relatório do Dose/.test(b.t)).map(b=>b.t):[];
   const rx=rxNeeds().map(m=>`Receita de ${m.name} ${m.strength||''}`.trim());
   const lme=S.meds.filter(m=>m.source==='sus'&&m.sus&&m.sus.lmeStart&&lmeInfo(m).renew).map(m=>`Novo LME e receita de ${m.name}`);
-  return {from,days,rows,sosUsed,D,moodAvg:moods.length?moods.reduce((a,e)=>a+e.mood,0)/moods.length:null,painAvg:pains.length?pains.reduce((a,e)=>a+e.pain,0)/pains.length:null,painMax:pains.length?Math.max(...pains.map(e=>e.pain)):null,sx,lastEx,nx,ask:[...new Set([...ask,...rx,...lme])],notes:D.filter(e=>e.note&&e.note.trim())};
+  const delays=S.meds.flatMap(m=>(m.delays||[]).filter(x=>x.from>=fi).map(x=>({...x,name:m.name})));
+  return {from,days,rows,sosUsed,delays,D,moodAvg:moods.length?moods.reduce((a,e)=>a+e.mood,0)/moods.length:null,painAvg:pains.length?pains.reduce((a,e)=>a+e.pain,0)/pains.length:null,painMax:pains.length?Math.max(...pains.map(e=>e.pain)):null,sx,lastEx,nx,ask:[...new Set([...ask,...rx,...lme])],notes:D.filter(e=>e.note&&e.note.trim())};
 }
 function reportSheet(){
   UI.repDays??=30;const r=reportData(UI.repDays);
@@ -1903,6 +1936,7 @@ function reportHTML(r){
   return `<h1>Relatório de acompanhamento</h1><div class="muted">${esc(patient())} · ${fD(r.from)} a ${fD(today())} (${r.days} dias) · gerado em ${today().toLocaleDateString('pt-BR')} pelo Dose</div>
   <h2>Remédios em uso</h2><table><tr><th>Remédio</th><th>Como toma</th><th>Origem</th><th>No horário</th><th>Atraso</th><th>Não tomou</th></tr>
   ${r.rows.map(x=>`<tr><td><b>${esc(x.m.name)}</b> ${esc(x.m.strength||'')}</td><td>${esc(x.how)}</td><td>${x.m.source==='sus'?'SUS':'compra'}</td><td>${x.n?`${x.ok} (${pct(x)})`:'—'}</td><td>${x.n?x.late:'—'}</td><td>${x.n?x.miss+(x.skip?` + ${x.skip} pulada${x.skip>1?'s':''}`:''):'—'}</td></tr>`).join('')}</table>
+  ${r.delays.length?`<p style="margin-top:8px"><b>Aplicações adiadas:</b> ${r.delays.map(x=>`${esc(x.name)} de ${fD(parse(x.from))} para ${fD(parse(x.to))} (${x.days} dias, ${esc(x.why.toLowerCase())})`).join('; ')}</p>`:''}
   ${r.sosUsed.length?`<p class="muted" style="margin-top:6px">Quando precisa (SOS): ${r.sosUsed.map(esc).join(', ')}</p>`:''}
   <h2>Diário de sintomas</h2>${r.D.length?`<p>${r.D.length} dias anotados.${r.moodAvg?` Humor médio: ${MOODS[Math.round(r.moodAvg)-1][1].toLowerCase()} (${r.moodAvg.toFixed(1)} de 5).`:''}${r.painAvg!=null?` Dor média ${r.painAvg.toFixed(1)}/10, máxima ${r.painMax}/10.`:''}</p>
     ${r.sx.length?`<table><tr><th>Sintoma</th><th>Dias</th></tr>${r.sx.map(([s,n])=>`<tr><td>${esc(s)}</td><td>${n}</td></tr>`).join('')}</table>`:''}
@@ -1918,6 +1952,7 @@ function printReport(){
 function reportText(r){
   const L=[`Relatório — ${patient()}`,`${fD(r.from)} a ${fD(today())}`,'','REMÉDIOS'];
   r.rows.forEach(x=>L.push(`• ${x.m.name} ${x.m.strength||''}: ${x.how}${x.n?` — ${x.ok}/${x.n} no horário, ${x.late} com atraso, ${x.miss} não tomadas`:''}`));
+  r.delays.forEach(x=>L.push(`• Adiada: ${x.name} de ${fD(parse(x.from))} para ${fD(parse(x.to))} (${x.days} dias, ${x.why.toLowerCase()})`));
   L.push('','SINTOMAS');
   if(r.D.length){L.push(`${r.D.length} dias anotados${r.painAvg!=null?`, dor média ${r.painAvg.toFixed(1)}/10`:''}`);r.sx.slice(0,8).forEach(([s,n])=>L.push(`• ${s}: ${n} dias`))}else L.push('Nada anotado');
   if(r.lastEx.length){L.push('','EXAMES');r.lastEx.forEach(a=>L.push(`• ${a.title} (${fD(parse(a.date))}): ${a.result||'sem resultado'}`))}
@@ -2047,8 +2082,8 @@ function pushCard(){
 }
 
 /* ====================== NOVA VERSÃO ====================== */
-const APP_VER='5';
-const CHANGES={'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+const APP_VER='6';
+const CHANGES={'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
 function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Dose pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
 function whatsNew(){
   let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
@@ -2131,6 +2166,7 @@ function evRange(from,to){ // tudo que acontece entre duas datas, por dia
   scheduled().forEach(m=>{
     if(m.sched.type==='interval'){
       S.log.filter(l=>l.medId===m.id&&l.taken).forEach(l=>put(l.taken,{ic:'💉',k:m.color,t:`${m.name}: ${injectable(m)?'aplicada':'tomada'}`,sub:l.site||`às ${l.taken.slice(11,16)}`,pri:2}));
+      const dl=delayOn(m);if(dl)put(dl.from,{ic:'🕒',k:'var(--amber)',t:`${m.name}: aplicação adiada`,sub:`para ${fD(parse(dl.to))}, ${dl.why.toLowerCase()}`,pri:4,act:`UI.dly=null;delaySheet('${m.id}')`});
       let d=nextInterval(m);const toEnd=addDays(parse(iso(to)),1);for(let i=0;i<40&&d<toEnd;i++){if(d>=from&&iso(d)>=T)put(d,{ic:'💉',k:m.color,t:`${m.name}: ${injectable(m)?'aplicação':'dose'}`,sub:`às ${m.sched.time}${qty(m)<m.dose?' — sem remédio em casa':''}`,pri:qty(m)<m.dose?5:3,...(iso(d)===T?{act:`closeSheet();go('hoje')`}:{})});d=addDays(d,m.sched.every)}
     }
   });
