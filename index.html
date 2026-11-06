@@ -413,6 +413,60 @@ body::before{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:0;
 .cfg-l{font-size:12px;font-weight:700;color:var(--cyan);margin:14px 0 6px}
 .cfg-in{margin-top:6px}
 .cp{font-size:11px;opacity:.7}
+/* SOS e nav */
+.sosb{border:0;border-radius:99px;padding:7px 13px;font:inherit;font-weight:800;font-size:13px;letter-spacing:.04em;color:#fff;cursor:pointer;
+  background:linear-gradient(160deg,#ff5b7f,#e0244f);box-shadow:0 0 0 3px rgba(255,77,141,.18),0 6px 16px -4px #ff4d8d;animation:sosPulse 2.4s ease-in-out infinite}
+@keyframes sosPulse{50%{box-shadow:0 0 0 6px rgba(255,77,141,.1),0 6px 20px -2px #ff4d8d}}
+.nav .fab{flex:0 0 auto;margin-top:-24px;width:62px;height:62px;border-radius:20px;justify-content:center;color:#06102a!important;
+  background:linear-gradient(150deg,var(--mint),#22c9a0);box-shadow:0 0 0 4px rgba(61,255,197,.15),0 10px 24px -6px var(--mint)}
+.nav .fab svg{width:26px;height:26px;color:#06102a!important}
+.nav .fab span{font-size:10px;font-weight:700}
+.nav .fab.on{background:linear-gradient(150deg,#fff,var(--mint))}
+body.sosmode{background:radial-gradient(70% 40% at 50% 0%,rgba(255,77,141,.28),transparent 70%),var(--ink)}
+.sos-hero{padding:22px 18px;border-radius:26px;text-align:center;background:radial-gradient(100% 80% at 50% 120%,rgba(255,77,141,.45),transparent 70%),linear-gradient(165deg,#3a1236,#1a0d2c);
+  border:1px solid rgba(255,77,141,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 3px 0 #4a1640,0 6px 0 #2a0c27,0 30px 50px -20px rgba(255,77,141,.5)}
+.sos-lead{color:#ffb3c7;font-size:13px;font-weight:600}
+.sos-big{display:flex;flex-direction:column;align-items:center;gap:4px;margin:12px auto 14px;padding:22px 14px;border-radius:24px;text-decoration:none;color:#fff;
+  background:linear-gradient(160deg,#ff5b7f,#d81b47);box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 4px 0 #9e1235,0 8px 0 #6e0c25,0 24px 40px -10px #ff4d8d;transition:transform .1s}
+.sos-big:active{transform:translateY(5px);box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 2px 0 #9e1235,0 12px 24px -10px #ff4d8d}
+.sos-big span{font-size:40px;line-height:1}.sos-big b{font-family:"Bricolage Grotesque";font-size:24px;font-weight:800}.sos-big em{font-style:normal;font-family:"Bricolage Grotesque";font-size:44px;font-weight:800;letter-spacing:.06em}
+.sos-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.sos-card{padding:16px;border-radius:20px;margin-bottom:12px;background:radial-gradient(90% 60% at 50% 125%,color-mix(in srgb,var(--k) 28%,transparent),transparent 70%),linear-gradient(165deg,#1a2158,#0e1339);
+  border:1px solid color-mix(in srgb,var(--k) 40%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 3px 0 #141a52,0 6px 0 #0a0e33,0 20px 30px -14px rgba(0,0,0,.9)}
+.sos-who{display:flex;gap:12px;align-items:center}
+.sos-who>div{flex:1;min-width:0}.sos-who strong{display:block;font-size:16px}.sos-who>div span{display:block;font-size:13px;color:var(--mut)}
+.sos-av{width:44px;height:44px;flex:none;border-radius:14px;display:grid;place-items:center;font-family:"Bricolage Grotesque";font-weight:800;font-size:20px;color:#06102a;background:var(--k);box-shadow:0 0 16px -4px var(--k)}
+.sos-acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.sos-acts .btn{flex:1;text-align:center;padding:12px}
+.sos-file .sos-f{padding:9px 0;border-bottom:1px solid var(--line)}.sos-file .sos-f:last-child{border-bottom:0}
+.sos-f span{display:block;font-size:12px;color:var(--amber);font-weight:600}.sos-f b{display:block;font-weight:500;font-size:14px;margin-top:3px;line-height:1.45}
+/* formulário */
+.f-start{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.f-big{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;padding:18px 14px;border-radius:22px;cursor:pointer;color:var(--txt);font:inherit;
+  background:radial-gradient(90% 60% at 50% 125%,color-mix(in srgb,var(--k) 35%,transparent),transparent 70%),linear-gradient(165deg,#1a2158,#0e1339);border:1px solid color-mix(in srgb,var(--k) 45%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 3px 0 #141a52,0 6px 0 #0a0e33,0 22px 30px -14px rgba(0,0,0,.9);animation:capin .5s cubic-bezier(.2,1.5,.4,1) backwards;animation-delay:calc(var(--i)*80ms);transition:transform .12s}
+.f-big:active{transform:translateY(4px)}
+.f-big b{font-family:"Bricolage Grotesque";font-size:18px;font-weight:800}.f-big small{color:var(--mut);font-size:12px;line-height:1.35}
+.f-ic{font-size:30px;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--k) 22%,#10153f);box-shadow:0 8px 16px -6px var(--k)}
+.f-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mut);margin-bottom:8px}
+.f-prog{height:6px;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:16px}
+.f-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--mint));box-shadow:0 0 10px var(--mint);transition:width .4s}
+.f-card{padding:22px 18px;border-radius:24px;background:radial-gradient(100% 60% at 50% 125%,color-mix(in srgb,var(--k) 30%,transparent),transparent 70%),linear-gradient(165deg,#1a2158,#0e1339);
+  border:1px solid color-mix(in srgb,var(--k) 40%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 3px 0 #141a52,0 6px 0 #0a0e33,0 26px 40px -16px rgba(0,0,0,.9);animation:fIn .38s cubic-bezier(.16,.9,.24,1)}
+.f-card.back{animation-name:fBack}
+@keyframes fIn{from{opacity:0;transform:translateX(40px) rotateY(-8deg)}}@keyframes fBack{from{opacity:0;transform:translateX(-40px) rotateY(8deg)}}
+.f-q{font-size:24px;font-weight:800;margin-bottom:10px;line-height:1.15}
+.f-in{width:100%;padding:14px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--txt);font:inherit;font-size:17px;outline:none;color-scheme:dark}
+.f-in:focus{border-color:var(--k)}
+.f-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.f-chip{border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--txt);font:inherit;font-size:14px;font-weight:600;padding:9px 13px;border-radius:99px;cursor:pointer}
+.f-chip.on{background:var(--k,var(--mint));color:#06102a;border-color:transparent;box-shadow:0 6px 14px -6px var(--k,var(--mint))}
+.f-opts{display:grid;gap:10px}
+.f-opt{text-align:left;padding:15px 16px;border-radius:16px;border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--txt);font:inherit;font-size:15.5px;font-weight:600;cursor:pointer;transition:transform .1s}
+.f-opt:active{transform:scale(.98)}.f-opt.on{border-color:var(--k);background:color-mix(in srgb,var(--k) 18%,transparent)}
+.f-ok{width:72px;height:72px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:36px;font-weight:800;color:#06102a;background:var(--mint);box-shadow:0 0 30px -4px var(--mint);animation:capin .6s cubic-bezier(.2,1.7,.4,1)}
+.f-item{display:flex;gap:12px;padding:14px;border-radius:18px;margin-bottom:10px;background:linear-gradient(165deg,#1a2158,#0e1339);border:1px solid color-mix(in srgb,var(--k) 35%,transparent)}
+.f-item b{font-size:14px}.f-item p{font-size:13px;color:var(--mut);margin-top:3px;line-height:1.4}.f-item .f-ic{width:44px;height:44px;font-size:22px}
+.pkrow input{width:64px!important;padding:8px;border-radius:10px;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--txt);font:inherit}
 /* cápsulas 3D no fundo */
 .floaters{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .app{position:relative;z-index:1}
@@ -440,9 +494,9 @@ body::before{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:0;
 <nav class="nav" aria-label="Seções">
   <button data-v="hoje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Hoje</button>
   <button data-v="remedios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-35 12 12)"/><path d="M9.2 7.9l5.6 8.2"/></svg>Remédios</button>
+  <button data-v="form" class="fab" aria-label="Formulário"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>Adicionar</span></button>
   <button data-v="retiradas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-5 9 5v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-7h6v7"/></svg>Retiradas</button>
   <button data-v="consultas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Consultas</button>
-  <button data-v="historico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Histórico</button>
 </nav>
 <div class="scrim" id="scrim"></div>
 <div class="sheet" id="sheet" role="dialog"></div>
@@ -451,6 +505,7 @@ body::before{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:0;
 <script>
 /* ====================== PARÂMETROS ====================== */
 const KEY = 'dose_pwa_v1';
+const DB_VERSION = 2;
 const LATE_HOURS_DAILY = 2;       // dose diária vira atrasada depois de 2 h
 const LATE_DAYS_INTERVAL = 1;     // dose espaçada vira atrasada depois de 1 dia
 const BUY_ALERT_DAYS = 10;        // avisar compra quando faltar isso
@@ -461,7 +516,7 @@ const FORMS = ['comprimido','cápsula','seringa','caneta','spray','colírio','po
 const LEVELS = ['cheio','metade','acabando','vazio'];
 const SITES = ['Abdômen direito','Abdômen esquerdo','Coxa direita','Coxa esquerda','Braço direito','Braço esquerdo','Não informado'];
 const injectable=m=>['seringa','caneta','ampola'].includes(m.form);
-const GROUPS = {continuo:'Contínuo',sempre:'Ter sempre',casa:'Outros em casa'};
+const GROUPS = {continuo:'Contínuos',sos:'SOS',outros:'Outros'};
 const SUS_DEFAULT = {
   unit:'Farmácia de Alto Custo de São Carlos', city:'São Carlos',
   address:'Rua Padre Teixeira, 3756 — Centro', hours:'', phone:''
@@ -513,22 +568,42 @@ function seed(){
   return {profile:{patient:'',helper:'',home:'São Carlos'},where:{city:null,from:null,to:null},example:false,log:[],appts:[],meds:[]};
 }
 let S; try{S=JSON.parse(localStorage.getItem(KEY))||seed()}catch(e){S=seed()}
+function normMed(m){
+  m=Object.assign(M({}),m);
+  if(m.group==='sempre')m.group='sos';if(m.group==='casa')m.group='outros';if(!GROUPS[m.group])m.group='outros';
+  if(!Array.isArray(m.packs))m.packs=[];if(!Array.isArray(m.purchases))m.purchases=[];
+  if(m.source==='sus'||m.sus)m.sus=Object.assign(susBlank(m.cold),m.sus||{});
+  if(m.sus&&!Array.isArray(m.sus.docs))m.sus.docs=susBlank(m.cold).docs;
+  if(m.sus&&!Array.isArray(m.sus.renewDocs))m.sus.renewDocs=susBlank(m.cold).renewDocs;
+  if(m.sus&&!Array.isArray(m.sus.pickups))m.sus.pickups=[];
+  if(m.sus&&!m.sus.rep)m.sus.rep={allowed:true,name:''};
+  return m;
+}
+function normalize(){
+  S.meds=(S.meds||[]).filter(m=>m&&m.id).map(normMed);
+  S.log=(S.log||[]).filter(l=>l&&l.id);S.appts=(S.appts||[]).filter(a=>a&&a.id);
+  S.profile=S.profile||{patient:'',helper:'',home:'São Carlos'};S.where=S.where||{city:null,from:null,to:null};
+  S.sos=Object.assign({contacts:[],doctor:{},notes:'',blood:''},S.sos||{});
+}
+normalize();
 const localSave=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const save=()=>{localSave();schedulePush()};
 const UI={view:'hoje',hist:'all'};
 const med=id=>S.meds.find(m=>m.id===id);
 const patient=()=>S.profile.patient||'a paciente';
-const scheduled=()=>S.meds.filter(m=>m.sched);
+const scheduled=()=>S.meds.filter(m=>m.sched&&!(m.until&&m.until<iso(today())));
 const qty=m=>m.packs&&m.packs.length?m.packs.reduce((a,p)=>a+p.left,0):(m.stock||0);
 const packSize=m=>m.packs&&m.packs.length?Math.max(...m.packs.map(p=>p.size)):0;
 const boxUnits=m=>parseInt((m.ref&&m.ref.pack)||'')||m.boxSize||packSize(m)||30;
 function takeUnits(m,n){
+  if(m.level)return;
   if(!m.packs||!m.packs.length){m.stock=Math.max(0,(m.stock||0)-n);return}
   let r=n;
   while(r>0){const open=m.packs.filter(p=>p.left>0).sort((a,b)=>a.left-b.left)[0];if(!open)break;const k=Math.min(open.left,r);open.left-=k;r-=k}
   m.packs=m.packs.filter(p=>p.left>0);
 }
 function addUnits(m,n){
+  if(m.level)return;
   if(!m.packs||!m.packs.length){if(m.source==='sus'||!packSize(m)){m.stock=(m.stock||0)+n;return}}
   const notFull=m.packs.filter(p=>p.left<p.size).sort((a,b)=>b.left-a.left)[0];
   if(notFull&&notFull.left+n<=notFull.size){notFull.left+=n;return}
@@ -545,10 +620,10 @@ function buyStatus(m){
   if(m.level)return m.level==='vazio'?'out':m.level==='acabando'?'low':'ok';
   if(m.unknown&&!qty(m))return'check';
   const q=qty(m);if(q<=0)return'out';
-  if(m.group==='casa')return'ok';
+  if(m.group==='outros'&&m.kind!=='pele')return'ok';
   if(m.sched)return stockInfo(m).daysLeft<=BUY_ALERT_DAYS?'low':'ok';
   const ps=packSize(m)||1;
-  if(m.group==='sempre')return (q/m.dose<=3||q/ps<=.3)?'low':'ok';
+  if(m.group==='sos')return (q/m.dose<=3||q/ps<=.3)?'low':'ok';
   return (q<.5*ps||q<=7)?'low':'ok';
 }
 const STATUS={ok:['em estoque','var(--mint)'],low:['acabando','var(--amber)'],out:['sem estoque','var(--pink)'],check:['conferir','var(--mut)']};
@@ -630,7 +705,7 @@ function lmeInfo(m){
 function adherence(id,days=30){
   const from=iso(addDays(today(),-days));
   const L=S.log.filter(l=>(id==='all'||l.medId===id)&&l.sched>=from);
-  const ok=L.filter(l=>l.status==='ok').length,late=L.filter(l=>l.status==='late').length,miss=L.filter(l=>l.status==='miss').length;
+  const ok=L.filter(l=>l.status==='ok'||l.status==='auto').length,late=L.filter(l=>l.status==='late').length,miss=L.filter(l=>l.status==='miss'||l.status==='skip').length;
   return {total:L.length,ok,late,miss,pct:L.length?Math.round(ok/L.length*100):100};
 }
 /* onde a família vai estar */
@@ -691,7 +766,7 @@ function urg(p){return p>=90?{lvl:'Agora',k:'var(--pink)'}:p>=70?{lvl:'Hoje',k:'
 /* ====================== TELAS ====================== */
 function header(){
   return `<div class="head"><div class="brand"><span class="pill"></span>Dose<i class="sync ${SYNC}" title="${SYNC_TXT[SYNC]}"></i></div>
-    <button class="who" onclick="profileSheet()">${S.profile.patient?`<b>${esc(S.profile.patient)}</b>`:'Definir paciente'}${S.where.city?` em ${esc(S.where.city)}`:''}</button></div>`;
+    <div class="row" style="gap:8px;flex-wrap:nowrap"><button class="sosb" onclick="go('urgencia')" aria-label="Urgência">SOS</button><button class="who" onclick="profileSheet()">${S.profile.patient?`<b>${esc(S.profile.patient)}</b>`:'Definir paciente'}${S.where.city?` em ${esc(S.where.city)}`:''}</button></div></div>`;
 }
 function noticesHTML(A){
   const cnt=k=>A.filter(a=>a.lvl===k).length;
@@ -718,7 +793,7 @@ function vHoje(){
     </div>`
   :scheduled().length?`<div class="now" style="--k:var(--mint)"><div class="lede">${due.length?'Todas as doses de hoje registradas':'Nenhuma dose marcada para hoje'}</div><div class="when" style="font-size:44px">${due.length?'Dia fechado':'Dia livre'}</div><p class="lede" style="margin-top:8px">${upNext.length?`Próxima aplicação: ${esc(upNext[0].m.name)}, ${relD(upNext[0].d)}.`:'Amanhã tem mais.'}</p></div>`:`<div class="now" style="--k:var(--lav)"><div class="lede">Bora começar?</div><div class="what" style="font-size:22px;font-family:'Bricolage Grotesque';font-weight:700">${S.meds.length} itens no armário, nenhum com horário</div><p class="lede" style="margin-top:8px">Coloque dose e horário nos contínuos e o app passa a lembrar cada dose.</p><div class="row"><button class="btn fill" style="--k:var(--lav)" onclick="UI.medTab='continuo';go('remedios')">Definir horários</button></div></div>`}
 
-  ${due.length?`<div class="sec"><h3>Cartela de hoje</h3><small>${due.filter(x=>x.e).length} de ${due.length}, aperte a bolha quando tomar</small></div>
+  ${due.length?`<div class="sec"><h3>Cartela de hoje</h3><button class="link" onclick="skipSheet()">Pular um dia</button></div><p class="help" style="margin:-6px 0 10px">${due.filter(x=>x.e).length} de ${due.length} feitas. Aperte a bolha quando tomar. Doses que ficarem sem marcar contam sozinhas no dia seguinte.</p>
   <div class="foil blister">${due.map(x=>{const st=x.e?'taken':x.late?'late':(x.sd>new Date()?'later':'now');
     const when=x.interval&&dd(x.sd,today())!==0?fD(x.sd):x.sd.toTimeString().slice(0,5);
     return `<button class="bub ${st}" style="--k:${x.m.color}" onclick="${x.e?`undoSheet('${x.e.id}')`:`popDose(this,'${x.m.id}','${x.sched}')`}" aria-label="${esc(x.m.name)}, ${when}${x.e?', já tomada':''}">
@@ -727,10 +802,10 @@ function vHoje(){
 
   ${kitsHTML()}
 
-  ${scheduled().length?`<div class="sec"><h3>Últimas doses</h3><small>como foi cada remédio</small></div>
+  ${scheduled().length?`<div class="sec"><h3>Últimas doses</h3><button class="link" onclick="go('historico')">Ver histórico</button></div>
   <div class="foil">
     ${scheduled().map(m=>`<div class="strip" style="--k:${m.color}"><div class="nm">${esc(m.name)}<small>${m.sched.type==='daily'?'diário':'a cada '+m.sched.every+' dias'}</small></div>
-      <div class="cells">${capsules(m).map((c,ci)=>`<span class="cap ${c.status}" style="--i:${ci}" title="${c.l?fDW(parse(c.l.sched)):'próxima'}"></span>`).join('')}</div></div>`).join('')}
+      <div class="cells">${capsules(m).map((c,ci)=>`<span class="cap ${c.status==='auto'?'ok':c.status==='skip'?'miss':c.status}" style="--i:${ci}" title="${c.l?fDW(parse(c.l.sched)):'próxima'}"></span>`).join('')}</div></div>`).join('')}
     <div class="key"><span><i class="cap ok" style="--k:var(--mint)"></i>tomada</span><span><i class="cap late"></i>com atraso</span><span><i class="cap miss"></i>não tomada</span><span><i class="cap due" style="--k:var(--mut)"></i>próxima</span></div>
   </div>`:''}
 
@@ -778,7 +853,7 @@ function vRemedios(){
   const tab=UI.medTab;
   const buy=S.meds.filter(m=>['low','out'].includes(buyStatus(m))), check=S.meds.filter(m=>buyStatus(m)==='check');
   const n=g=>S.meds.filter(m=>m.group===g).length;
-  const tabs=[['continuo','Contínuo',n('continuo')],['sempre','Ter sempre',n('sempre')],['casa','Outros',n('casa')],['comprar','Comprar',buy.length]];
+  const tabs=[['continuo','Contínuos',n('continuo')],['sos','SOS',n('sos')],['outros','Outros',n('outros')],['comprar','Comprar',buy.length]];
   let body='';
   if(tab==='comprar'){
     const tot=buy.reduce((a,m)=>a+(priceInfo(m).est||0),0), sem=buy.filter(m=>!priceInfo(m).est).length;
@@ -1079,7 +1154,10 @@ function vRetiradas(){
       <div class="grp"><h4>Retiradas anteriores</h4>
         ${s.pickups.slice().reverse().map(p=>`<div class="chk" style="cursor:default"><span>${fDW(parse(p.date))}</span><b class="num" style="margin-left:auto;color:${m.color}">+${p.units}</b></div>`).join('')||'<p class="help">Nenhuma ainda.</p>'}</div>
     </div>`}).join('')
-  :`<div class="empty">Nenhum remédio do SUS. Ao cadastrar um remédio, escolha a origem SUS.</div>`}`;
+  :`<div class="empty">Nenhum remédio está marcado como "retirado no SUS".</div>
+    ${S.meds.filter(m=>m.group==='continuo').length?`<div class="sec"><h3>Algum destes vem do SUS?</h3></div><div class="list">${S.meds.filter(m=>m.group==='continuo').map(m=>`<div class="item"><div class="b"><strong>${esc(m.name)}</strong><span>${esc(m.strength)}</span></div><button class="btn sm" style="--k:var(--cyan)" onclick="markSus('${m.id}')">É do SUS</button></div>`).join('')}</div>`:''}`}`;
+}
+function markSus(id){const m=med(id);m.source='sus';m.sus=Object.assign(susBlank(m.cold),m.sus||{});save();render();toast(`${m.name} agora aparece em Retiradas`)
 }
 
 function apptItem(a){
@@ -1135,7 +1213,7 @@ function vConsultas(){
 function vHistorico(){
   const id=UI.hist,a=adherence(id,30),cells=[];
   for(let i=27;i>=0;i--){const d=iso(addDays(today(),-i));const L=S.log.filter(l=>(id==='all'||l.medId===id)&&l.sched.slice(0,10)===d);
-    cells.push(`<i class="${!L.length?'':L.some(l=>l.status==='miss')?'miss':L.some(l=>l.status==='late')?'late':'ok'}" title="${fD(parse(d))}"></i>`)}
+    cells.push(`<i class="${!L.length?'':L.some(l=>l.status==='miss'||l.status==='skip')?'miss':L.some(l=>l.status==='late')?'late':'ok'}" title="${fD(parse(d))}"></i>`)}
   const L=S.log.filter(l=>id==='all'||l.medId===id).sort((x,y)=>y.sched.localeCompare(x.sched)).slice(0,30);
   const w=n=>a.total?n/a.total*100:0;
   return `${header()}<h1 style="font-size:28px">Histórico</h1>
@@ -1146,10 +1224,10 @@ function vHistorico(){
     <div class="legend"><span style="--k:var(--mint)">${a.ok} no horário</span><span style="--k:var(--amber)">${a.late} com atraso</span><span style="--k:var(--pink)">${a.miss} não tomadas</span></div>
     <div class="cal">${cells.join('')}</div>
   </div>
-  <div class="sec"><h3>Registros</h3><small>toque para corrigir</small></div>
+  <div class="sec"><h3>Registros</h3><button class="link" onclick="skipSheet()">Pular um dia</button></div>
   <div class="list">${L.map(l=>{const m=med(l.medId);if(!m)return'';
-    const k=l.status==='ok'?'var(--mint)':l.status==='late'?'var(--amber)':'var(--pink)';
-    const t=l.status==='miss'?'não tomada':l.status==='late'?delay(l):'no horário';
+    const k=l.status==='ok'||l.status==='auto'?'var(--mint)':l.status==='late'?'var(--amber)':'var(--pink)';
+    const t=l.status==='skip'?'pulada':l.status==='auto'?'contada sozinha':l.status==='miss'?'não tomada':l.status==='late'?delay(l):'no horário';
     return `<div class="item tap" onclick="logSheet('${l.id}')"><div class="b"><strong>${esc(m.name)}</strong><span>${l.site?esc(l.site)+'; ':''}prevista ${fDW(parse(l.sched))}, ${l.sched.slice(11,16)}${l.taken?`; tomada ${l.taken.slice(0,10)===l.sched.slice(0,10)?'às '+l.taken.slice(11,16):fD(parse(l.taken))}`:''}</span></div><span class="chip" style="--k:${k}">${t}</span></div>`}).join('')||'<div class="item"><div class="b"><span>Sem registros ainda.</span></div></div>'}</div>`;
 }
 function delay(l){const h=(parse(l.taken)-parse(l.sched))/36e5;return h>=24?`${Math.round(h/24)} d depois`:`${Math.round(h)} h depois`}
@@ -1176,6 +1254,8 @@ function nextSite(m){
 const KITS=[
   {ic:'💧',k:'#45d2ff',t:'Precisa de hidratação?',sub:'Calor, enjoo, diarreia ou treino puxado',home:[],
    buy:['Hidralyte','Gatorade','Água de coco','Pedialyte','Powerade'],note:'Soro de reidratação repõe água e sais; isotônico é a opção para treino e calor.'},
+  {ic:'🧴',k:'#ffb547',t:'Tratamento de pele',sub:'Rotina de cuidados e reposição',home:'__pele__',
+   buy:['Protetor solar facial','Hidratante facial','Sabonete facial','Água micelar','Hidratante corporal'],note:'Produtos com ácido ou de receita: use como a dermatologista orientou.'},
   {ic:'🤧',k:'#b39bff',t:'Gripou?',sub:'Nariz entupido, corpo mole, garganta',home:['Benegrip','Dipirona','Fexofenadina','Winter AP'],
    buy:['Soro fisiológico nasal','Lenço de papel','Mel','Chá de gengibre'],note:'Febre em quem usa imunossupressor pede contato com o médico.'},
   {ic:'🫠',k:'#3dffc5',t:'Enjoo ou estômago',sub:'Náusea, azia, gases',home:['Ondansetrona','Simeticona','Hidróxido de alumínio','Pantoprazol'],
@@ -1193,7 +1273,7 @@ const raia=q=>`https://www.drogaraia.com.br/search?w=${encodeURIComponent(q)}`;
 function kitsHTML(){
   return `<div class="sec"><h3>Kits rápidos</h3><small>deslize para os lados</small></div>
   <div class="kits" id="kits">${KITS.map((k,i)=>{
-    const home=k.home.map(findMed).filter(Boolean);
+    const home=k.home==='__pele__'?S.meds.filter(m=>m.kind==='pele'):k.home.map(findMed).filter(Boolean);
     const low=home.filter(m=>['low','out'].includes(buyStatus(m)));
     return `<article class="kit" style="--k:${k.k}">
       <div class="kit-top"><span class="kit-ic">${k.ic}</span><div><h4>${k.t}</h4><p>${k.sub}</p></div></div>
@@ -1257,9 +1337,11 @@ function party(){
 function recordTake(medId,sched,taken,site){
   const r=tapRect;
   const m=med(medId),status=statusFor(m,sched,taken);
+  const prev=S.log.find(l=>l.medId===medId&&l.sched===sched);
   S.log=S.log.filter(l=>!(l.medId===medId&&l.sched===sched));
-  S.log.push({id:uid(),medId,sched,taken,status,...(site?{site}:{})});
-  if(taken)takeUnits(m,m.dose);
+  S.log.push({id:prev?prev.id:uid(),medId,sched,taken,status,...(site?{site}:{})});
+  if(taken&&!(prev&&prev.taken))takeUnits(m,m.dose);
+  if(!taken&&prev&&prev.taken)addUnits(m,m.dose);
   UI.just=S.log.at(-1).id;
   save();render();
   if(!taken){toast(`Anotado: ${m.name} ficou sem tomar. Amanhã a gente acerta.`);return}
@@ -1298,6 +1380,7 @@ function profileSheet(){
     <button class="btn fill block" onclick="S.profile.patient=pfN.value.trim();S.profile.helper=pfH.value.trim();S.profile.home=pfC.value.trim()||'São Carlos';save();closeSheet();render();toast('Perfil salvo')">Salvar perfil</button>
     ${HH?`<div class="box k" style="--k:var(--mint);margin-top:14px">Casa <b>${esc(HH.name)}</b>. Código para convidar: <b class="num" style="font-size:18px;letter-spacing:.12em">${esc(HH.invite_code)}</b><br><small>Quem entrar com esse código vê e marca tudo junto.</small></div>
       <button class="btn block" style="--k:var(--mint);margin-top:8px" onclick="copyInvite()">Copiar convite</button>`:''}
+    <button class="btn block" style="--k:var(--lav);margin-top:8px" onclick="closeSheet();go('historico')">Histórico de doses</button>
     <button class="btn block" style="--k:var(--cyan);margin-top:8px" onclick="importSheet()">Importar dados</button>
     <button class="btn block quiet" style="margin-top:8px" onclick="exportData()">Copiar backup dos dados</button>
     ${SESSION?`<button class="btn block quiet" style="margin-top:8px" onclick="signOut()">Sair (${esc(SESSION.user.email||'')})</button>`:''}
@@ -1359,9 +1442,11 @@ function drawMed(){
           ${d.packs.map((p,i)=>`<div class="pkrow"><input type="number" min="0" value="${p.left}" oninput="md.packs[${i}].left=+this.value" aria-label="Restam"><span>de</span><input type="number" min="1" value="${p.size}" oninput="md.packs[${i}].size=+this.value" aria-label="Total"><button class="x" onclick="md.packs.splice(${i},1);drawMed()" aria-label="Remover">×</button></div>`).join('')||'<p class="lede" style="font-size:13px">Nenhuma cartela registrada.</p>'}
           <div class="row" style="margin-top:8px"><button class="btn sm" onclick="const z=packSize(md)||10;md.packs.push({left:z,size:z});md.unknown=false;drawMed()">Adicionar cartela</button></div></div>`}`}
 
+    ${st==='daily'?`<div class="tgrow">Contar sozinho (não precisa marcar cada dose)<button class="tg ${d.autoCount!==false?'on':''}" onclick="md.autoCount=!(md.autoCount!==false);this.classList.toggle('on')" aria-label="Contar sozinho"></button></div>`:''}
     <div class="tgrow">Receita retida na compra (controlado)<button class="tg ${d.rx?'on':''}" onclick="md.rx=!md.rx;this.classList.toggle('on')" aria-label="Receita retida"></button></div>
     <div class="tgrow">Guardar na geladeira<button class="tg ${d.cold?'on':''}" onclick="md.cold=!md.cold;this.classList.toggle('on')" aria-label="Geladeira"></button></div>
     <div class="fld"><label>Observações</label><textarea oninput="md.notes=this.value" placeholder="Ex.: depois do café">${esc(d.notes)}</textarea></div>
+    ${d.id&&med(d.id)?`<button class="btn block" style="--k:var(--cyan);margin-bottom:8px" onclick="editWithForm('${d.id}')">Editar passo a passo</button>`:''}
     <button class="btn fill block" onclick="saveMed()">Salvar remédio</button>
     ${d.id?`<button class="btn block" style="--k:var(--pink);margin-top:8px" onclick="S.meds=S.meds.filter(m=>m.id!==md.id);S.log=S.log.filter(l=>l.medId!==md.id);save();closeSheet();render();toast('Remédio apagado')">Apagar remédio</button>`:''}`);
 }
@@ -1539,11 +1624,12 @@ document.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||REDUCED)
 document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('#app :is(.now,.foil,.notes,.list,.med,.pick)');if(c){c.classList.add('press');const up=()=>{c.classList.remove('press');removeEventListener('pointerup',up);removeEventListener('pointercancel',up)};addEventListener('pointerup',up);addEventListener('pointercancel',up)}});
 /* ====================== SUPABASE ====================== */
 const SB_URL='https://untfnrynobarljjwkoxa.supabase.co',SB_KEY='sb_publishable_Bi0ilEANsJ-0DDqogzmP7Q_TL88ca6L';
-let sb=null,SESSION=null,HH=null,SYNC='off',pushT=null,pushing=false,chan=null;
+let ERRN=0,sb=null,SESSION=null,HH=null,SYNC='off',pushT=null,pushing=false,chan=null;
 const SYNC_TXT={ok:'Sincronizado',busy:'Sincronizando',off:'Sem conexão',err:'Erro ao sincronizar'};
 let snap={meds:{},appts:{},log:{},settings:''};
 const stable=v=>Array.isArray(v)?'['+v.map(stable).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).sort().filter(k=>v[k]!==undefined).map(k=>JSON.stringify(k)+':'+stable(v[k])).join(',')+'}':JSON.stringify(v===undefined?null:v);
-const settingsOf=()=>({profile:S.profile,plan:S.plan||null,sim:S.sim||null,where:S.where,apptFrom:S.apptFrom||null});
+const SET_KEYS=['profile','plan','sim','where','apptFrom','sos'];
+const settingsOf=()=>({profile:S.profile,plan:S.plan||null,sim:S.sim||null,where:S.where,apptFrom:S.apptFrom||null,sos:S.sos||null});
 const rowToLog=r=>({id:r.id,medId:r.med_id,sched:String(r.sched).slice(0,16),taken:r.taken?String(r.taken).slice(0,16):null,status:r.status,...(r.site?{site:r.site}:{})});
 const logToRow=l=>({id:l.id,household_id:HH.id,med_id:l.medId,sched:l.sched,taken:l.taken,status:l.status,site:l.site||null});
 function setSync(v){SYNC=v;document.querySelectorAll('.sync').forEach(e=>{e.className='sync '+v;e.title=SYNC_TXT[v]})}
@@ -1566,8 +1652,10 @@ async function push(){
     if(aD.length)ok(await sb.from('appts').delete().in('id',aD));
     const st=stable(settingsOf());
     if(st!==snap.settings)ok(await sb.from('settings').upsert({household_id:HH.id,data:settingsOf()}));
-    snap={...cur,settings:st};setSync('ok');
-  }catch(e){console.warn(e);setSync('err');toast('Não consegui sincronizar agora. Tento de novo sozinho.');setTimeout(schedulePush,8000)}
+    snap={...cur,settings:st};setSync('ok');ERRN=0;
+  }catch(e){console.warn(e);setSync('err');ERRN=(ERRN||0)+1;
+    if(ERRN===1)toast(e&&e.code==='23514'?'Falta rodar o SQL de atualização no Supabase (status das doses).':'Não consegui sincronizar agora. Tento de novo sozinho.');
+    setTimeout(schedulePush,Math.min(120000,8000*ERRN))}
   finally{pushing=false}
 }
 async function pull(){
@@ -1576,17 +1664,17 @@ async function pull(){
   const [m,l,a,st]=await Promise.all([q('meds'),q('dose_log').order('sched'),q('appts'),sb.from('settings').select('data').eq('household_id',HH.id).maybeSingle()]);
   for(const r of [m,l,a,st])if(r.error)throw r.error;
   S.meds=m.data.map(r=>r.data);S.log=l.data.map(rowToLog);S.appts=a.data.map(r=>r.data);
-  if(st.data&&st.data.data&&Object.keys(st.data.data).length){const d=st.data.data;['profile','plan','sim','where','apptFrom'].forEach(k=>{if(d[k]!=null)S[k]=d[k]})}
-  S.profile=S.profile||{patient:'',helper:'',home:'São Carlos'};S.where=S.where||{city:null,from:null,to:null};
+  if(st.data&&st.data.data&&Object.keys(st.data.data).length){const d=st.data.data;SET_KEYS.forEach(k=>{if(d[k]!=null)S[k]=d[k]})}
+  normalize();
   takeSnap();localSave();setSync('ok');
 }
 function applyRemote(t,p){
   const del=p.eventType==='DELETE',row=del?p.old:p.new;if(!row)return;
   const upd=(arr,key,obj)=>{const i=S[arr].findIndex(x=>x.id===row.id);if(del){if(i>=0)S[arr].splice(i,1);delete snap[key][row.id]}else{if(i>=0)S[arr][i]=obj;else S[arr].push(obj);snap[key][row.id]=stable(obj)}};
-  if(t==='meds')upd('meds','meds',row.data);
+  if(t==='meds')upd('meds','meds',del?null:normMed(row.data));
   else if(t==='appts')upd('appts','appts',row.data);
   else if(t==='dose_log')upd('log','log',del?null:rowToLog(row));
-  else if(t==='settings'&&!del){const d=row.data||{};['profile','plan','sim','where','apptFrom'].forEach(k=>{if(d[k]!=null)S[k]=d[k]});snap.settings=stable(settingsOf())}
+  else if(t==='settings'&&!del){const d=row.data||{};SET_KEYS.forEach(k=>{if(d[k]!=null)S[k]=d[k]});snap.settings=stable(settingsOf())}
   localSave();
   if(!document.getElementById('sheet').classList.contains('on'))render();
 }
@@ -1604,7 +1692,7 @@ async function loadHousehold(){
 async function enterHousehold(fresh){
   if(fresh){snap={meds:{},appts:{},log:{},settings:''};localSave();await push()}
   else await pull();
-  subscribe();hideGate();UI.anim=true;render();
+  subscribe();hideGate();processAuto();UI.anim=true;render();
 }
 /* portão: login por código no e-mail */
 function gate(html){let g=document.getElementById('gate');if(!g){g=document.createElement('div');g.id='gate';g.className='gate';document.body.appendChild(g)}g.innerHTML=`<div class="card"><div class="brand"><span class="pill"></span>Dose</div>${html}</div>`}
@@ -1668,24 +1756,332 @@ function doImport(){
   if(!d||!Array.isArray(d.meds)){toast('Não achei remédios nesse texto');return}
   const byId=(a,b)=>{const m=new Map(a.map(x=>[x.id,x]));b.forEach(x=>m.set(x.id,x));return [...m.values()]};
   S.meds=byId(S.meds,d.meds);S.log=byId(S.log,d.log||[]);S.appts=byId(S.appts,d.appts||[]);
-  ['profile','plan','where','sim','apptFrom'].forEach(k=>{if(d[k])S[k]=d[k]});
-  save();closeSheet();UI.anim=true;render();toast(`Importado: ${d.meds.length} remédios e ${(d.log||[]).length} registros`);
+  ['profile','plan','where','sim','apptFrom','sos','contacts'].forEach(k=>{if(d[k])S[k]=d[k]});
+  normalize();save();closeSheet();UI.anim=true;render();toast(`Importado: ${d.meds.length} remédios e ${(d.log||[]).length} registros`);
 }
 async function boot(){
-  if(!window.supabase){render();setSync('off');toast('Sem conexão com o servidor: usando os dados deste aparelho.');return}
+  if(!window.supabase){processAuto();render();setSync('off');toast('Sem conexão com o servidor: usando os dados deste aparelho.');return}
   sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
   const {data}=await sb.auth.getSession();SESSION=data.session;
   sb.auth.onAuthStateChange((ev,ses)=>{SESSION=ses});
   if(!SESSION){gateEmail();return}
-  render();await afterLogin();
+  processAuto();render();await afterLogin();
 }
 addEventListener('online',()=>{setSync('busy');schedulePush()});
 addEventListener('offline',()=>setSync('off'));
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+/* ====================== URGÊNCIA ====================== */
+const telNum=t=>{let d=String(t||'').replace(/\D/g,'');if(!d)return '';if(d.length<=11&&!d.startsWith('55'))d='55'+d;return d};
+const telHref=t=>{const d=String(t||'').replace(/\D/g,'');return d.length<=4?`tel:${d}`:`tel:+${telNum(t)}`};
+const waHref=t=>`https://wa.me/${telNum(t)}`;
+const fmtTel=t=>{const d=String(t||'').replace(/\D/g,'').replace(/^55/,'');return d.length===11?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length===10?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:t};
+function vUrgencia(){
+  const o=S.sos,doc=o.doctor||{},cont=S.meds.filter(m=>m.group==='continuo'&&m.kind!=='pele');
+  const person=(c,i)=>`<div class="sos-card" style="--k:${c.main?'var(--mint)':'var(--cyan)'}">
+      <div class="sos-who"><span class="sos-av">${esc((c.name||'?')[0].toUpperCase())}</span><div><strong>${esc(c.name)}</strong><span>${esc(c.rel||'')}${c.rel?', ':''}${fmtTel(c.phone)}</span></div>
+      <button class="link" onclick="contactSheet(${i})">Editar</button></div>
+      <div class="sos-acts"><a class="btn fill" style="--k:var(--mint);text-decoration:none" href="${telHref(c.phone)}">📞 Ligar</a>${c.wa!==false?`<a class="btn" style="--k:#25d366;text-decoration:none" href="${waHref(c.phone)}" target="_blank" rel="noopener">WhatsApp</a>`:''}</div></div>`;
+  return `${header()}
+  <div class="sos-hero">
+    <p class="sos-lead">Emergência médica</p>
+    <a class="sos-big" href="tel:192"><span>🚑</span><b>Ligar para o SAMU</b><em>192</em></a>
+    <div class="sos-row"><a class="btn" style="--k:#ff8a5c;text-decoration:none" href="tel:193">🚒 Bombeiros 193</a><a class="btn" style="--k:var(--cyan);text-decoration:none" href="https://www.google.com/maps/search/pronto+socorro" target="_blank" rel="noopener">🏥 Pronto-socorro perto</a></div>
+  </div>
+
+  <div class="sec"><h3>Contatos de urgência</h3><button class="link" onclick="contactSheet(-1)">Adicionar</button></div>
+  ${o.contacts.length?o.contacts.map(person).join(''):`<div class="empty">Adicione quem deve ser avisado primeiro, com telefone e WhatsApp.<br><button class="btn sm fill" style="margin-top:12px" onclick="contactSheet(-1)">Adicionar contato</button></div>`}
+
+  <div class="sec"><h3>Médica</h3><button class="link" onclick="doctorSheet()">${doc.name?'Editar':'Preencher'}</button></div>
+  ${doc.name||doc.phone?`<div class="sos-card" style="--k:var(--lav)"><div class="sos-who"><span class="sos-av">🩺</span><div><strong>${esc(doc.name||'Médica')}</strong><span>${esc(doc.spec||'')}${doc.spec&&doc.phone?', ':''}${fmtTel(doc.phone||'')}</span>${doc.addr?`<span>${esc(doc.addr)}</span>`:''}</div></div>
+      <div class="sos-acts">${doc.phone?`<a class="btn fill" style="--k:var(--lav);text-decoration:none" href="${telHref(doc.phone)}">📞 Ligar</a><a class="btn" style="--k:#25d366;text-decoration:none" href="${waHref(doc.phone)}" target="_blank" rel="noopener">WhatsApp</a>`:''}${doc.addr?`<a class="btn quiet" style="text-decoration:none" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(doc.addr)}" target="_blank" rel="noopener">Rota</a>`:''}</div></div>`
+    :`<div class="empty">Nome, telefone e endereço da médica, para ligar com um toque.<br><button class="btn sm fill" style="margin-top:12px;--k:var(--lav)" onclick="doctorSheet()">Preencher</button></div>`}
+
+  <div class="sec"><h3>Ficha para mostrar ao socorro</h3><button class="link" onclick="notesSheet()">Editar</button></div>
+  <div class="sos-card sos-file" style="--k:var(--amber)">
+    <div class="sos-f"><span>Paciente</span><b>${esc(S.profile.patient||'—')}</b></div>
+    ${o.blood?`<div class="sos-f"><span>Tipo sanguíneo</span><b>${esc(o.blood)}</b></div>`:''}
+    <div class="sos-f"><span>Alergias e informações importantes</span><b>${o.notes?esc(o.notes).replace(/\n/g,'<br>'):'Toque em Editar para preencher'}</b></div>
+    <div class="sos-f"><span>Remédios de uso contínuo</span><b>${cont.length?cont.map(m=>`${esc(m.name)} ${esc(m.strength)}${m.sched?`, ${esc(schedText(m))}`:''}`).join('<br>'):'—'}</b></div>
+  </div>`;
+}
+function contactSheet(i){
+  const c=i>=0?S.sos.contacts[i]:{name:'',rel:'',phone:'',wa:true,main:!S.sos.contacts.length};
+  openSheet(`<h2>${i>=0?'Editar contato':'Contato de urgência'}</h2>
+    <div class="fld"><label>Nome</label><input id="cN" value="${esc(c.name)}" placeholder="Ex.: Cristiano"></div>
+    <div class="two"><div class="fld"><label>Relação</label><input id="cR" value="${esc(c.rel||'')}" placeholder="Ex.: marido"></div>
+      <div class="fld"><label>Telefone com DDD</label><input id="cP" inputmode="tel" value="${esc(c.phone)}" placeholder="11 91234-5678"></div></div>
+    <div class="tgrow">Tem WhatsApp<button class="tg ${c.wa!==false?'on':''}" id="cW" onclick="this.classList.toggle('on')"></button></div>
+    <div class="tgrow">Contato principal (aparece primeiro)<button class="tg ${c.main?'on':''}" id="cM" onclick="this.classList.toggle('on')"></button></div>
+    <button class="btn fill block" onclick="saveContact(${i})">Salvar contato</button>
+    ${i>=0?`<button class="btn block" style="--k:var(--pink);margin-top:8px" onclick="S.sos.contacts.splice(${i},1);save();closeSheet();render()">Apagar contato</button>`:''}`);
+}
+function saveContact(i){
+  const c={name:cN.value.trim(),rel:cR.value.trim(),phone:cP.value.trim(),wa:cW.classList.contains('on'),main:cM.classList.contains('on')};
+  if(!c.name||c.phone.replace(/\D/g,'').length<8){toast('Preencha nome e telefone com DDD');return}
+  if(c.main)S.sos.contacts.forEach(x=>x.main=false);
+  if(i>=0)S.sos.contacts[i]=c;else S.sos.contacts.push(c);
+  S.sos.contacts.sort((a,b)=>(b.main?1:0)-(a.main?1:0));
+  save();closeSheet();render();toast('Contato salvo');
+}
+function doctorSheet(){
+  const d=S.sos.doctor||{};
+  openSheet(`<h2>Médica</h2>
+    <div class="fld"><label>Nome</label><input id="dN" value="${esc(d.name||'')}" placeholder="Dra. ..."></div>
+    <div class="two"><div class="fld"><label>Especialidade</label><input id="dS" value="${esc(d.spec||'')}" placeholder="Reumatologista"></div>
+      <div class="fld"><label>Telefone</label><input id="dP" inputmode="tel" value="${esc(d.phone||'')}"></div></div>
+    <div class="fld"><label>Endereço do consultório</label><input id="dA" value="${esc(d.addr||'')}" placeholder="Rua, número - cidade"></div>
+    <button class="btn fill block" style="--k:var(--lav)" onclick="S.sos.doctor={name:dN.value.trim(),spec:dS.value.trim(),phone:dP.value.trim(),addr:dA.value.trim()};save();closeSheet();render();toast('Médica salva')">Salvar</button>`);
+}
+function notesSheet(){
+  openSheet(`<h2>Ficha para o socorro</h2>
+    <div class="fld"><label>Tipo sanguíneo</label><input id="nB" value="${esc(S.sos.blood||'')}" placeholder="Ex.: O+"></div>
+    <div class="fld"><label>Alergias, condições, plano de saúde, cartão SUS</label><textarea id="nT" style="min-height:120px">${esc(S.sos.notes||'')}</textarea></div>
+    <p class="help" style="margin-bottom:12px">A lista de remédios contínuos entra sozinha na ficha.</p>
+    <button class="btn fill block" style="--k:var(--amber)" onclick="S.sos.blood=nB.value.trim();S.sos.notes=nT.value.trim();save();closeSheet();render();toast('Ficha salva')">Salvar</button>`);
+}
+/* ====================== CONTAGEM AUTOMÁTICA ====================== */
+const autoOn=m=>m.sched&&m.sched.type==='daily'&&m.autoCount!==false&&!injectable(m)&&!m.level;
+function processAuto(){
+  const T=iso(today());let n=0;
+  scheduled().forEach(m=>{
+    if(!autoOn(m))return;
+    if(!m.autoFrom){m.autoFrom=T;n++;return}
+    let d=parse(m.autoFrom);const st=m.sched.start?parse(m.sched.start):d;if(d<st)d=st;
+    if(m.until&&parse(m.until)<addDays(today(),-1)){}
+    while(iso(d)<T){
+      const ds=iso(d);
+      if(!(m.until&&ds>m.until))m.sched.times.forEach(t=>{const sched=`${ds}T${t}`;
+        if(!S.log.some(l=>l.medId===m.id&&l.sched===sched)){S.log.push({id:`a_${m.id}_${ds.replace(/-/g,'')}${t.replace(':','')}`,medId:m.id,sched,taken:sched,status:'auto'});takeUnits(m,m.dose);n++}});
+      d=addDays(d,1);
+    }
+    if(m.autoFrom!==T){m.autoFrom=T;n++}
+  });
+  if(n){localSave();schedulePush()}
+}
+function skipSheet(dateIso){
+  const d=dateIso||iso(addDays(today(),-1));
+  const meds=scheduled().filter(m=>m.sched.type==='daily');
+  openSheet(`<h2>Pular um dia</h2>
+    <div class="hint">Use quando ela não tomou num dia (dormiu, esqueceu, passou mal). As doses daquele dia voltam para o estoque e ficam marcadas como puladas.</div>
+    <div class="fld"><label>Qual dia</label><input type="date" id="skD" value="${d}" max="${iso(today())}" onchange="skipSheet(this.value)"></div>
+    <div class="row" style="margin:-4px 0 12px;gap:6px"><button class="btn sm quiet" onclick="skipSheet('${iso(today())}')">Hoje</button><button class="btn sm quiet" onclick="skipSheet('${iso(addDays(today(),-1))}')">Ontem</button><button class="btn sm quiet" onclick="skipSheet('${iso(addDays(today(),-2))}')">Anteontem</button></div>
+    <div class="fld"><label>Quais remédios</label>${meds.length?meds.map(m=>{const n=m.sched.times.length;const done=S.log.filter(l=>l.medId===m.id&&l.sched.slice(0,10)===d&&l.status==='skip').length;
+      return `<div class="chk ${done?'':'on'}" data-id="${m.id}" onclick="this.classList.toggle('on')"><span class="bx"></span><span>${esc(m.name)} ${esc(m.strength)}<br><small style="color:var(--mut)">${plural(n,'dose')} de ${plural(m.dose*n,unit(m,1),unit(m,2))}${done?', já pulado':''}</small></span></div>`}).join(''):'<p class="help">Nenhum remédio com horário diário.</p>'}</div>
+    <button class="btn fill block" style="--k:var(--amber)" onclick="doSkip()">Pular e devolver ao estoque</button>`);
+}
+function doSkip(){
+  const d=skD.value,ids=[...document.querySelectorAll('.sheet .chk.on')].map(e=>e.dataset.id);let back=0,cnt=0;
+  ids.forEach(id=>{const m=med(id);if(!m||!m.sched)return;
+    m.sched.times.forEach(t=>{const sched=`${d}T${t}`;const l=S.log.find(x=>x.medId===id&&x.sched===sched);
+      if(l){if(l.status==='skip'||l.status==='miss')return;if(l.taken){addUnits(m,m.dose);back+=m.dose}l.status='skip';l.taken=null;cnt++}
+      else{S.log.push({id:`s_${id}_${d.replace(/-/g,'')}${t.replace(':','')}`,medId:id,sched,taken:null,status:'skip'});cnt++}});
+  });
+  save();closeSheet();render();toast(cnt?`${plural(cnt,'dose')} pulada${cnt>1?'s':''}${back?`, ${back} de volta ao estoque`:''}`:'Nada para pular nesse dia');
+}
+/* ====================== FORMULÁRIO ====================== */
+const FORM_TYPES={
+  trat:{ic:'💊',k:'var(--mint)',t:'Tratamento',sub:'Remédio de uso contínuo, com horário'},
+  sos:{ic:'🆘',k:'var(--amber)',t:'Medicação comprada',sub:'Para quando precisar (SOS) ou guardada em casa'},
+  pele:{ic:'🧴',k:'#ffb547',t:'Produto de pele',sub:'Protetor, hidratante, ácido, pomada'},
+  appt:{ic:'🩺',k:'var(--lav)',t:'Consulta ou exame',sub:'Data, endereço e o que levar'}};
+const TIMES=['06:00','07:00','08:00','09:00','12:00','14:00','18:00','20:00','21:00','22:00'];
+const yes=v=>v===true;
+const F_STEPS={
+  trat:[
+    {k:'name',q:'Qual o nome do remédio?',type:'text',ph:'Ex.: Gabapentina',req:true},
+    {k:'strength',q:'Qual a concentração?',type:'chips',opts:['5 mg','10 mg','20 mg','25 mg','50 mg','100 mg','300 mg','500 mg'],ph:'Ex.: 300 mg',hint:'Está escrito na caixa. Pode pular.'},
+    {k:'form',q:'Como ele é?',type:'choice',opts:[['comprimido','💊 Comprimido'],['cápsula','💊 Cápsula'],['gota','💧 Gotas'],['seringa','💉 Injeção / seringa'],['caneta','🖊️ Caneta'],['spray','🌬️ Spray'],['pomada','🧴 Pomada / creme'],['colírio','👁️ Colírio'],['unidade','Outro']]},
+    {k:'dose',q:'Quanto toma de cada vez?',type:'number',opts:['0.5','1','2','3'],unitOf:true,def:'1'},
+    {k:'freq',q:'Com que frequência?',type:'choice',opts:[['daily','Todo dia'],['interval','A cada alguns dias'],['none','Só quando precisa']]},
+    {k:'times',q:'Em quais horários?',type:'times',show:d=>d.freq==='daily',req:true},
+    {k:'every',q:'A cada quantos dias?',type:'number',opts:['7','14','15','28','30'],show:d=>d.freq==='interval',def:'14'},
+    {k:'time',q:'Em que horário?',type:'time',show:d=>d.freq==='interval',def:'09:00'},
+    {k:'start',q:'Quando começa (ou a próxima dose)?',type:'date',show:d=>d.freq!=='none',def:()=>iso(today())},
+    {k:'dur',q:'Por quanto tempo?',type:'choice',show:d=>d.freq!=='none',opts:[['cont','Uso contínuo'],['until','Até uma data'],['days','Por alguns dias']]},
+    {k:'until',q:'Até quando?',type:'date',show:d=>d.dur==='until',req:true},
+    {k:'days',q:'Por quantos dias?',type:'number',opts:['5','7','10','14','30'],show:d=>d.dur==='days',req:true},
+    {k:'source',q:'Como vocês conseguem?',type:'choice',opts:[['compra','🏪 Compramos na farmácia'],['sus','🏛️ Retiramos no SUS (alto custo)']]},
+    {k:'packs',q:'Quanto tem em casa agora?',type:'packs',show:d=>d.source!=='sus'},
+    {k:'stock',q:'Quantas unidades tem em casa agora?',type:'number',opts:['0','1','2','4'],show:d=>d.source==='sus',def:'0'},
+    {k:'extras',q:'Algum detalhe?',type:'toggles',opts:[['rx','Receita retida na compra (controlado)'],['cold','Guardar na geladeira'],['auto','Contar sozinho (não precisa marcar cada dose)',d=>d.freq==='daily'&&!['seringa','caneta','pomada','colírio'].includes(d.form)]]},
+    {k:'price',q:'Quanto custou a última caixa?',type:'money',show:d=>d.source!=='sus',hint:'Opcional. Ajuda a estimar as próximas compras.'},
+  ],
+  sos:[
+    {k:'name',q:'Qual o nome?',type:'text',ph:'Ex.: Dipirona',req:true},
+    {k:'strength',q:'Qual a concentração?',type:'chips',opts:['200 mg','400 mg','500 mg','1 g','4 mg','10 mg'],ph:'Ex.: 500 mg',hint:'Pode pular.'},
+    {k:'form',q:'Como ele é?',type:'choice',opts:[['comprimido','💊 Comprimido'],['cápsula','💊 Cápsula'],['gota','💧 Gotas'],['frasco','🧪 Xarope / líquido'],['spray','🌬️ Spray'],['pomada','🧴 Pomada'],['colírio','👁️ Colírio'],['adesivo','🩹 Adesivo'],['unidade','Outro']]},
+    {k:'cat',q:'Para que é?',type:'choice',opts:[['sos','🆘 SOS: para quando precisar (dor, enjoo, gripe)'],['outros','📦 Outros: guardado em casa']]},
+    {k:'dose',q:'Quanto toma quando precisa?',type:'number',opts:['1','2'],unitOf:true,def:'1'},
+    {k:'packs',q:'Quanto tem em casa?',type:'packs'},
+    {k:'price',q:'Quanto pagou?',type:'money',hint:'Opcional.'},
+    {k:'notes',q:'Para que serve? Alguma observação?',type:'text',ph:'Ex.: dor de cabeça forte',hint:'Opcional.'},
+  ],
+  pele:[
+    {k:'name',q:'Qual o produto?',type:'text',ph:'Ex.: Protetor solar La Roche FPS 60',req:true},
+    {k:'skin',q:'Que tipo de produto é?',type:'choice',opts:[['Protetor solar','☀️ Protetor solar'],['Hidratante','💧 Hidratante'],['Sabonete','🫧 Sabonete / limpeza'],['Sérum ou ácido','🧪 Sérum ou ácido'],['Tônico','🌿 Tônico'],['Pomada de receita','🧴 Pomada / creme de receita'],['Outro','Outro']]},
+    {k:'when',q:'Quando ela usa?',type:'choice',opts:[['am','🌅 De manhã'],['pm','🌙 À noite'],['both','🌅🌙 Manhã e noite'],['free','Só às vezes']]},
+    {k:'level',q:'Como está a embalagem?',type:'choice',opts:[['cheio','Cheia'],['metade','Pela metade'],['acabando','Acabando'],['vazio','Acabou']]},
+    {k:'price',q:'Quanto custou?',type:'money',hint:'Opcional.'},
+  ],
+  appt:[
+    {k:'kind',q:'É consulta ou exame?',type:'choice',opts:[['consulta','🩺 Consulta'],['exame','🧪 Exame']]},
+    {k:'title',q:'Qual especialidade ou exame?',type:'chips',opts:['Reumatologista','Dermatologista','Psiquiatra','Clínico geral','Exame de sangue','Oftalmologista'],ph:'Ex.: Reumatologista',req:true},
+    {k:'who',q:'Com quem ou onde?',type:'text',ph:'Ex.: Dra. Helena / Laboratório',hint:'Opcional.'},
+    {k:'date',q:'Que dia?',type:'date',req:true,def:()=>iso(addDays(today(),7))},
+    {k:'time',q:'Que horas?',type:'time',def:'09:00'},
+    {k:'place',q:'Qual o endereço?',type:'text',ph:'Rua, número - bairro',hint:'Com o endereço, o app calcula como chegar.'},
+    {k:'city',q:'Em qual cidade?',type:'chips',opts:['São Carlos','São Paulo','São Bernardo do Campo'],def:()=>S.profile.home||'São Carlos'},
+    {k:'renew',q:'Vai renovar o LME nessa consulta?',type:'choice',show:d=>d.kind==='consulta',opts:[['yes','Sim, pedir LME e receita'],['no','Não']]},
+    {k:'bring',q:'O que levar ou pedir?',type:'multi',opts:['Exames recentes','Lista de remédios','Receitas','Documento com foto','Carteirinha do convênio/SUS','Pedido médico']},
+  ]};
+UI.form=UI.form||{view:'start',cart:[],cur:null};
+function F(){return UI.form}
+function fSteps(c){return F_STEPS[c.type].filter(st=>!st.show||st.show(c.data))}
+function fStart(type,edit){
+  const d={};F_STEPS[type].forEach(st=>{if(st.def!==undefined)d[st.k]=typeof st.def==='function'?st.def():st.def});
+  if(type==='trat'){d.extras={auto:true};d.packs=[]}
+  if(type==='sos')d.packs=[];
+  if(type==='appt')d.bring=[];
+  F().cur={type,data:edit?JSON.parse(JSON.stringify(edit.data)):d,i:0,edit:edit?edit.idx:null,medId:edit&&edit.medId||null};F().view='step';F().dir=1;render();
+}
+function fVal(){const c=F().cur,st=fSteps(c)[c.i];return c.data[st.k]}
+function fSet(v,adv){const c=F().cur,st=fSteps(c)[c.i];c.data[st.k]=v;const el=document.getElementById('fIn');if(el)el.value=v;if(adv)fNext();else render()}
+function fNext(){
+  const c=F().cur,L=fSteps(c),st=L[c.i];
+  const el=document.getElementById('fIn');if(el&&['text','chips','number','money','date','time'].includes(st.type))c.data[st.k]=el.value.trim();
+  const v=c.data[st.k];
+  if(st.req&&(v==null||v===''||(Array.isArray(v)&&!v.length))){toast('Preencha para continuar');return}
+  if(c.i<fSteps(c).length-1){c.i++;F().dir=1;render();return}
+  const item={type:c.type,data:c.data,medId:c.medId};
+  if(c.edit!=null)F().cart[c.edit]=item;else F().cart.push(item);
+  F().cur=null;F().view='added';render();
+}
+function fBack(){const c=F().cur;if(c.i>0){c.i--;F().dir=-1;render()}else{F().cur=null;F().view=F().cart.length?'review':'start';render()}}
+function packsOf(d){return (d.packs||[]).filter(p=>p.size>0)}
+function fSummary(it){
+  const d=it.data,u=n=>{const f=d.form||'unidade';return n==1?f:f==='ml'?f:f+'s'};
+  if(it.type==='appt')return `${d.kind==='exame'?'Exame':'Consulta'}: ${d.title}${d.who?`, ${d.who}`:''}. ${d.date?fDW(parse(d.date)):''}${d.time?` às ${d.time}`:''}${d.city?`, ${d.city}`:''}`;
+  if(it.type==='pele')return `${d.skin||'Pele'}: ${d.name}. ${({am:'De manhã',pm:'À noite',both:'Manhã e noite',free:'Só às vezes'})[d.when]||''}, embalagem ${({cheio:'cheia',metade:'pela metade',acabando:'acabando',vazio:'vazia'})[d.level]||''}`;
+  const P=packsOf(d),q=P.reduce((a,p)=>a+(+p.left||0),0);
+  const fr=d.freq==='daily'?`${d.dose} ${u(d.dose)} às ${(d.times||[]).join(', ')}`:d.freq==='interval'?`${d.dose} ${u(d.dose)} a cada ${d.every} dias`:it.type==='sos'?(d.cat==='sos'?'SOS, quando precisar':'Guardado em casa'):'Quando precisar';
+  const est=d.source==='sus'?`${d.stock||0} em casa, retirado no SUS`:P.length?`${q} em casa (${P.map(p=>`${p.left}/${p.size}`).join(' + ')})`:'nada em casa';
+  return `${d.name}${d.strength?' '+d.strength:''}. ${fr}. ${est}${d.price?`, R$ ${(+d.price).toFixed(2).replace('.',',')}`:''}`;
+}
+function fToObjects(it){
+  const d=it.data,T=iso(today());
+  if(it.type==='appt')return {appt:{id:uid(),title:d.title,who:d.who||'',date:d.date,time:d.time||'',place:d.place||'',city:d.city||'',kind:d.kind||'consulta',renewLme:d.renew==='yes',
+    bring:[...(d.bring||[]),...(d.renew==='yes'?['Pedir novo LME','Pedir receita atualizada']:[])].map(t=>({t,on:false})),notes:''}};
+  const base=it.medId?med(it.medId):null;
+  const m=base?JSON.parse(JSON.stringify(base)):M({color:COLORS[S.meds.length%COLORS.length]});
+  m.name=d.name;m.strength=d.strength||'';
+  if(it.type==='pele'){
+    m.kind='pele';m.form=/protetor|hidrat|sabonete|tônico|sérum|ácido/i.test(d.skin||'')?'frasco':'pomada';m.notes=d.skin||'';m.level=d.level||'cheio';m.packs=[];m.dose=1;m.autoCount=false;m.color='#ffb547';
+    const tm=d.when==='am'?['07:00']:d.when==='pm'?['21:00']:d.when==='both'?['07:00','21:00']:null;
+    m.sched=tm?{type:'daily',times:tm,start:T}:null;m.group=tm?'continuo':'outros';
+  }else{
+    m.form=d.form||'comprimido';m.dose=+d.dose||1;m.kind=null;
+    if(it.type==='sos'){m.group=d.cat==='outros'?'outros':'sos';m.sched=null;m.notes=d.notes||m.notes||''}
+    else{
+      m.group='continuo';
+      m.sched=d.freq==='daily'?{type:'daily',times:(d.times||[]).slice().sort(),start:d.start||T}:d.freq==='interval'?{type:'interval',every:+d.every||14,time:d.time||'09:00',start:d.start||T}:null;
+      m.until=d.dur==='until'?d.until:d.dur==='days'&&d.start?iso(addDays(parse(d.start),(+d.days||1)-1)):null;
+      const ex=d.extras||{};m.rx=yes(ex.rx);m.cold=yes(ex.cold);m.autoCount=yes(ex.auto);if(!base||!m.autoFrom)m.autoFrom=T;
+      m.source=d.source||'compra';
+      if(m.source==='sus'){m.packs=[];m.stock=+d.stock||0;m.sus=Object.assign(susBlank(m.cold),m.sus||{})}
+    }
+    if(m.source!=='sus'){m.packs=packsOf(d).map(p=>({left:+p.left||0,size:+p.size||1}))}
+    if(['seringa','caneta'].includes(m.form))m.autoCount=false;
+  }
+  m.unknown=false;
+  if(d.price&&+d.price>0&&!base)m.purchases=[{date:T,boxes:1,price:+d.price,store:''}];
+  return {med:m};
+}
+function fSaveAll(){
+  let nm=0,na=0;
+  F().cart.forEach(it=>{const o=fToObjects(it);if(o.appt){S.appts.push(o.appt);na++}else{const i=S.meds.findIndex(x=>x.id===o.med.id);if(i>=0)S.meds[i]=o.med;else S.meds.push(o.med);nm++}});
+  F().cart=[];F().view='start';save();burst(null,true);
+  toast(`Salvo! ${nm?plural(nm,'item','itens')+' em Remédios':''}${nm&&na?' e ':''}${na?plural(na,'consulta'):''}`);
+  UI.view=nm?'remedios':'consultas';UI.anim=true;scrollTo({top:0});render();
+}
+function medToForm(m){
+  const d={name:m.name,strength:m.strength,form:m.form,dose:String(m.dose),packs:JSON.parse(JSON.stringify(m.packs||[])),price:''};
+  if(m.kind==='pele'){const t=m.sched?m.sched.times:[];return {type:'pele',data:{name:m.name,skin:m.notes||'Outro',when:t.length===2?'both':t[0]==='07:00'?'am':t[0]?'pm':'free',level:m.level||'cheio'}}}
+  if(m.group!=='continuo')return {type:'sos',data:{...d,cat:m.group,notes:m.notes}};
+  Object.assign(d,{freq:m.sched?m.sched.type:'none',times:m.sched&&m.sched.times?m.sched.times.slice():[],every:m.sched&&m.sched.every?String(m.sched.every):'14',time:m.sched&&m.sched.time||'09:00',
+    start:m.sched&&m.sched.start||iso(today()),dur:m.until?'until':'cont',until:m.until||'',source:m.source,stock:String(m.stock||0),extras:{rx:!!m.rx,cold:!!m.cold,auto:m.autoCount!==false}});
+  return {type:'trat',data:d};
+}
+function editWithForm(id){const m=med(id),f=medToForm(m);closeSheet();UI.view='form';F().cart=[];fStart(f.type,{data:f.data,idx:null,medId:id});}
+
+function fInput(st,c){
+  const v=c.data[st.k];
+  if(st.type==='text')return `<input id="fIn" class="f-in" value="${esc(v||'')}" placeholder="${esc(st.ph||'')}" onkeydown="if(event.key==='Enter')fNext()" autocomplete="off">`;
+  if(st.type==='chips'||st.type==='number'||st.type==='money'){
+    const isN=st.type!=='chips';
+    return `<input id="fIn" class="f-in" ${isN?`type="number" inputmode="decimal" step="${st.type==='money'?'0.01':'0.5'}"`:''} value="${esc(v||'')}" placeholder="${esc(st.ph||(st.type==='money'?'R$ 0,00':''))}" onkeydown="if(event.key==='Enter')fNext()">
+      ${st.unitOf?`<p class="help" style="margin-top:6px">${unit({form:c.data.form||'comprimido'},2)}</p>`:''}
+      ${st.opts?`<div class="f-chips">${st.opts.map(o=>`<button class="f-chip ${String(v)===o?'on':''}" onclick="fSet('${o}',true)">${st.unitOf?`${o.replace('0.5','½')} ${unit({form:c.data.form||'comprimido'},o==='1'||o==='0.5'?1:2)}`:o}</button>`).join('')}</div>`:''}`;
+  }
+  if(st.type==='date')return `<input id="fIn" class="f-in" type="date" value="${esc(v||'')}">
+    <div class="f-chips"><button class="f-chip" onclick="fSet('${iso(today())}',true)">Hoje</button><button class="f-chip" onclick="fSet('${iso(addDays(today(),1))}',true)">Amanhã</button><button class="f-chip" onclick="fSet('${iso(addDays(today(),7))}',true)">Daqui a 1 semana</button></div>`;
+  if(st.type==='time')return `<input id="fIn" class="f-in" type="time" value="${esc(v||'')}">
+    <div class="f-chips">${['07:00','08:00','09:00','12:00','20:00','22:00'].map(t=>`<button class="f-chip" onclick="fSet('${t}',true)">${t}</button>`).join('')}</div>`;
+  if(st.type==='choice')return `<div class="f-opts">${st.opts.map(([val,l])=>`<button class="f-opt ${v===val?'on':''}" onclick="fSet('${val}',true)">${l}</button>`).join('')}</div>`;
+  if(st.type==='times'){const sel=v||[];return `<div class="f-chips">${[...new Set([...TIMES,...sel])].sort().map(t=>`<button class="f-chip ${sel.includes(t)?'on':''}" onclick="fToggleTime('${t}')">${t}</button>`).join('')}</div>
+    <div class="addline" style="margin-top:12px"><input type="time" id="fT" style="flex:1"><button class="btn sm" onclick="if(fT.value)fToggleTime(fT.value,true)">Outro horário</button></div>
+    <p class="help" style="margin-top:8px">${sel.length?`${plural(sel.length,'vez','vezes')} ao dia: ${sel.slice().sort().join(', ')}`:'Toque em todos os horários.'}</p>`}
+  if(st.type==='packs'){const P=v||[];return `${P.map((p,i)=>`<div class="pkrow"><span>Cartela/caixa ${i+1}: restam</span><input type="number" min="0" value="${p.left}" onchange="F().cur.data.packs[${i}].left=+this.value"><span>de</span><input type="number" min="1" value="${p.size}" onchange="F().cur.data.packs[${i}].size=+this.value"><button class="x" onclick="F().cur.data.packs.splice(${i},1);render()">×</button></div>`).join('')}
+    <p class="help" style="margin:6px 0 8px">Toque para adicionar uma caixa ou cartela:</p>
+    <div class="f-chips">${[10,14,15,20,28,30,60].map(n=>`<button class="f-chip" onclick="F().cur.data.packs.push({left:${n},size:${n}});render()">+ ${n} un.</button>`).join('')}</div>
+    <p class="help" style="margin-top:10px">${P.length?`Total: ${P.reduce((a,p)=>a+(+p.left||0),0)} unidades. Ajuste "restam" se alguma já está aberta.`:'Se não tem nenhum agora, só toque em Próximo.'}</p>`}
+  if(st.type==='toggles'){const o=v||{};return st.opts.filter(x=>!x[2]||x[2](c.data)).map(([key,l])=>`<div class="tgrow">${l}<button class="tg ${o[key]?'on':''}" onclick="F().cur.data.extras=Object.assign({},F().cur.data.extras,{${key}:!${!!o[key]}});render()"></button></div>`).join('')}
+  if(st.type==='multi'){const sel=v||[];return `<div class="f-chips">${[...new Set([...st.opts,...sel])].map(o=>`<button class="f-chip ${sel.includes(o)?'on':''}" onclick="fToggleMulti(this.textContent)">${esc(o)}</button>`).join('')}</div>
+    <div class="addline" style="margin-top:12px"><input id="fM" placeholder="Outro item" onkeydown="if(event.key==='Enter'&&this.value.trim())fToggleMulti(this.value.trim())"><button class="btn sm" onclick="if(fM.value.trim())fToggleMulti(fM.value.trim())">Adicionar</button></div>`}
+  return '';
+}
+function fToggleTime(t,force){const c=F().cur;c.data.times=c.data.times||[];const i=c.data.times.indexOf(t);if(i>=0&&!force)c.data.times.splice(i,1);else if(i<0)c.data.times.push(t);render()}
+function fToggleMulti(t){const c=F().cur;c.data.bring=c.data.bring||[];const i=c.data.bring.indexOf(t);if(i>=0)c.data.bring.splice(i,1);else c.data.bring.push(t);render()}
+function vForm(){
+  const f=F();
+  if(f.view==='step'&&f.cur){
+    const c=f.cur,L=fSteps(c),st=L[c.i],T=FORM_TYPES[c.type],auto=st.type==='choice';
+    return `${header()}
+    <div class="f-top"><button class="link" onclick="fBack()">‹ Voltar</button><span>${T.ic} ${T.t}${c.medId?' (editando)':''}</span><span class="num">${c.i+1}/${L.length}</span></div>
+    <div class="f-prog"><i style="width:${(c.i+1)/L.length*100}%"></i></div>
+    <div class="f-card ${f.dir<0?'back':''}" style="--k:${T.k}" key="${c.i}">
+      <h2 class="f-q">${st.q}</h2>${st.hint?`<p class="help" style="margin-bottom:12px">${st.hint}</p>`:''}
+      ${fInput(st,c)}
+      ${auto?'':`<button class="btn fill block" style="--k:${T.k};margin-top:18px" onclick="fNext()">${c.i===L.length-1?'Concluir':'Próximo'}</button>`}
+      ${!st.req&&auto?`<button class="btn block quiet" style="margin-top:12px" onclick="fNext()">Pular</button>`:''}
+    </div>
+    ${f.cart.length?`<p class="help" style="text-align:center;margin-top:14px">${plural(f.cart.length,'item','itens')} esperando confirmação</p>`:''}`;
+  }
+  if(f.view==='added'){
+    const last=f.cart[f.cart.length-1],T=FORM_TYPES[last.type];
+    return `${header()}<div class="f-card" style="--k:${T.k};text-align:center">
+      <div class="f-ok">✓</div><h2 class="f-q">Anotado!</h2><p class="lede">${esc(fSummary(last))}</p>
+      <button class="btn fill block" style="--k:var(--mint);margin-top:18px" onclick="F().view='start';render()">Adicionar outra coisa</button>
+      <button class="btn block" style="--k:var(--cyan);margin-top:8px" onclick="F().view='review';render()">Revisar e salvar (${f.cart.length})</button></div>`;
+  }
+  if(f.view==='review'){
+    return `${header()}<h1 style="font-size:28px">Confirme antes de salvar</h1><p class="lede">Confira o que vai entrar no app. Toque em Editar para corrigir.</p>
+      <div style="height:14px"></div>
+      ${f.cart.length?f.cart.map((it,i)=>{const T=FORM_TYPES[it.type];return `<div class="f-item" style="--k:${T.k}"><span class="f-ic">${T.ic}</span><div><b>${T.t}${it.medId?' (atualização)':''}</b><p>${esc(fSummary(it))}</p>
+        <div class="row" style="margin-top:8px;gap:6px"><button class="btn sm" style="--k:${T.k}" onclick="F().cur={type:'${it.type}',data:JSON.parse(JSON.stringify(F().cart[${i}].data)),i:0,edit:${i},medId:${it.medId?`'${it.medId}'`:'null'}};F().view='step';render()">Editar</button><button class="btn sm quiet" onclick="F().cart.splice(${i},1);render()">Remover</button></div></div></div>`}).join('')
+        :'<div class="empty">Nada para salvar.</div>'}
+      ${f.cart.length?`<button class="btn fill block" style="margin-top:16px" onclick="fSaveAll()">Salvar tudo no app</button>`:''}
+      <button class="btn block quiet" style="margin-top:8px" onclick="F().view='start';render()">Adicionar mais</button>`;
+  }
+  return `${header()}<h1 style="font-size:30px">O que você quer adicionar?</h1><p class="lede">Uma pergunta por vez. No fim você confere tudo antes de salvar.</p>
+    <div class="f-start">${Object.entries(FORM_TYPES).map(([k,T],i)=>`<button class="f-big" style="--k:${T.k};--i:${i}" onclick="fStart('${k}')"><span class="f-ic">${T.ic}</span><b>${T.t}</b><small>${T.sub}</small></button>`).join('')}</div>
+    ${f.cart.length?`<button class="btn fill block" style="--k:var(--cyan);margin-top:16px" onclick="F().view='review';render()">Revisar e salvar (${f.cart.length})</button>`:''}
+    <p class="help" style="margin-top:16px">Para mudar algo que já existe, abra o remédio em Remédios e toque em "Editar passo a passo".</p>`;
+}
 function render(){
-  const V={hoje:vHoje,remedios:vRemedios,retiradas:vRetiradas,consultas:vConsultas,historico:vHistorico};
+  const V={hoje:vHoje,remedios:vRemedios,retiradas:vRetiradas,consultas:vConsultas,historico:vHistorico,urgencia:vUrgencia,form:vForm};
   document.getElementById('app').innerHTML=V[UI.view]();
   document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===UI.view));
+  document.body.classList.toggle('sosmode',UI.view==='urgencia');
   wire();
   const kb=document.getElementById('kits');if(kb){kb.addEventListener('scroll',()=>requestAnimationFrame(kitTick),{passive:true});kitTick()}
 }
