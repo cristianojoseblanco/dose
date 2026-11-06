@@ -219,7 +219,7 @@ h2{font-size:21px;font-weight:700}
 .tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
 .tg.on{background:var(--mint)}
 .tg.on::after{left:21px}
-.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 16px);transform:translate(-50%,-140px);z-index:60;padding:11px 16px;border-radius:14px;background:#141a4a;border:1px solid var(--line2);font-size:14px;transition:.3s;max-width:90%}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 16px);transform:translate(-50%,-140px);z-index:120;padding:11px 16px;border-radius:14px;background:#141a4a;border:1px solid var(--line2);font-size:14px;transition:.3s;max-width:90%}
 .toast.on{transform:translate(-50%,0)}
 /* ===== camada viva: sombra + brilho na base ===== */
 body::before{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:0;
@@ -568,6 +568,16 @@ body.sosmode{background:radial-gradient(70% 40% at 50% 0%,rgba(255,77,141,.28),t
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
 .wk small{display:block;text-align:center;font-size:10.5px;color:var(--mut);margin-bottom:3px;text-transform:capitalize}
 .calb{width:36px;height:36px;border-radius:12px;border:1px solid var(--line2);background:transparent;color:var(--txt);font-size:16px;cursor:pointer;display:grid;place-items:center}
+/* login: erros, mostrar senha */
+.gerr{display:none;margin:2px 0 12px;padding:10px 12px;border-radius:12px;font-size:13.5px;line-height:1.45;color:#ffd0de;background:color-mix(in srgb,var(--pink) 16%,transparent);border:1px solid color-mix(in srgb,var(--pink) 50%,transparent)}
+.gerr.on{display:block}
+.gerr.okm{color:#c9fff0;background:color-mix(in srgb,var(--mint) 14%,transparent);border-color:color-mix(in srgb,var(--mint) 45%,transparent)}
+.gate input.bad{border-color:var(--pink)!important;animation:shake .35s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.pw{position:relative}
+.pw input{padding-right:64px}
+.pw button{position:absolute;right:8px;top:7px;border:0;background:transparent;color:var(--mut);font:600 12.5px "Instrument Sans",sans-serif;padding:6px 8px;cursor:pointer}
+.forgot{display:block;margin:-4px 0 14px auto;border:0;background:none;color:var(--cyan);font:600 13px "Instrument Sans",sans-serif;cursor:pointer;padding:4px 0}
 </style>
 </head>
 <body>
@@ -2082,8 +2092,8 @@ function pushCard(){
 }
 
 /* ====================== NOVA VERSÃO ====================== */
-const APP_VER='7';
-const CHANGES={'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+const APP_VER='8';
+const CHANGES={'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
 function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Suporte pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
 function whatsNew(){
   let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
@@ -2358,28 +2368,82 @@ async function enterHousehold(fresh){
   subscribe();hideGate();processAuto();UI.anim=true;render();
 }
 /* portão: login por código no e-mail */
-function gate(html){let g=document.getElementById('gate');if(!g){g=document.createElement('div');g.id='gate';g.className='gate';document.body.appendChild(g)}g.innerHTML=`<div class="card"><div class="brand"><span class="pill"></span>Dose</div>${html}</div>`}
+function gate(html){let g=document.getElementById('gate');if(!g){g=document.createElement('div');g.id='gate';g.className='gate';document.body.appendChild(g)}g.innerHTML=`<div class="card"><div class="brand"><span class="pill"></span>Suporte</div>${html}</div>`}
 function hideGate(){const g=document.getElementById('gate');if(g)g.remove()}
+let loginFails=0;
+const pwField=(id,ph,ac)=>`<div class="pw"><input id="${id}" type="password" autocomplete="${ac}" placeholder="${ph}" style="margin-top:0" oninput="this.classList.remove('bad')" onkeydown="if(event.key==='Enter')document.querySelector('.gate .btn.fill').click()"><button type="button" onclick="const i=document.getElementById('${id}');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'Mostrar':'Ocultar'">Mostrar</button></div>`;
 function gateEmail(msg,mode){
   mode=mode||localStorage.getItem('dose_mode')||'login';
   gate(`<h1>${mode==='login'?'Entrar':'Criar conta'}</h1><p class="lede">${mode==='login'?'Use o e-mail e a senha da sua conta do Suporte.':'Cada pessoa cria a própria conta. Depois vocês se juntam na mesma casa.'}</p>
-    <input id="gE" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com" value="${esc(localStorage.getItem('dose_email')||'')}">
-    <input id="gP" type="password" autocomplete="${mode==='login'?'current-password':'new-password'}" placeholder="Senha (mínimo 6 caracteres)" style="margin-top:0">
+    <input id="gE" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com" value="${esc(localStorage.getItem('dose_email')||'')}" oninput="this.classList.remove('bad')">
+    ${pwField('gP',mode==='login'?'Senha':'Crie uma senha (mínimo 6 caracteres)',mode==='login'?'current-password':'new-password')}
+    ${mode==='login'?`<button class="forgot" onclick="gateForgot()">Esqueceu a senha?</button>`:'<div style="height:12px"></div>'}
+    <div class="gerr" id="gErr"></div>
     <button class="btn fill block" onclick="${mode==='login'?'doLogin()':'doSignup()'}">${mode==='login'?'Entrar':'Criar conta'}</button>
-    <button class="btn block quiet" style="margin-top:8px" onclick="localStorage.setItem('dose_mode','${mode==='login'?'signup':'login'}');gateEmail()">${mode==='login'?'Ainda não tenho conta':'Já tenho conta'}</button>
+    <button class="btn block quiet" style="margin-top:8px" onclick="localStorage.setItem('dose_mode','${mode==='login'?'signup':'login'}');loginFails=0;gateEmail()">${mode==='login'?'Ainda não tenho conta':'Já tenho conta'}</button>
     ${msg?`<p class="help" style="margin-top:12px">${msg}</p>`:''}`);
 }
-function creds(){const e=gE.value.trim(),p=gP.value;if(!/.+@.+\..+/.test(e)){toast('Confira o e-mail');return null}if(p.length<6){toast('A senha precisa ter pelo menos 6 caracteres');return null}localStorage.setItem('dose_email',e);return {email:e,password:p}}
+function gErr(msg,field,ok){
+  const e=document.getElementById('gErr');if(e){e.innerHTML=msg;e.className='gerr on'+(ok?' okm':'')}
+  document.querySelectorAll('.gate input.bad').forEach(i=>i.classList.remove('bad'));
+  if(field){const i=document.getElementById(field);if(i){void i.offsetWidth;i.classList.add('bad');i.focus()}}
+}
+function busy(on,label){const b=document.querySelector('.gate .btn.fill');if(!b)return;if(on){b.dataset.t=b.textContent;b.textContent=label||'Aguarde…';b.disabled=true}else{b.textContent=b.dataset.t||b.textContent;b.disabled=false}}
+function creds(){const e=gE.value.trim(),p=gP.value;if(!/.+@.+\..+/.test(e)){gErr('Esse e-mail parece incompleto. Confira se tem @ e o final (.com, .com.br).','gE');return null}if(p.length<6){gErr(p?'A senha tem pelo menos 6 caracteres.':'Digite a senha.','gP');return null}localStorage.setItem('dose_email',e);return {email:e,password:p}}
 async function doLogin(){
-  const c=creds();if(!c)return;
-  const {data,error}=await sb.auth.signInWithPassword(c);
-  if(error){toast(/invalid/i.test(error.message)?'E-mail ou senha incorretos':/confirm/i.test(error.message)?'Conta ainda não confirmada: desligue "Confirm email" no Supabase':'Erro: '+error.message);return}
-  SESSION=data.session;localStorage.setItem('dose_mode','login');await afterLogin();
+  const c=creds();if(!c)return;busy(true,'Entrando…');
+  const {data,error}=await sb.auth.signInWithPassword(c);busy(false);
+  if(error){
+    if(/invalid/i.test(error.message)){loginFails++;gErr(loginFails>=2?'Senha errada de novo. Confira maiúsculas e minúsculas ou toque em <b>Esqueceu a senha?</b> para criar uma nova.':'E-mail ou senha incorretos. Confira e tente de novo.','gP');if(loginFails>=2){const f=document.querySelector('.forgot');if(f)f.style.cssText+='color:#fff;background:color-mix(in srgb,var(--cyan) 22%,transparent);padding:6px 10px;border-radius:10px'}}
+    else if(/confirm/i.test(error.message))gErr('Essa conta ainda não foi confirmada. No Supabase, desligue "Confirm email" em Authentication → Sign In / Providers → Email.');
+    else if(/fetch|network/i.test(error.message))gErr('Sem internet agora. Confira a conexão e tente de novo.');
+    else if(/rate|too many/i.test(error.message))gErr('Muitas tentativas seguidas. Espere um minuto e tente de novo.');
+    else gErr('Não deu para entrar: '+esc(error.message));
+    return}
+  loginFails=0;SESSION=data.session;localStorage.setItem('dose_mode','login');await afterLogin();
+}
+function gateForgot(){
+  const e=(document.getElementById('gE')||{}).value||localStorage.getItem('dose_email')||'';
+  gate(`<h1>Nova senha</h1><p class="lede">Digite o e-mail da conta. Vamos mandar um link para criar uma senha nova.</p>
+    <input id="gE" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com" value="${esc(e)}" oninput="this.classList.remove('bad')">
+    <div class="gerr" id="gErr"></div>
+    <button class="btn fill block" onclick="sendReset()">Mandar link</button>
+    <button class="btn block quiet" style="margin-top:8px" onclick="gateEmail(null,'login')">Voltar para entrar</button>`);
+}
+async function sendReset(){
+  const e=gE.value.trim();if(!/.+@.+\..+/.test(e)){gErr('Confira o e-mail.','gE');return}
+  localStorage.setItem('dose_email',e);busy(true,'Mandando…');
+  const {error}=await sb.auth.resetPasswordForEmail(e,{redirectTo:location.origin+location.pathname});busy(false);
+  if(error){
+    if(/rate|security purposes|seconds/i.test(error.message))gErr('Já mandamos um link há pouco. Espere alguns minutos antes de pedir outro e confira a caixa de spam.');
+    else if(/not authorized|authorized/i.test(error.message))gErr('O servidor de e-mail do app ainda não pode mandar para esse endereço. Peça para quem cuida do app trocar a senha pelo Supabase.');
+    else gErr('Não deu para mandar: '+esc(error.message));
+    return}
+  gErr(`Pronto! Se existir uma conta com <b>${esc(e)}</b>, o link chega em instantes. Abra o e-mail <b>neste celular</b> e toque no link. Confira também o spam.`,null,true);
+}
+function gateNewPass(){
+  gate(`<h1>Criar senha nova</h1><p class="lede">Escolha a nova senha da sua conta.</p>
+    ${pwField('gP','Nova senha (mínimo 6 caracteres)','new-password')}
+    <div style="height:10px"></div>
+    ${pwField('gP2','Repita a nova senha','new-password')}
+    <div style="height:12px"></div>
+    <div class="gerr" id="gErr"></div>
+    <button class="btn fill block" onclick="saveNewPass()">Salvar senha nova</button>`);
+}
+async function saveNewPass(){
+  const a=gP.value,b=gP2.value;
+  if(a.length<6){gErr('A senha precisa ter pelo menos 6 caracteres.','gP');return}
+  if(a!==b){gErr('As duas senhas estão diferentes.','gP2');return}
+  busy(true,'Salvando…');const {error}=await sb.auth.updateUser({password:a});busy(false);
+  if(error){gErr(/expired|invalid|session/i.test(error.message)?'O link venceu. Peça um novo em "Esqueceu a senha?".':'Não deu para salvar: '+esc(error.message));return}
+  history.replaceState(null,'',location.pathname);
+  gate(`<h1>Senha trocada ✓</h1><p class="lede">Tudo certo. Se você usa o Suporte pelo ícone da tela de início, abra por ele e entre com a senha nova.</p>
+    <button class="btn fill block" onclick="afterLogin()">Continuar aqui</button>`);
 }
 async function doSignup(){
-  const c=creds();if(!c)return;
-  const {data,error}=await sb.auth.signUp(c);
-  if(error){toast(/registered|exists/i.test(error.message)?'Esse e-mail já tem conta: toque em "Já tenho conta"':'Erro: '+error.message);return}
+  const c=creds();if(!c)return;busy(true,'Criando…');
+  const {data,error}=await sb.auth.signUp(c);busy(false);
+  if(error){gErr(/registered|exists/i.test(error.message)?'Esse e-mail já tem conta. Toque em <b>Já tenho conta</b> para entrar.':/weak|password/i.test(error.message)?'Senha fraca. Use pelo menos 6 caracteres, misturando letras e números.':'Não deu para criar: '+esc(error.message),/password/i.test(error.message)?'gP':'gE');return}
   if(!data.session){gateEmail('Conta criada, mas o Supabase pediu confirmação por e-mail. Desligue "Confirm email" em Authentication → Sign In / Providers → Email e tente entrar.','login');return}
   SESSION=data.session;localStorage.setItem('dose_mode','login');toast('Conta criada!');await afterLogin();
 }
@@ -2425,8 +2489,11 @@ function doImport(){
 async function boot(){
   if(!window.supabase){processAuto();render();setSync('off');toast('Sem conexão com o servidor: usando os dados deste aparelho.');return}
   sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const rec=/type=recovery/.test(location.hash);
   const {data}=await sb.auth.getSession();SESSION=data.session;
-  sb.auth.onAuthStateChange((ev,ses)=>{SESSION=ses});
+  sb.auth.onAuthStateChange((ev,ses)=>{SESSION=ses;if(ev==='PASSWORD_RECOVERY')gateNewPass()});
+  if(rec&&SESSION){gateNewPass();return}
+  if(/error_code=otp_expired|error=access_denied/.test(location.hash)){history.replaceState(null,'',location.pathname);gateEmail('O link de senha venceu ou já foi usado. Peça outro em "Esqueceu a senha?".','login');return}
   if(!SESSION){gateEmail();return}
   processAuto();render();await afterLogin();
 }
