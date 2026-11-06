@@ -1,6 +1,6 @@
 {
-  "name": "Dose — remédios, retiradas e consultas",
-  "short_name": "Dose",
+  "name": "Suporte — remédios, retiradas e consultas",
+  "short_name": "Suporte",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

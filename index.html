@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dose</title>
+<title>Suporte</title>
 <meta name="theme-color" content="#080b24">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Dose">
+<meta name="apple-mobile-web-app-title" content="Suporte">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="icons/icon-192.png">
@@ -880,7 +880,7 @@ function urg(p){return p>=90?{lvl:'Agora',k:'var(--pink)'}:p>=70?{lvl:'Hoje',k:'
 
 /* ====================== TELAS ====================== */
 function header(){
-  return `<div class="head"><div class="brand"><span class="pill"></span>Dose<i class="sync ${SYNC}" title="${SYNC_TXT[SYNC]}"></i></div>
+  return `<div class="head"><div class="brand"><span class="pill"></span>Suporte<i class="sync ${SYNC}" title="${SYNC_TXT[SYNC]}"></i></div>
     <div class="row" style="gap:8px;flex-wrap:nowrap"><button class="calb" onclick="go('calendario')" aria-label="Calendário">📅</button><button class="sosb" onclick="go('urgencia')" aria-label="Urgência">SOS</button><button class="who" onclick="profileSheet()">${S.profile.patient?`<b>${esc(S.profile.patient)}</b>`:'Definir paciente'}${S.where.city?` em ${esc(S.where.city)}`:''}</button></div></div>`;
 }
 function noticesHTML(A){
@@ -936,7 +936,7 @@ function vHoje(){
     <div class="b"><strong>${esc(x.m.name)} ${esc(x.m.strength)}</strong><span>${rel(x.d)}, às ${x.m.sched.time}${injectable(x.m)&&nextSite(x.m)?`, ${nextSite(x.m).next.toLowerCase()}`:''}${qty(x.m)<x.m.dose?' — <b style="color:var(--pink)">sem remédio em casa</b>':''}${awayOn(x.d)?` — vocês estarão em ${esc(S.where.city)}`:''}</span></div></div>`).join('')}</div>`:''}
 
   ${appt?`<div class="sec"><h3>Próxima consulta</h3><button class="link" onclick="go('consultas')">Ver todas</button></div><div class="list">${apptItem(appt)}</div>`:''}
-  <p class="fine">O Dose organiza registros e lembretes. Ele não substitui orientação médica: mudanças de dose sempre com o médico.</p>`;
+  <p class="fine">O Suporte organiza registros e lembretes. Ele não substitui orientação médica: mudanças de dose sempre com o médico.</p>`;
 }
 
 function moneyBlock(m){
@@ -1695,7 +1695,7 @@ function drawAppt(){
     <div class="tgrow">Renovar o LME nesta consulta<button class="tg ${a.renewLme?'on':''}" onclick="ad.renewLme=!ad.renewLme;this.classList.toggle('on')" aria-label="Renovar LME"></button></div>
     <div class="fld"><label>O que levar ou pedir</label>
       ${a.bring.map((b,i)=>`<div class="chk ${b.on?'on':''}" onclick="ad.bring[${i}].on=!ad.bring[${i}].on;drawAppt()"><span class="bx"></span><span>${esc(b.t)}</span><button class="x" onclick="event.stopPropagation();ad.bring.splice(${i},1);drawAppt()">×</button></div>`).join('')}
-      ${(()=>{const sug=[...rxNeeds().map(m=>`Receita de ${m.name}`),'Relatório do Dose (PDF)'].filter(t=>!a.bring.some(b=>b.t===t));return sug.length&&a.kind!=='exame'?`<div class="tags" style="margin:6px 0 8px">${sug.map(t=>`<button style="--k:var(--amber)" onclick="ad.bring.push({t:'${t.replace(/'/g,'')}',on:false});drawAppt()">+ ${esc(t)}</button>`).join('')}</div>`:''})()}
+      ${(()=>{const sug=[...rxNeeds().map(m=>`Receita de ${m.name}`),'Relatório do Suporte (PDF)'].filter(t=>!a.bring.some(b=>b.t===t));return sug.length&&a.kind!=='exame'?`<div class="tags" style="margin:6px 0 8px">${sug.map(t=>`<button style="--k:var(--amber)" onclick="ad.bring.push({t:'${t.replace(/'/g,'')}',on:false});drawAppt()">+ ${esc(t)}</button>`).join('')}</div>`:''})()}
       <div class="addline"><input id="abN" placeholder="Adicionar item" onkeydown="if(event.key==='Enter'&&this.value.trim()){ad.bring.push({t:this.value.trim(),on:false});drawAppt()}"><button class="btn sm" onclick="if(abN.value.trim()){ad.bring.push({t:abN.value.trim(),on:false});drawAppt()}">Adicionar</button></div></div>
     <div class="fld"><label>Anotações da consulta</label><textarea oninput="ad.notes=this.value">${esc(a.notes)}</textarea></div>
     <button class="btn fill block" style="--k:var(--lav)" onclick="saveAppt()">${a.kind==='exame'?'Salvar exame':'Salvar consulta'}</button>
@@ -1915,7 +1915,7 @@ function reportData(days){
   const exams=AP().filter(a=>a.kind==='exame'&&parse(a.date)<=today()).sort((a,b)=>b.date.localeCompare(a.date));
   const seen=new Set(),lastEx=exams.filter(a=>{const k=slug(a.title);if(seen.has(k))return false;seen.add(k);return true}).slice(0,10);
   const nx=AP().filter(a=>parse(a.date)>=today()&&a.kind!=='exame').sort((a,b)=>a.date.localeCompare(b.date))[0];
-  const ask=nx?nx.bring.filter(b=>!b.on&&!/^Relatório do Dose/.test(b.t)).map(b=>b.t):[];
+  const ask=nx?nx.bring.filter(b=>!b.on&&!/^Relatório do (Dose|Suporte)/.test(b.t)).map(b=>b.t):[];
   const rx=rxNeeds().map(m=>`Receita de ${m.name} ${m.strength||''}`.trim());
   const lme=S.meds.filter(m=>m.source==='sus'&&m.sus&&m.sus.lmeStart&&lmeInfo(m).renew).map(m=>`Novo LME e receita de ${m.name}`);
   const delays=S.meds.flatMap(m=>(m.delays||[]).filter(x=>x.from>=fi).map(x=>({...x,name:m.name})));
@@ -1933,7 +1933,7 @@ function reportSheet(){
 }
 function reportHTML(r){
   const pct=x=>x.n?Math.round(x.ok/x.n*100)+'%':'—';
-  return `<h1>Relatório de acompanhamento</h1><div class="muted">${esc(patient())} · ${fD(r.from)} a ${fD(today())} (${r.days} dias) · gerado em ${today().toLocaleDateString('pt-BR')} pelo Dose</div>
+  return `<h1>Relatório de acompanhamento</h1><div class="muted">${esc(patient())} · ${fD(r.from)} a ${fD(today())} (${r.days} dias) · gerado em ${today().toLocaleDateString('pt-BR')} pelo Suporte</div>
   <h2>Remédios em uso</h2><table><tr><th>Remédio</th><th>Como toma</th><th>Origem</th><th>No horário</th><th>Atraso</th><th>Não tomou</th></tr>
   ${r.rows.map(x=>`<tr><td><b>${esc(x.m.name)}</b> ${esc(x.m.strength||'')}</td><td>${esc(x.how)}</td><td>${x.m.source==='sus'?'SUS':'compra'}</td><td>${x.n?`${x.ok} (${pct(x)})`:'—'}</td><td>${x.n?x.late:'—'}</td><td>${x.n?x.miss+(x.skip?` + ${x.skip} pulada${x.skip>1?'s':''}`:''):'—'}</td></tr>`).join('')}</table>
   ${r.delays.length?`<p style="margin-top:8px"><b>Aplicações adiadas:</b> ${r.delays.map(x=>`${esc(x.name)} de ${fD(parse(x.from))} para ${fD(parse(x.to))} (${x.days} dias, ${esc(x.why.toLowerCase())})`).join('; ')}</p>`:''}
@@ -1961,7 +1961,7 @@ function reportText(r){
 }
 function shareReport(){
   const t=reportText(reportData(UI.repDays||30));
-  if(navigator.share){navigator.share({title:'Relatório Dose',text:t}).catch(()=>{});return}
+  if(navigator.share){navigator.share({title:'Relatório Suporte',text:t}).catch(()=>{});return}
   try{navigator.clipboard.writeText(t).then(()=>toast('Resumo copiado. Cole no WhatsApp.'),()=>{})}catch(e){}
 }
 
@@ -2082,9 +2082,9 @@ function pushCard(){
 }
 
 /* ====================== NOVA VERSÃO ====================== */
-const APP_VER='6';
-const CHANGES={'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
-function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Dose pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
+const APP_VER='7';
+const CHANGES={'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Suporte pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
 function whatsNew(){
   let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
   if(v&&v!==APP_VER&&CHANGES[APP_VER])setTimeout(()=>openSheet(`<h2>Novidades</h2><div class="list">${CHANGES[APP_VER].map(t=>`<div class="item"><span style="color:var(--mint)">✦</span><div class="b"><strong style="font-weight:500">${esc(t)}</strong></div></div>`).join('')}</div><button class="btn fill block" style="margin-top:14px" onclick="closeSheet()">Bora</button>`),900);
@@ -2362,7 +2362,7 @@ function gate(html){let g=document.getElementById('gate');if(!g){g=document.crea
 function hideGate(){const g=document.getElementById('gate');if(g)g.remove()}
 function gateEmail(msg,mode){
   mode=mode||localStorage.getItem('dose_mode')||'login';
-  gate(`<h1>${mode==='login'?'Entrar':'Criar conta'}</h1><p class="lede">${mode==='login'?'Use o e-mail e a senha da sua conta do Dose.':'Cada pessoa cria a própria conta. Depois vocês se juntam na mesma casa.'}</p>
+  gate(`<h1>${mode==='login'?'Entrar':'Criar conta'}</h1><p class="lede">${mode==='login'?'Use o e-mail e a senha da sua conta do Suporte.':'Cada pessoa cria a própria conta. Depois vocês se juntam na mesma casa.'}</p>
     <input id="gE" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com" value="${esc(localStorage.getItem('dose_email')||'')}">
     <input id="gP" type="password" autocomplete="${mode==='login'?'current-password':'new-password'}" placeholder="Senha (mínimo 6 caracteres)" style="margin-top:0">
     <button class="btn fill block" onclick="${mode==='login'?'doLogin()':'doSignup()'}">${mode==='login'?'Entrar':'Criar conta'}</button>
@@ -2408,7 +2408,7 @@ async function afterLogin(){
   try{await enterHousehold(false)}catch(e){console.warn(e);setSync('err');hideGate();render()}
 }
 async function signOut(){await sb.auth.signOut();if(chan)sb.removeChannel(chan);SESSION=null;HH=null;S=seed();localSave();closeSheet();gateEmail('Você saiu.')}
-function copyInvite(){const t=`Entra no Dose com o código ${HH.invite_code}: ${location.origin+location.pathname}`;try{navigator.clipboard.writeText(t).then(()=>toast('Convite copiado. Manda pra ela!'))}catch(e){}}
+function copyInvite(){const t=`Entra no Suporte com o código ${HH.invite_code}: ${location.origin+location.pathname}`;try{navigator.clipboard.writeText(t).then(()=>toast('Convite copiado. Manda pra ela!'))}catch(e){}}
 function importSheet(){
   openSheet(`<h2>Importar dados</h2><div class="hint">Na versão antiga (dentro do Claude), abra o perfil e toque em <b>Copiar dados para o app instalado</b>. Depois cole aqui.</div>
     <div class="fld"><textarea id="imT" style="min-height:140px" placeholder="Cole aqui"></textarea></div>
