@@ -486,6 +486,58 @@ body.sosmode{background:radial-gradient(70% 40% at 50% 0%,rgba(255,77,141,.28),t
 .gate input{width:100%;padding:13px 14px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--txt);font:inherit;font-size:16px;outline:none;margin:12px 0}
 .gate .or{text-align:center;color:var(--dim);font-size:12px;margin:16px 0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* consultas: abas, especialidades */
+.tabs{display:flex;gap:6px;padding:5px;border-radius:16px;border:1px solid var(--line);background:rgba(15,20,56,.6);margin:14px 0 6px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--mut);font:600 13.5px "Instrument Sans",sans-serif;padding:10px 6px;border-radius:12px;cursor:pointer}
+.tabs button.on{background:color-mix(in srgb,var(--k,var(--lav)) 20%,transparent);color:var(--k,var(--lav));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--k,var(--lav)) 45%,transparent)}
+.tabs button b{display:inline-block;min-width:18px;margin-left:5px;padding:0 5px;border-radius:9px;font-size:11px;background:var(--k,var(--lav));color:#06102a}
+.near{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 4px;font-size:13px;color:var(--mut)}
+.near b{color:var(--txt)}
+.specs{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:560px){.specs{grid-template-columns:1fr 1fr}}
+.spec{position:relative;padding:15px 15px 13px;border-radius:var(--r-lg);border:1px solid color-mix(in srgb,var(--k) 30%,var(--line));
+  background:linear-gradient(160deg,color-mix(in srgb,var(--k) 13%,rgba(15,20,56,.9)),rgba(12,16,46,.92) 60%);
+  box-shadow:0 1px 0 rgba(255,255,255,.07) inset,0 14px 0 -8px color-mix(in srgb,var(--k) 22%,#050720),0 22px 34px -18px color-mix(in srgb,var(--k) 55%,transparent)}
+.spec h4{font:700 16.5px "Bricolage Grotesque",sans-serif;display:flex;align-items:center;gap:9px}
+.spec h4 i{font-style:normal;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:16px;background:color-mix(in srgb,var(--k) 20%,transparent)}
+.spec p{font-size:12.5px;color:var(--mut);margin:6px 0 10px;line-height:1.45}
+.spec .doc{margin:2px 0 10px;padding:10px 11px;border-radius:12px;background:rgba(255,255,255,.04);border:1px dashed color-mix(in srgb,var(--k) 45%,transparent);font-size:13px}
+.spec .doc strong{display:block;color:var(--k);font-size:14px}
+.spec .doc span{color:var(--mut);font-size:12px}
+.spec .row{gap:6px}
+.spec .trust{position:absolute;top:13px;right:13px}
+.appt-acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+/* diário */
+.mood{display:flex;gap:8px;justify-content:space-between;margin-top:10px}
+.mood button{flex:1;aspect-ratio:1;max-width:64px;border-radius:16px;border:1px solid var(--line2);background:rgba(255,255,255,.03);font-size:24px;cursor:pointer;transition:transform .15s}
+.mood button.on{border-color:var(--k);background:color-mix(in srgb,var(--k) 20%,transparent);transform:translateY(-3px);box-shadow:0 8px 18px -8px var(--k)}
+.mood button small{display:block;font:600 10px "Instrument Sans",sans-serif;color:var(--mut);margin-top:2px}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tags button{border:1px solid var(--line2);background:transparent;color:var(--mut);border-radius:99px;padding:7px 12px;font:600 12.5px "Instrument Sans",sans-serif;cursor:pointer}
+.tags button.on{border-color:var(--k,var(--amber));color:#06102a;background:var(--k,var(--amber))}
+.moodline{display:flex;gap:4px;align-items:flex-end;height:46px;margin:12px 0 4px}
+.moodline i{flex:1;border-radius:4px 4px 2px 2px;background:var(--line2);min-height:4px}
+/* viagem */
+.pack{display:flex;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.pack:last-child{border-bottom:0}
+.pack b.num{font:700 22px "Bricolage Grotesque",sans-serif;color:var(--k);min-width:44px;text-align:center}
+/* faixa de nova versão */
+.upd{position:fixed;left:12px;right:12px;bottom:calc(86px + env(safe-area-inset-bottom));z-index:60;display:flex;gap:10px;align-items:center;justify-content:space-between;
+  padding:12px 14px;border-radius:16px;background:#141a4a;border:1px solid var(--mint);box-shadow:0 12px 30px -10px rgba(61,255,197,.5);font-size:13.5px;transform:translateY(160%);transition:transform .35s}
+.upd.on{transform:none}
+/* relatório impresso */
+#print{display:none}
+@media print{
+  body{background:#fff!important;color:#000}
+  body>*:not(#print){display:none!important}
+  #print{display:block;font:12pt/1.45 "Instrument Sans",Arial,sans-serif;color:#111;padding:0}
+  #print h1{font:700 20pt "Bricolage Grotesque",Arial;margin:0 0 2pt}
+  #print h2{font:700 13pt "Bricolage Grotesque",Arial;margin:16pt 0 6pt;border-bottom:1.5pt solid #111;padding-bottom:2pt}
+  #print table{width:100%;border-collapse:collapse;font-size:10.5pt}
+  #print th,#print td{text-align:left;border-bottom:.5pt solid #bbb;padding:4pt 4pt}
+  #print .muted{color:#555;font-size:10pt}
+  #print ul{margin:4pt 0;padding-left:16pt}
+}
 </style>
 </head>
 <body>
@@ -746,7 +798,7 @@ function notices(){
     if(s.available) A.push({pri:88,h:`${esc(m.name)} liberado! Já dá pra buscar`,p:`Liberado desde ${fD(parse(s.availableSince))} em ${esc(s.unit)}.`,acts:[['Ver o que levar',`go('retiradas')`]]});
     if(!out&&st&&st.firstMissing<np) A.push({pri:85,h:`${esc(m.name)} não chega até a retirada`,p:`A dose de ${fD(st.firstMissing)} fica sem remédio e a retirada é ${fD(np)}. Ligue para a farmácia ou fale com o médico.`});
     if(L&&L.expired) A.push({pri:82,h:`O LME de ${esc(m.name)} venceu`,p:'Sem renovar, a farmácia pode não liberar. Leve novo LME e receita.',acts:[['Ver documentos',`go('retiradas')`]]});
-    else if(L&&L.renew){const has=S.appts.some(a=>a.renewLme&&parse(a.date)>=today());
+    else if(L&&L.renew){const has=AP().some(a=>a.renewLme&&parse(a.date)>=today());
       A.push({pri:50,h:`Hora de renovar o LME de ${esc(m.name)}`,p:`Mês ${Math.min(L.idx,s.lmeMonths)} de ${s.lmeMonths}, vale até ${fD(L.end)}. Peça novo LME e receita na consulta.`,
         acts:[[has?'Ver consulta':'Marcar consulta',has?`go('consultas')`:`apptSheet(null,{title:'Consulta para renovar o LME',renewLme:true})`]]});}
     const lp=s.pickups.at(-1);
@@ -759,6 +811,7 @@ function notices(){
   if(noS.length) A.push({pri:35,h:noS.length===1?'1 remédio esperando horário':`${noS.length} remédios esperando horário`,p:'Coloque dose e horário: o app passa a lembrar e a contar até quando cada um dura.',acts:[['Definir horários',`UI.medTab='continuo';go('remedios')`]]});
   const ad=adherence('all',14),bad=ad.late+ad.miss;
   if(bad>=3) A.push({pri:25,h:`${plural(bad,'dose')} fora do horário em 2 semanas`,p:'Um alarme no celular no horário da dose costuma resolver.',acts:[['Ver histórico',`go('historico')`]]});
+  rxNotices(A);examNotices(A);travelNotice(A);
   return A.sort((a,b)=>b.pri-a.pri).map(a=>({...a,...urg(a.pri)}));
 }
 function urg(p){return p>=90?{lvl:'Agora',k:'var(--pink)'}:p>=70?{lvl:'Hoje',k:'var(--amber)'}:p>=45?{lvl:'Esta semana',k:'var(--cyan)'}:{lvl:'Quando der',k:'var(--lav)'}}
@@ -778,8 +831,8 @@ function vHoje(){
   const due=dueToday(), pend=due.filter(x=>!x.e), next=pend[0];
   const A=notices();
   const upNext=scheduled().filter(m=>m.sched.type==='interval').map(m=>({m,d:nextInterval(m)})).filter(x=>dd(x.d,today())>0).sort((a,b)=>a.d-b.d);
-  const appt=S.appts.filter(a=>parse(a.date)>=today()).sort((a,b)=>a.date.localeCompare(b.date))[0];
-  return `${header()}
+  const appt=AP().filter(a=>parse(a.date)>=today()&&a.kind!=='exame').sort((a,b)=>a.date.localeCompare(b.date))[0];
+  return `${header()}${pushCard()}
   ${S.example?`<div class="box" style="margin-bottom:18px;--k:var(--lav)">Estes são remédios de exemplo. Quando a lista real chegar, eles saem.</div>`:''}
   ${next?`<div class="now" style="--k:${next.late?'var(--pink)':next.m.color}">
       ${(()=>{const tot=due.length,dn=due.filter(x=>x.e).length,C=2*Math.PI*30;return tot?`<div class="ring" style="--k:${next.late?'var(--pink)':'var(--mint)'}"><svg viewBox="0 0 74 74" width="74" height="74"><circle class="bg" cx="37" cy="37" r="30"/><circle class="fg" cx="37" cy="37" r="30" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-dn/tot)}"/></svg><b>${dn}/${tot}</b><small>hoje</small></div>`:''})()}
@@ -799,6 +852,8 @@ function vHoje(){
     return `<button class="bub ${st}" style="--k:${x.m.color}" onclick="${x.e?`undoSheet('${x.e.id}')`:`popDose(this,'${x.m.id}','${x.sched}')`}" aria-label="${esc(x.m.name)}, ${when}${x.e?', já tomada':''}">
       <span class="dome"><span class="pil ${injectable(x.m)?'inj':''}"></span></span>
       <span class="lb"><b>${when}</b>${esc(shortName(x.m))}${x.e?`<em>tomada ${x.e.taken.slice(11,16)}</em>`:x.late?`<em class="lt">${x.lateTxt}</em>`:''}</span></button>`}).join('')}</div>`:''}
+
+  ${diaryCard()}
 
   ${kitsHTML()}
 
@@ -841,6 +896,7 @@ function medCard(m){
       <div><b>${nx?fD(nx):st?fD(st.end):m.rx?'retida':'—'}</b><span>${nx?'próxima dose':st?'acaba':m.rx?'receita':'previsão'}</span></div>
     </div>
     ${packsViz(m)}${money}
+    ${rxInfo(m)?`<p class="free" style="color:${rxInfo(m).expired?'var(--pink)':rxInfo(m).left<=7?'var(--amber)':'var(--mut)'}">Receita ${rxInfo(m).expired?'venceu em':'vale até'} ${fD(rxInfo(m).end)}</p>`:m.rx&&m.source!=='sus'?`<p class="free">Controlado: <button class="link" onclick="medSheet('${m.id}')">informe a data da receita</button></p>`:''}
     ${m.notes?`<p class="free">${esc(m.notes)}</p>`:''}
   </div>`;
 }
@@ -1169,7 +1225,7 @@ function apptItem(a){
       <div class="row" style="margin-top:6px;gap:6px">${a.renewLme?'<span class="chip" style="--k:var(--lav)">renovar LME</span>':''}
       ${!past&&a.bring.length?`<span class="chip" style="--k:${pend?'var(--amber)':'var(--mint)'}">${pend?plural(pend,'item','itens')+' para levar':'tudo separado'}</span>`:''}
       ${trip?`<span class="chip" style="--k:var(--pink)">vocês estarão fora</span>`:''}
-      ${!past?`<button class="btn sm" style="--k:var(--cyan);padding:4px 10px" onclick="event.stopPropagation();apptRoute('${a.id}')">🚗 Como chegar</button>`:''}</div></div></div>`;
+      </div>${!past?`<div class="appt-acts">${apptUberBtn(a)}<button class="btn sm" style="--k:var(--cyan)" onclick="event.stopPropagation();apptRoute('${a.id}')">Rota e horário</button>${phoneOf(a)?`<a class="btn sm quiet" style="text-decoration:none" href="${telHref(phoneOf(a))}" onclick="event.stopPropagation()">📞 Ligar</a>`:''}</div>`:''}</div></div>`;
 }
 function apptDest(a){const t=[a.place,a.city].filter(Boolean).join(', ');const c=cityIn(t)||cityIn(a.city||'');return {n:a.title,a:t||a.title,c:c?CITY[c]:null,city:c}}
 function apptOrigin(){const r=S.apptFrom||{kind:'home'};
@@ -1179,7 +1235,7 @@ function apptOrigin(){const r=S.apptFrom||{kind:'home'};
 function apptLocate(id){
   if(!navigator.geolocation){toast('Sem localização neste navegador. Digite o endereço.');return}
   navigator.geolocation.getCurrentPosition(p=>{const here=[p.coords.latitude,p.coords.longitude];let best=null,bd=1e9;for(const [n,c] of Object.entries(CITY)){const d=hav(here,c);if(d<bd){bd=d;best=n}}
-    S.apptFrom={kind:'loc',lat:here[0],lon:here[1],near:best};save();apptRoute(id);toast(`Localização: perto de ${best}`)},
+    S.apptFrom={kind:'loc',lat:here[0],lon:here[1],near:best};save();id?apptRoute(id):render();toast(`Localização: perto de ${best}`)},
     ()=>toast('A localização não foi liberada nesta tela. Digite o endereço.'),{timeout:9000,maximumAge:600000});
 }
 function apptRoute(id){
@@ -1202,14 +1258,6 @@ function apptRoute(id){
     <div class="row">${links.map(linkBtn).join('')}</div>
     <p class="help" style="margin-top:12px">⧉ copia o endereço da consulta: no Uber, toque em "Para onde?" e cole.</p>`);
 }
-function vConsultas(){
-  const fut=S.appts.filter(a=>parse(a.date)>=today()).sort((a,b)=>a.date.localeCompare(b.date));
-  const past=S.appts.filter(a=>parse(a.date)<today()).sort((a,b)=>b.date.localeCompare(a.date));
-  return `${header()}<div class="sec" style="margin-top:0"><h1 style="font-size:28px">Consultas</h1><button class="btn sm" style="--k:var(--lav)" onclick="apptSheet()">Adicionar</button></div>
-  ${fut.length?`<div class="list">${fut.map(apptItem).join('')}</div>`:'<div class="empty">Nenhuma consulta marcada.</div>'}
-  ${past.length?`<div class="sec"><h3>Anteriores</h3></div><div class="list">${past.map(apptItem).join('')}</div>`:''}`;
-}
-
 function vHistorico(){
   const id=UI.hist,a=adherence(id,30),cells=[];
   for(let i=27;i>=0;i--){const d=iso(addDays(today(),-i));const L=S.log.filter(l=>(id==='all'||l.medId===id)&&l.sched.slice(0,10)===d);
@@ -1228,7 +1276,8 @@ function vHistorico(){
   <div class="list">${L.map(l=>{const m=med(l.medId);if(!m)return'';
     const k=l.status==='ok'||l.status==='auto'?'var(--mint)':l.status==='late'?'var(--amber)':'var(--pink)';
     const t=l.status==='skip'?'pulada':l.status==='auto'?'contada sozinha':l.status==='miss'?'não tomada':l.status==='late'?delay(l):'no horário';
-    return `<div class="item tap" onclick="logSheet('${l.id}')"><div class="b"><strong>${esc(m.name)}</strong><span>${l.site?esc(l.site)+'; ':''}prevista ${fDW(parse(l.sched))}, ${l.sched.slice(11,16)}${l.taken?`; tomada ${l.taken.slice(0,10)===l.sched.slice(0,10)?'às '+l.taken.slice(11,16):fD(parse(l.taken))}`:''}</span></div><span class="chip" style="--k:${k}">${t}</span></div>`}).join('')||'<div class="item"><div class="b"><span>Sem registros ainda.</span></div></div>'}</div>`;
+    return `<div class="item tap" onclick="logSheet('${l.id}')"><div class="b"><strong>${esc(m.name)}</strong><span>${l.site?esc(l.site)+'; ':''}prevista ${fDW(parse(l.sched))}, ${l.sched.slice(11,16)}${l.taken?`; tomada ${l.taken.slice(0,10)===l.sched.slice(0,10)?'às '+l.taken.slice(11,16):fD(parse(l.taken))}`:''}</span></div><span class="chip" style="--k:${k}">${t}</span></div>`}).join('')||'<div class="item"><div class="b"><span>Sem registros ainda.</span></div></div>'}</div>
+  ${diaryHist()}`;
 }
 function delay(l){const h=(parse(l.taken)-parse(l.sched))/36e5;return h>=24?`${Math.round(h/24)} d depois`:`${Math.round(h)} h depois`}
 
@@ -1380,14 +1429,16 @@ function profileSheet(){
     <button class="btn fill block" onclick="S.profile.patient=pfN.value.trim();S.profile.helper=pfH.value.trim();S.profile.home=pfC.value.trim()||'São Carlos';save();closeSheet();render();toast('Perfil salvo')">Salvar perfil</button>
     ${HH?`<div class="box k" style="--k:var(--mint);margin-top:14px">Casa <b>${esc(HH.name)}</b>. Código para convidar: <b class="num" style="font-size:18px;letter-spacing:.12em">${esc(HH.invite_code)}</b><br><small>Quem entrar com esse código vê e marca tudo junto.</small></div>
       <button class="btn block" style="--k:var(--mint);margin-top:8px" onclick="copyInvite()">Copiar convite</button>`:''}
-    <button class="btn block" style="--k:var(--lav);margin-top:8px" onclick="closeSheet();go('historico')">Histórico de doses</button>
+    <button class="btn block" style="--k:var(--cyan);margin-top:8px" onclick="${pushOn()?'disablePush()':'enablePush()'}">${pushOn()?'🔔 Lembretes ligados (desligar)':'🔔 Ligar lembretes no celular'}</button>
+    <button class="btn block" style="--k:var(--lav);margin-top:8px" onclick="closeSheet();go('historico')">Histórico de doses e diário</button>
+    <button class="btn block" style="--k:var(--amber);margin-top:8px" onclick="reportSheet()">Relatório para a consulta</button>
     <button class="btn block" style="--k:var(--cyan);margin-top:8px" onclick="importSheet()">Importar dados</button>
     <button class="btn block quiet" style="margin-top:8px" onclick="exportData()">Copiar backup dos dados</button>
     ${SESSION?`<button class="btn block quiet" style="margin-top:8px" onclick="signOut()">Sair (${esc(SESSION.user.email||'')})</button>`:''}
     ${S.example?`<button class="btn block quiet" style="margin-top:8px" onclick="clearExample()">Apagar remédios de exemplo</button>`:''}`);
 }
 function exportData(){
-  const out=JSON.stringify({dose:1,meds:S.meds,log:S.log,appts:S.appts,profile:S.profile,plan:S.plan,where:S.where,sim:S.sim,apptFrom:S.apptFrom});
+  const out=JSON.stringify({dose:1,meds:S.meds,log:S.log,appts:S.appts,profile:S.profile,plan:S.plan,where:S.where,sim:S.sim,apptFrom:S.apptFrom,sos:S.sos,docs:S.docs});
   try{navigator.clipboard.writeText(out).then(()=>toast(`Copiado: ${S.meds.length} remédios, ${S.log.length} registros. Cole no app instalado.`),()=>toast('Não consegui copiar aqui.'))}catch(e){toast('Não consegui copiar aqui.')}
 }
 function setWhere(c,keep){S.where={city:c,from:iso(today()),to:c===S.profile.home?null:S.where.to};save();if(!keep)closeSheet();render();toast(c===S.profile.home?`Em ${c}`:`Fora de casa: ${c}`)}
@@ -1397,6 +1448,7 @@ function whereSheet(){
     <div class="two"><div class="fld"><label>De</label><input type="date" id="wF" value="${S.where.from||iso(today())}"></div>
     <div class="fld"><label>Até (volta para casa no dia seguinte)</label><input type="date" id="wT" value="${S.where.to||''}"></div></div>
     <button class="btn fill block" onclick="if(!wC.value.trim()){toast('Informe a cidade');return}S.where={city:wC.value.trim(),from:wF.value,to:wT.value||null};save();closeSheet();render();toast('Viagem salva')">Salvar viagem</button>
+    <button class="btn block" style="--k:var(--cyan);margin-top:8px" onclick="if(wC.value.trim()){S.where={city:wC.value.trim(),from:wF.value,to:wT.value||null};save()}UI.trip=null;travelSheet()">Mala de remédios: quanto levar</button>
     <button class="btn block quiet" style="margin-top:8px" onclick="setWhere(S.profile.home)">Estamos em ${esc(S.profile.home)}</button>`);
 }
 function clearExample(){S.meds=[];S.log=[];S.appts=[];S.example=false;save();closeSheet();render();toast('Exemplos apagados')}
@@ -1417,6 +1469,7 @@ function setSched(t){
 function drawMed(){
   const d=md,s=d.sched,st=s?s.type:'none';
   openSheet(`<h2>${d.id?esc(d.name)||'Editar remédio':'Novo remédio'}</h2>
+    ${!d.id||!d.name?`<button class="btn block" style="--k:var(--cyan);margin-bottom:14px" onclick="camPick()">📷 Ler a caixa com a câmera</button>`:''}
     <div class="fld"><label>Grupo</label><div class="seg">${Object.entries(GROUPS).map(([k,l])=>`<button class="${d.group===k?'on':''}" onclick="md.group='${k}';drawMed()">${l}</button>`).join('')}</div></div>
     <div class="two"><div class="fld"><label>Nome</label><input value="${esc(d.name)}" placeholder="Ex.: Gabapentina" oninput="md.name=this.value"></div>
       <div class="fld"><label>Concentração</label><input value="${esc(d.strength)}" placeholder="300 mg" oninput="md.strength=this.value"></div></div>
@@ -1443,7 +1496,8 @@ function drawMed(){
           <div class="row" style="margin-top:8px"><button class="btn sm" onclick="const z=packSize(md)||10;md.packs.push({left:z,size:z});md.unknown=false;drawMed()">Adicionar cartela</button></div></div>`}`}
 
     ${st==='daily'?`<div class="tgrow">Contar sozinho (não precisa marcar cada dose)<button class="tg ${d.autoCount!==false?'on':''}" onclick="md.autoCount=!(md.autoCount!==false);this.classList.toggle('on')" aria-label="Contar sozinho"></button></div>`:''}
-    <div class="tgrow">Receita retida na compra (controlado)<button class="tg ${d.rx?'on':''}" onclick="md.rx=!md.rx;this.classList.toggle('on')" aria-label="Receita retida"></button></div>
+    <div class="tgrow">Receita retida na compra (controlado)<button class="tg ${d.rx?'on':''}" onclick="md.rx=!md.rx;drawMed()" aria-label="Receita retida"></button></div>
+    ${rxFields(d)}
     <div class="tgrow">Guardar na geladeira<button class="tg ${d.cold?'on':''}" onclick="md.cold=!md.cold;this.classList.toggle('on')" aria-label="Geladeira"></button></div>
     <div class="fld"><label>Observações</label><textarea oninput="md.notes=this.value" placeholder="Ex.: depois do café">${esc(d.notes)}</textarea></div>
     ${d.id&&med(d.id)?`<button class="btn block" style="--k:var(--cyan);margin-bottom:8px" onclick="editWithForm('${d.id}')">Editar passo a passo</button>`:''}
@@ -1549,29 +1603,416 @@ function susSheet(id){
 let ad=null;
 function apptSheet(id,preset={}){
   const a=id?S.appts.find(x=>x.id===id):null;
-  ad=a?JSON.parse(JSON.stringify(a)):{id:null,title:'',who:'',date:iso(addDays(today(),7)),time:'',place:'',city:S.profile.home,kind:'consulta',renewLme:false,bring:[],notes:'',...preset};
+  ad=a?JSON.parse(JSON.stringify(a)):{id:null,title:'',who:'',date:iso(addDays(today(),7)),time:'',place:'',city:S.profile.home,kind:'consulta',renewLme:false,bring:[],notes:'',phone:'',...preset};
+  if(!a&&ad.kind==='exame'&&!preset.date)ad.date=iso(today());
   if(ad.renewLme&&!ad.bring.length)ad.bring=['Pedir novo LME','Pedir receita atualizada','Exames recentes'].map(t=>({t,on:false}));
   drawAppt();
 }
 function drawAppt(){
   const a=ad;
-  openSheet(`<h2>${a.id?'Consulta':'Nova consulta'}</h2>
+  openSheet(`<h2>${a.kind==='exame'?(a.id?'Exame':'Novo exame'):a.id?'Consulta':'Nova consulta'}</h2>
     <div class="fld"><div class="seg"><button class="${a.kind==='consulta'?'on':''}" style="--k:var(--lav)" onclick="ad.kind='consulta';drawAppt()">Consulta</button><button class="${a.kind==='exame'?'on':''}" onclick="ad.kind='exame';drawAppt()">Exame</button></div></div>
     <div class="fld"><label>Especialidade ou exame</label><input value="${esc(a.title)}" placeholder="Reumatologista" oninput="ad.title=this.value"></div>
     <div class="two"><div class="fld"><label>Médico ou local</label><input value="${esc(a.who)}" oninput="ad.who=this.value"></div><div class="fld"><label>Cidade</label><input value="${esc(a.city||'')}" oninput="ad.city=this.value"></div></div>
-    <div class="fld"><label>Endereço</label><input value="${esc(a.place)}" oninput="ad.place=this.value"></div>
+    <div class="fld"><label>Endereço</label><input value="${esc(a.place)}" placeholder="Rua, número (para o Uber ir direto)" oninput="ad.place=this.value"></div>
+    <div class="fld"><label>Telefone</label><input type="tel" inputmode="tel" value="${esc(a.phone||'')}" oninput="ad.phone=this.value"></div>
     <div class="two"><div class="fld"><label>Data</label><input type="date" value="${a.date}" oninput="ad.date=this.value"></div><div class="fld"><label>Hora</label><input type="time" value="${a.time}" oninput="ad.time=this.value"></div></div>
+    ${a.kind==='exame'?`<div class="fld"><label>Resultado</label><textarea oninput="ad.result=this.value" placeholder="Ex.: hemoglobina 12,8; leucócitos normais">${esc(a.result||'')}</textarea></div>
+      <div class="fld"><label>Repetir a cada</label><div class="seg">${[0,3,6,12].map(n=>`<button class="${(+a.repeatMonths||0)===n?'on':''}" onclick="ad.repeatMonths=${n};drawAppt()">${n?n+' meses':'não repetir'}</button>`).join('')}</div></div>`:''}
     <div class="tgrow">Renovar o LME nesta consulta<button class="tg ${a.renewLme?'on':''}" onclick="ad.renewLme=!ad.renewLme;this.classList.toggle('on')" aria-label="Renovar LME"></button></div>
     <div class="fld"><label>O que levar ou pedir</label>
       ${a.bring.map((b,i)=>`<div class="chk ${b.on?'on':''}" onclick="ad.bring[${i}].on=!ad.bring[${i}].on;drawAppt()"><span class="bx"></span><span>${esc(b.t)}</span><button class="x" onclick="event.stopPropagation();ad.bring.splice(${i},1);drawAppt()">×</button></div>`).join('')}
+      ${(()=>{const sug=[...rxNeeds().map(m=>`Receita de ${m.name}`),'Relatório do Dose (PDF)'].filter(t=>!a.bring.some(b=>b.t===t));return sug.length&&a.kind!=='exame'?`<div class="tags" style="margin:6px 0 8px">${sug.map(t=>`<button style="--k:var(--amber)" onclick="ad.bring.push({t:'${t.replace(/'/g,'')}',on:false});drawAppt()">+ ${esc(t)}</button>`).join('')}</div>`:''})()}
       <div class="addline"><input id="abN" placeholder="Adicionar item" onkeydown="if(event.key==='Enter'&&this.value.trim()){ad.bring.push({t:this.value.trim(),on:false});drawAppt()}"><button class="btn sm" onclick="if(abN.value.trim()){ad.bring.push({t:abN.value.trim(),on:false});drawAppt()}">Adicionar</button></div></div>
     <div class="fld"><label>Anotações da consulta</label><textarea oninput="ad.notes=this.value">${esc(a.notes)}</textarea></div>
-    <button class="btn fill block" style="--k:var(--lav)" onclick="saveAppt()">Salvar consulta</button>
+    <button class="btn fill block" style="--k:var(--lav)" onclick="saveAppt()">${a.kind==='exame'?'Salvar exame':'Salvar consulta'}</button>
     ${a.id?`<button class="btn block" style="--k:var(--pink);margin-top:8px" onclick="S.appts=S.appts.filter(x=>x.id!=='${a.id}');save();closeSheet();render();toast('Consulta apagada')">Apagar consulta</button>`:''}`);
 }
 function saveAppt(){if(!ad.title.trim()){toast('Informe a especialidade');return}
   if(ad.id)Object.assign(S.appts.find(x=>x.id===ad.id),ad);else{ad.id=uid();S.appts.push(ad)}
-  save();closeSheet();render();toast('Consulta salva')}
+  save();closeSheet();render();toast(ad.kind==='exame'?'Exame salvo':'Consulta salva')}
+
+/* ====================== CONSULTAS: AGENDAR / AGENDADAS / EXAMES ====================== */
+const AP=()=>S.appts.filter(a=>!a.rec);
+const SPECS=[
+  ['reumato','Reumatologista','🦴','#b39bff','reumatologista','Acompanha o tratamento, renova LME e receitas.'],
+  ['oftalmo','Oftalmologista','👁️','#45d2ff','oftalmologista','Visão, olho seco e revisão anual.'],
+  ['clinico','Clínico geral','🩺','#3dffc5','clinico-geral','Primeiro atendimento, check-up e pedidos de exame.'],
+  ['dermato','Dermatologista','✨','#ff4d8d','dermatologista','Pele, cabelo e unhas.'],
+  ['gineco','Ginecologista','🌸','#ff8ac2','ginecologista','Preventivo e acompanhamento anual.'],
+  ['psiq','Psiquiatra','🧠','#ffb547','psiquiatra','Ajuste de remédios controlados e receitas.'],
+  ['psico','Psicólogo','💬','#7ee0ff','psicologo','Terapia e acompanhamento.'],
+  ['cardio','Cardiologista','❤️','#ff6b6b','cardiologista','Pressão, coração e exames de rotina.'],
+  ['endo','Endocrinologista','⚖️','#c3f56a','endocrinologista','Tireoide, hormônios e metabolismo.'],
+  ['orto','Ortopedista','🦵','#ffa26b','ortopedista','Ossos, articulações e coluna.'],
+  ['dentista','Dentista','🦷','#e8e8ff','dentista','Limpeza e revisão a cada 6 meses.'],
+  ['nutri','Nutricionista','🥗','#8cffb0','nutricionista','Alimentação e plano de dieta.']
+];
+const docs=()=>(S.docs=S.docs||{});
+function specList(){
+  const base=SPECS.map(([k,n,ic,c,sl,p])=>({k,n,ic,c,sl,p}));
+  Object.entries(docs()).filter(([k,d])=>d.custom).forEach(([k,d])=>base.push({k,n:d.label||'Especialidade',ic:'⭐',c:'#ffb547',sl:slug(d.label||''),p:'Especialidade que vocês adicionaram.'}));
+  const has=s=>!!(docs()[s.k]&&(docs()[s.k].name||docs()[s.k].phone));
+  return base.sort((a,b)=>has(b)-has(a));
+}
+function searchPlace(){ // de onde procurar: localização, casa ou endereço digitado
+  const o=apptOrigin();
+  return {o,label:o.my?o.n:o.a||o.n,city:o.city||cityIn(o.a||'')||S.profile.home||'São Carlos'};
+}
+function specLinks(s){
+  const P=searchPlace(),q=s.n.toLowerCase(),near=P.o.my?`${q} perto de mim`:`${q} perto de ${P.label}`;
+  const drc=['Dr. Consulta','https://drconsulta.com/servicos/consultas','#7aa7ff',`${s.n} ${P.city}`,'Dr. Consulta'];
+  const dct=['Doctoralia',`https://www.doctoralia.com.br/${s.sl}/${slug(P.city)}`,'var(--cyan)'];
+  const map=['Perto no Maps',`https://www.google.com/maps/search/?api=1&query=${enc(near)}`,'var(--mint)'];
+  return [drc,dct,map];
+}
+function nextApptFor(label){const n=slug(label);return AP().filter(a=>parse(a.date)>=today()&&slug(a.title).includes(n.split('-')[0])).sort((a,b)=>a.date.localeCompare(b.date))[0]}
+function specBox(s){
+  const d=docs()[s.k]||{},has=d.name||d.phone,nx=nextApptFor(s.n);
+  return `<div class="spec" style="--k:${s.c}">
+    <h4><i>${s.ic}</i>${esc(s.n)}</h4>
+    ${nx?`<span class="chip trust" style="--k:var(--mint)">marcada ${fD(parse(nx.date))}</span>`:has?`<span class="chip trust" style="--k:${s.c}">de confiança</span>`:''}
+    ${has?`<div class="doc"><strong>${esc(d.name||s.n)}</strong><span>${[fmtTel(d.phone||''),d.place,d.city].filter(Boolean).map(esc).join(', ')}</span>${d.notes?`<br><span>${esc(d.notes)}</span>`:''}</div>
+      <div class="row" style="margin-bottom:8px">${d.phone?`<a class="btn sm fill" style="--k:${s.c};text-decoration:none" href="${telHref(d.phone)}">📞 Ligar</a>${d.wa!==false?`<a class="btn sm" style="--k:#25d366;text-decoration:none" href="${waHref(d.phone)}" target="_blank" rel="noopener">WhatsApp</a>`:''}`:''}
+        <button class="btn sm" style="--k:${s.c}" onclick="bookWith('${s.k}')">Marcar</button><button class="btn sm quiet" onclick="docSheet('${s.k}')">Editar</button></div>
+      <details><summary class="help" style="cursor:pointer">Procurar outro ${esc(s.n.toLowerCase())}</summary><div class="row" style="margin-top:8px">${specLinks(s).map(linkBtn).join('')}</div></details>`
+    :`<p>${esc(s.p)}</p><div class="row">${specLinks(s).map((l,j)=>linkBtn(l,j)).join('')}</div>
+      <div class="row" style="margin-top:8px"><button class="btn sm" style="--k:${s.c}" onclick="docSheet('${s.k}')">⭐ Salvar contato</button><button class="btn sm quiet" onclick="bookWith('${s.k}')">Já marquei</button></div>`}
+  </div>`;
+}
+function bookWith(k){
+  const s=specList().find(x=>x.k===k),d=docs()[k]||{};
+  apptSheet(null,{title:s?s.n:'',who:d.name||'',place:d.place||'',city:d.city||S.profile.home,phone:d.phone||'',spec:k});
+}
+function docSheet(k){
+  const isNew=k==='__new',d=isNew?{custom:true,wa:true}:Object.assign({wa:true},docs()[k]||{}),s=isNew?null:specList().find(x=>x.k===k);
+  openSheet(`<h2>${isNew?'Nova especialidade':`${esc(s?s.n:'')} de confiança`}</h2>
+    <div class="hint">Salve o médico ou a clínica que vocês já conhecem. Depois é um toque para ligar, chamar no WhatsApp ou marcar.</div>
+    ${isNew||d.custom?`<div class="fld"><label>Especialidade</label><input id="dkL" value="${esc(d.label||'')}" placeholder="Ex.: Hematologista"></div>`:''}
+    <div class="fld"><label>Nome do médico ou clínica</label><input id="dkN" value="${esc(d.name||'')}" placeholder="Dra. Ana Souza"></div>
+    <div class="fld"><label>Telefone</label><input id="dkP" type="tel" inputmode="tel" value="${esc(d.phone||'')}" placeholder="(16) 99999-9999"></div>
+    <div class="tgrow">Esse número tem WhatsApp<button class="tg ${d.wa!==false?'on':''}" id="dkW" onclick="this.classList.toggle('on')" aria-label="WhatsApp"></button></div>
+    <div class="fld"><label>Endereço</label><input id="dkA" value="${esc(d.place||'')}" placeholder="Rua, número"></div>
+    <div class="fld"><label>Cidade</label><input id="dkC" value="${esc(d.city||S.profile.home||'')}"></div>
+    <div class="fld"><label>Observações</label><input id="dkO" value="${esc(d.notes||'')}" placeholder="Convênio, valor, melhor horário"></div>
+    <button class="btn fill block" onclick="saveDoc('${k}')">Salvar contato</button>
+    ${!isNew&&docs()[k]?`<button class="btn block" style="--k:var(--pink);margin-top:8px" onclick="delete docs()['${k}'];save();closeSheet();render();toast('Contato removido')">Remover contato</button>`:''}`);
+}
+function saveDoc(k){
+  const v=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
+  if(k==='__new'){if(!v('dkL')){toast('Diga qual é a especialidade');return}k='c_'+uid()}
+  const old=docs()[k]||{};
+  docs()[k]={...old,name:v('dkN'),phone:v('dkP'),wa:document.getElementById('dkW').classList.contains('on'),place:v('dkA'),city:v('dkC'),notes:v('dkO'),...(old.custom||k.startsWith('c_')?{custom:true,label:v('dkL')||old.label}:{})};
+  save();closeSheet();render();toast('Contato salvo');
+}
+function nearSel(){
+  const r=S.apptFrom||{kind:'home'},P=searchPlace();
+  return `<div class="near">Procurando perto de <b>${esc(P.o.my?P.o.n:P.label)}</b></div>
+    <div class="seg" style="margin-bottom:6px"><button class="${r.kind==='loc'?'on':''}" onclick="apptLocate()">📍 Onde estou</button>
+      <button class="${r.kind==='home'?'on':''}" onclick="S.apptFrom={kind:'home'};save();render()">🏠 Casa</button>
+      <button class="${r.kind==='typed'?'on':''}" onclick="nearTyped()">✏️ Outro lugar</button></div>`;
+}
+function nearTyped(){
+  const r=S.apptFrom||{};
+  openSheet(`<h2>Procurar perto de</h2><div class="fld"><label>Endereço ou cidade</label><input id="nT" list="cityList3" value="${esc(r.kind==='typed'?r.text||'':'')}" placeholder="Ex.: Av. Rotary, 624, São Bernardo do Campo"><datalist id="cityList3">${Object.keys(CITY).map(c=>`<option value="${c}">`).join('')}</datalist></div>
+    <button class="btn fill block" onclick="if(!nT.value.trim()){toast('Digite um endereço');return}S.apptFrom={kind:'typed',text:nT.value.trim()};save();closeSheet();render()">Usar este endereço</button>`);
+}
+function apptUberBtn(a){
+  if(!a.place)return `<button class="btn sm quiet" onclick="event.stopPropagation();apptSheet('${a.id}')">Pôr endereço</button>`;
+  const o=apptOrigin(),d=apptDest(a);
+  return `<span onclick="event.stopPropagation()">${linkBtn(['🚗 Uber',uberLink(o,d),'#e8e8ff',d.a,'Uber'],0)}</span>`;
+}
+function phoneOf(a){return a.phone||(a.spec&&docs()[a.spec]&&docs()[a.spec].phone)||''}
+const EXAMS=['Hemograma','TGO e TGP','Função renal','Glicemia','Colesterol','Vitamina D','PCR e VHS','Urina tipo 1','Ultrassom','Raio-X de tórax'];
+function examItem(a){
+  const d=parse(a.date),done=d<=today()||a.result,due=a.repeatMonths?addMonths(d,+a.repeatMonths):null;
+  return `<div class="item tap" style="--k:${done?'var(--cyan)':'var(--lav)'}" onclick="apptSheet('${a.id}')">
+    <div class="t">${d.getDate()}<small>${d.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</small></div>
+    <div class="b"><strong>${esc(a.title)}</strong><span>${a.result?esc(a.result.length>90?a.result.slice(0,88)+'…':a.result):done?'Sem resultado anotado':`${rel(d)}${a.time?', '+a.time:''}${a.who?', '+esc(a.who):''}`}</span>
+      <div class="row" style="margin-top:6px;gap:6px">${due?`<span class="chip" style="--k:${due<=addDays(today(),30)?'var(--amber)':'var(--mut)'}">repetir ${due<today()?'(atrasado) ':''}${fD(due)}</span>`:''}${done&&!a.result?`<span class="chip" style="--k:var(--amber)">anotar resultado</span>`:''}</div></div></div>`;
+}
+function vConsultas(){
+  UI.apTab??='agendar';const t=UI.apTab;
+  const list=AP(),fut=list.filter(a=>parse(a.date)>=today()).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
+  const past=list.filter(a=>parse(a.date)<today()&&a.kind!=='exame').sort((a,b)=>b.date.localeCompare(a.date));
+  const ex=list.filter(a=>a.kind==='exame').sort((a,b)=>b.date.localeCompare(a.date));
+  const tab=(k,l,n,c)=>`<button class="${t===k?'on':''}" style="--k:${c}" onclick="UI.apTab='${k}';render()">${l}${n?`<b>${n}</b>`:''}</button>`;
+  let body='';
+  if(t==='agendar'){
+    body=`<p class="help" style="margin-top:8px">Toque para procurar onde marcar. Salve o médico de confiança de cada área e ele fica a um toque.</p>${nearSel()}
+      <div class="specs" style="margin-top:14px">${specList().map(specBox).join('')}</div>
+      <button class="btn block quiet" style="margin-top:14px" onclick="docSheet('__new')">Adicionar outra especialidade</button>
+      <p class="help" style="margin-top:10px">O site do Dr. Consulta abre na lista de especialidades; ⧉ copia a especialidade e a cidade para colar na busca. Unidades só na Grande SP e no Rio; por vídeo funciona de qualquer lugar.</p>`;
+  }else if(t==='agendadas'){
+    body=`<div class="row" style="margin:12px 0 4px;justify-content:space-between"><span class="help">Saindo de: <b style="color:var(--txt)">${esc(apptOrigin().n)}</b> <button class="link" onclick="S.apptFrom&&S.apptFrom.kind==='home'?apptLocate():(S.apptFrom={kind:'home'},save(),render())">trocar</button></span><button class="btn sm" style="--k:var(--amber)" onclick="reportSheet()">Relatório para a consulta</button></div>
+      ${fut.length?`<div class="list">${fut.map(apptItem).join('')}</div>`:`<div class="empty">Nenhuma consulta marcada.<br><button class="btn sm fill" style="margin-top:12px;--k:var(--lav)" onclick="UI.apTab='agendar';render()">Escolher especialidade</button></div>`}
+      ${past.length?`<div class="sec"><h3>Anteriores</h3></div><div class="list">${past.slice(0,12).map(apptItem).join('')}</div>`:''}`;
+  }else{
+    body=`<p class="help" style="margin-top:8px">Marque o exame, anote o resultado e diga de quanto em quanto tempo repetir. O app avisa quando chegar a hora.</p>
+      <div class="tags" style="margin:12px 0">${EXAMS.map(e=>`<button style="--k:var(--cyan)" onclick="apptSheet(null,{kind:'exame',title:'${e}'})">+ ${e}</button>`).join('')}</div>
+      ${ex.length?`<div class="list">${ex.map(examItem).join('')}</div>`:'<div class="empty">Nenhum exame registrado ainda.</div>'}`;
+  }
+  return `${header()}<div class="sec" style="margin-top:0"><h1 style="font-size:28px">Consultas</h1><button class="btn sm" style="--k:var(--lav)" onclick="apptSheet(null,${t==='exames'?"{kind:'exame'}":'{}'})">Adicionar</button></div>
+    <div class="tabs">${tab('agendar','Agendar',0,'var(--lav)')}${tab('agendadas','Agendadas',fut.length,'var(--mint)')}${tab('exames','Exames',ex.filter(a=>parse(a.date)<=today()&&!a.result).length,'var(--cyan)')}</div>${body}`;
+}
+
+/* ====================== RECEITAS ====================== */
+function rxInfo(m){
+  if(!m.rx||!m.rxDate)return null;
+  const end=addDays(parse(m.rxDate),(+m.rxDays||30)-1),left=dd(end,today());
+  return {end,left,expired:left<0};
+}
+function rxNeeds(){ // remédios controlados que vão precisar de receita nova
+  return S.meds.filter(m=>m.rx&&m.source!=='sus').filter(m=>{const r=rxInfo(m);return !r||r.left<=45});
+}
+function rxNotices(A){
+  S.meds.filter(m=>m.rx&&m.source!=='sus').forEach(m=>{
+    const r=rxInfo(m),need=['low','out'].includes(buyStatus(m));
+    if(!r){if(need)A.push({pri:58,h:`Tem receita para comprar ${esc(m.name)}?`,p:'É controlado: a farmácia retém a receita. Informe a data da receita para o app avisar quando vencer.',acts:[['Informar a receita',`medSheet('${m.id}')`],['Marcar consulta',`apptSheet(null,{title:'Consulta para receita'})`]]});return}
+    if(r.expired&&need)A.push({pri:72,h:`Receita de ${esc(m.name)} venceu em ${fD(r.end)}`,p:'Sem receita nova não dá para comprar. Peça na próxima consulta ou ligue para o médico.',acts:[['Marcar consulta',`apptSheet(null,{title:'Consulta para receita'})`],['Já tenho nova',`medSheet('${m.id}')`]]});
+    else if(!r.expired&&r.left<=7)A.push({pri:need?66:42,h:`Receita de ${esc(m.name)} vence ${r.left===0?'hoje':`em ${plural(r.left,'dia')}`}`,p:need?'O estoque está acabando: compre antes de a receita vencer.':'Se for comprar este mês, compre antes do vencimento.',acts:[['Ver remédio',`medSheet('${m.id}')`]]});
+  });
+}
+function rxFields(d){
+  if(!d.rx)return'';
+  const r=d.rxDate?addDays(parse(d.rxDate),(+d.rxDays||30)-1):null;
+  return `<div class="two"><div class="fld"><label>Data da receita</label><input type="date" value="${d.rxDate||''}" oninput="md.rxDate=this.value||null"></div>
+    <div class="fld"><label>Vale por (dias)</label><input type="number" min="1" value="${d.rxDays||30}" oninput="md.rxDays=+this.value"></div></div>
+    <p class="help" style="margin:-4px 0 12px">Receita de controle especial costuma valer 30 dias a partir da data. Antibiótico, 10 dias. ${r?`Esta vale até <b>${fD(r)}</b>.`:''}</p>`;
+}
+
+/* ====================== DIÁRIO DE SINTOMAS ====================== */
+const MOODS=[['😣','Mal'],['😕','Ruim'],['😐','Ok'],['🙂','Bem'],['😄','Ótima']];
+const MOODK=['var(--pink)','#ff8a5c','var(--amber)','var(--cyan)','var(--mint)'];
+const SYMPT=['Dor nas articulações','Rigidez de manhã','Cansaço','Dor de cabeça','Enjoo','Febre','Pele irritada','Olhos secos','Insônia','Ansiedade','Tontura','Inchaço'];
+const diaryOf=d=>S.appts.find(a=>a.rec==='diary'&&a.date===d);
+const diary=()=>S.appts.filter(a=>a.rec==='diary').sort((a,b)=>b.date.localeCompare(a.date));
+let dy=null;
+function quickMood(v){
+  const d=iso(today()),e=diaryOf(d);
+  if(e)e.mood=v;else S.appts.push({id:'dy-'+d,rec:'diary',date:d,mood:v,sx:[],pain:null,note:''});
+  save();diarySheet(d);
+}
+function diarySheet(d){
+  d=d||iso(today());const e=diaryOf(d);
+  dy=e?JSON.parse(JSON.stringify(e)):{id:'dy-'+d,rec:'diary',date:d,mood:null,sx:[],pain:null,note:''};
+  drawDiary();
+}
+function drawDiary(){
+  const e=dy;
+  openSheet(`<h2>Como ${esc(patient())} está</h2><div class="hint">${fDW(parse(e.date))}. Vale anotar o que for diferente do normal: isso vira o relatório da consulta.</div>
+    <div class="mood">${MOODS.map(([ic,l],i)=>`<button class="${e.mood===i+1?'on':''}" style="--k:${MOODK[i]}" onclick="dy.mood=${i+1};drawDiary()">${ic}<small>${l}</small></button>`).join('')}</div>
+    <div class="fld" style="margin-top:16px"><label>Sintomas</label><div class="tags">${SYMPT.concat(e.sx.filter(s=>!SYMPT.includes(s))).map(s=>`<button class="${e.sx.includes(s)?'on':''}" onclick="dy.sx.includes('${s}')?dy.sx=dy.sx.filter(x=>x!=='${s}'):dy.sx.push('${s}');drawDiary()">${esc(s)}</button>`).join('')}</div>
+      <div class="addline" style="margin-top:8px"><input id="dyX" placeholder="Outro sintoma" onkeydown="if(event.key==='Enter'&&this.value.trim()){dy.sx.push(this.value.trim());drawDiary()}"><button class="btn sm" onclick="if(dyX.value.trim()){dy.sx.push(dyX.value.trim());drawDiary()}">Adicionar</button></div></div>
+    <div class="fld"><label>Dor, de 0 a 10: <b>${e.pain==null?'—':e.pain}</b></label><input type="range" min="0" max="10" value="${e.pain==null?0:e.pain}" oninput="dy.pain=+this.value;this.previousElementSibling.querySelector('b').textContent=this.value"></div>
+    <div class="fld"><label>Anotação</label><textarea oninput="dy.note=this.value" placeholder="Ex.: dor no joelho direito depois da caminhada">${esc(e.note||'')}</textarea></div>
+    <button class="btn fill block" style="--k:var(--amber)" onclick="saveDiary()">Salvar o dia</button>
+    ${diaryOf(e.date)?`<button class="btn block quiet" style="margin-top:8px" onclick="S.appts=S.appts.filter(a=>a.id!=='${e.id}');save();closeSheet();render();toast('Registro apagado')">Apagar este dia</button>`:''}`);
+}
+function saveDiary(){
+  if(!dy.mood&&!dy.sx.length&&dy.pain==null&&!dy.note.trim()){toast('Escolha como ela está ou um sintoma');return}
+  const i=S.appts.findIndex(a=>a.id===dy.id);if(i>=0)S.appts[i]=dy;else S.appts.push(dy);
+  save();closeSheet();render();toast('Diário salvo');
+}
+function diaryCard(){
+  const e=diaryOf(iso(today()));
+  if(e)return `<div class="sec"><h3>Diário de hoje</h3><button class="link" onclick="diarySheet()">Editar</button></div>
+    <div class="list"><div class="item tap" onclick="diarySheet()" style="--k:${e.mood?MOODK[e.mood-1]:'var(--amber)'}"><div class="t" style="font-size:28px">${e.mood?MOODS[e.mood-1][0]:'📝'}</div><div class="b"><strong>${e.mood?MOODS[e.mood-1][1]:'Anotado'}${e.pain!=null?`, dor ${e.pain}/10`:''}</strong><span>${e.sx.length?esc(e.sx.join(', ')):'Sem sintomas marcados'}${e.note?' — '+esc(e.note):''}</span></div></div></div>`;
+  return `<div class="sec"><h3>Como ${esc(patient())} está hoje?</h3><small>um toque</small></div>
+    <div class="foil" style="padding:14px"><div class="mood" style="margin:0">${MOODS.map(([ic,l],i)=>`<button style="--k:${MOODK[i]}" onclick="quickMood(${i+1})">${ic}<small>${l}</small></button>`).join('')}</div></div>`;
+}
+function diaryHist(){
+  const D=diary(),last=[];for(let i=29;i>=0;i--){const d=iso(addDays(today(),-i)),e=diaryOf(d);last.push(e)}
+  return `<div class="sec"><h3>Diário de sintomas</h3><button class="link" onclick="diarySheet()">Anotar hoje</button></div>
+    ${D.length?`<div class="foil" style="padding:14px 16px"><div class="moodline">${last.map(e=>`<i style="height:${e&&e.mood?e.mood*20:6}%;${e&&e.mood?`background:${MOODK[e.mood-1]}`:''}" title="${e?fD(parse(e.date)):''}"></i>`).join('')}</div><p class="help">Humor dos últimos 30 dias</p></div>
+    <div class="list" style="margin-top:12px">${D.slice(0,14).map(e=>`<div class="item tap" onclick="diarySheet('${e.date}')" style="--k:${e.mood?MOODK[e.mood-1]:'var(--amber)'}"><div class="t" style="font-size:22px">${e.mood?MOODS[e.mood-1][0]:'📝'}</div><div class="b"><strong>${fDW(parse(e.date))}${e.pain!=null?`, dor ${e.pain}/10`:''}</strong><span>${e.sx.length?esc(e.sx.join(', ')):'Sem sintomas'}${e.note?' — '+esc(e.note):''}</span></div></div>`).join('')}</div>`
+    :`<div class="empty">Nada anotado ainda. Um toque por dia na tela Hoje já monta o histórico para o médico.</div>`}
+    <button class="btn block" style="--k:var(--amber);margin-top:12px" onclick="reportSheet()">Relatório para a consulta</button>`;
+}
+
+/* ====================== RELATÓRIO PARA A CONSULTA ====================== */
+function reportData(days){
+  const from=addDays(today(),-days+1),fi=iso(from);
+  const meds=S.meds.filter(m=>m.sched||m.group==='continuo'),sosUsed=S.meds.filter(m=>m.group==='sos').map(m=>m.name);
+  const rows=meds.map(m=>{const L=S.log.filter(l=>l.medId===m.id&&l.sched>=fi),ok=L.filter(l=>l.status==='ok'||l.status==='auto').length,late=L.filter(l=>l.status==='late').length,miss=L.filter(l=>l.status==='miss').length,skip=L.filter(l=>l.status==='skip').length;
+    return {m,how:m.sched?schedText(m):'quando precisa',ok,late,miss,skip,n:L.length}});
+  const D=diary().filter(e=>e.date>=fi),moods=D.filter(e=>e.mood),pains=D.filter(e=>e.pain!=null);
+  const freq={};D.forEach(e=>e.sx.forEach(s=>freq[s]=(freq[s]||0)+1));
+  const sx=Object.entries(freq).sort((a,b)=>b[1]-a[1]);
+  const exams=AP().filter(a=>a.kind==='exame'&&parse(a.date)<=today()).sort((a,b)=>b.date.localeCompare(a.date));
+  const seen=new Set(),lastEx=exams.filter(a=>{const k=slug(a.title);if(seen.has(k))return false;seen.add(k);return true}).slice(0,10);
+  const nx=AP().filter(a=>parse(a.date)>=today()&&a.kind!=='exame').sort((a,b)=>a.date.localeCompare(b.date))[0];
+  const ask=nx?nx.bring.filter(b=>!b.on&&!/^Relatório do Dose/.test(b.t)).map(b=>b.t):[];
+  const rx=rxNeeds().map(m=>`Receita de ${m.name} ${m.strength||''}`.trim());
+  const lme=S.meds.filter(m=>m.source==='sus'&&m.sus&&m.sus.lmeStart&&lmeInfo(m).renew).map(m=>`Novo LME e receita de ${m.name}`);
+  return {from,days,rows,sosUsed,D,moodAvg:moods.length?moods.reduce((a,e)=>a+e.mood,0)/moods.length:null,painAvg:pains.length?pains.reduce((a,e)=>a+e.pain,0)/pains.length:null,painMax:pains.length?Math.max(...pains.map(e=>e.pain)):null,sx,lastEx,nx,ask:[...new Set([...ask,...rx,...lme])],notes:D.filter(e=>e.note&&e.note.trim())};
+}
+function reportSheet(){
+  UI.repDays??=30;const r=reportData(UI.repDays);
+  openSheet(`<h2>Relatório para a consulta</h2><div class="hint">Resumo de remédios, doses, sintomas e exames para mostrar ao médico. Salve como PDF ou mande pelo WhatsApp.</div>
+    <div class="fld"><label>Período</label><div class="seg">${[30,60,90].map(n=>`<button class="${UI.repDays===n?'on':''}" onclick="UI.repDays=${n};reportSheet()">${n} dias</button>`).join('')}</div></div>
+    <div class="tot" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:12px"><div><span>Remédios</span><b>${r.rows.length}</b><small>em uso</small></div><div><span>Dias no diário</span><b>${r.D.length}</b><small>de ${r.days}</small></div><div class="all"><span>Doses no horário</span><b>${adherence('all',r.days).pct}%</b><small>${adherence('all',r.days).total} registradas</small></div></div>
+    ${r.ask.length?`<div class="box k" style="--k:var(--amber);margin-bottom:12px"><b>Para pedir na consulta:</b> ${r.ask.map(esc).join('; ')}</div>`:''}
+    <button class="btn fill block" style="--k:var(--amber)" onclick="printReport()">Abrir para salvar em PDF</button>
+    <button class="btn block" style="--k:#25d366;margin-top:8px" onclick="shareReport()">Mandar resumo em texto</button>
+    <p class="help" style="margin-top:10px">No celular, a tela de impressão tem a opção "Salvar como PDF" (no iPhone, abra o compartilhar na prévia).</p>`);
+}
+function reportHTML(r){
+  const pct=x=>x.n?Math.round(x.ok/x.n*100)+'%':'—';
+  return `<h1>Relatório de acompanhamento</h1><div class="muted">${esc(patient())} · ${fD(r.from)} a ${fD(today())} (${r.days} dias) · gerado em ${today().toLocaleDateString('pt-BR')} pelo Dose</div>
+  <h2>Remédios em uso</h2><table><tr><th>Remédio</th><th>Como toma</th><th>Origem</th><th>No horário</th><th>Atraso</th><th>Não tomou</th></tr>
+  ${r.rows.map(x=>`<tr><td><b>${esc(x.m.name)}</b> ${esc(x.m.strength||'')}</td><td>${esc(x.how)}</td><td>${x.m.source==='sus'?'SUS':'compra'}</td><td>${x.n?`${x.ok} (${pct(x)})`:'—'}</td><td>${x.n?x.late:'—'}</td><td>${x.n?x.miss+(x.skip?` + ${x.skip} pulada${x.skip>1?'s':''}`:''):'—'}</td></tr>`).join('')}</table>
+  ${r.sosUsed.length?`<p class="muted" style="margin-top:6px">Quando precisa (SOS): ${r.sosUsed.map(esc).join(', ')}</p>`:''}
+  <h2>Diário de sintomas</h2>${r.D.length?`<p>${r.D.length} dias anotados.${r.moodAvg?` Humor médio: ${MOODS[Math.round(r.moodAvg)-1][1].toLowerCase()} (${r.moodAvg.toFixed(1)} de 5).`:''}${r.painAvg!=null?` Dor média ${r.painAvg.toFixed(1)}/10, máxima ${r.painMax}/10.`:''}</p>
+    ${r.sx.length?`<table><tr><th>Sintoma</th><th>Dias</th></tr>${r.sx.map(([s,n])=>`<tr><td>${esc(s)}</td><td>${n}</td></tr>`).join('')}</table>`:''}
+    ${r.notes.length?`<p><b>Anotações</b></p><ul>${r.notes.slice(0,15).map(e=>`<li>${fD(parse(e.date))}: ${esc(e.note)}</li>`).join('')}</ul>`:''}`:'<p class="muted">Nenhum dia anotado no período.</p>'}
+  <h2>Exames recentes</h2>${r.lastEx.length?`<table><tr><th>Exame</th><th>Data</th><th>Resultado</th></tr>${r.lastEx.map(a=>`<tr><td>${esc(a.title)}</td><td>${parse(a.date).toLocaleDateString('pt-BR')}</td><td>${esc(a.result||'—')}</td></tr>`).join('')}</table>`:'<p class="muted">Nenhum exame registrado.</p>'}
+  ${r.ask.length?`<h2>Para pedir ou perguntar</h2><ul>${r.ask.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>`:''}
+  ${r.nx&&r.nx.notes?`<h2>Anotações para a consulta</h2><p>${esc(r.nx.notes)}</p>`:''}`;
+}
+function printReport(){
+  let p=document.getElementById('print');if(!p){p=document.createElement('div');p.id='print';document.body.appendChild(p)}
+  p.innerHTML=reportHTML(reportData(UI.repDays||30));closeSheet();setTimeout(()=>window.print(),150);
+}
+function reportText(r){
+  const L=[`Relatório — ${patient()}`,`${fD(r.from)} a ${fD(today())}`,'','REMÉDIOS'];
+  r.rows.forEach(x=>L.push(`• ${x.m.name} ${x.m.strength||''}: ${x.how}${x.n?` — ${x.ok}/${x.n} no horário, ${x.late} com atraso, ${x.miss} não tomadas`:''}`));
+  L.push('','SINTOMAS');
+  if(r.D.length){L.push(`${r.D.length} dias anotados${r.painAvg!=null?`, dor média ${r.painAvg.toFixed(1)}/10`:''}`);r.sx.slice(0,8).forEach(([s,n])=>L.push(`• ${s}: ${n} dias`))}else L.push('Nada anotado');
+  if(r.lastEx.length){L.push('','EXAMES');r.lastEx.forEach(a=>L.push(`• ${a.title} (${fD(parse(a.date))}): ${a.result||'sem resultado'}`))}
+  if(r.ask.length){L.push('','PEDIR NA CONSULTA');r.ask.forEach(t=>L.push(`• ${t}`))}
+  return L.join('\n');
+}
+function shareReport(){
+  const t=reportText(reportData(UI.repDays||30));
+  if(navigator.share){navigator.share({title:'Relatório Dose',text:t}).catch(()=>{});return}
+  try{navigator.clipboard.writeText(t).then(()=>toast('Resumo copiado. Cole no WhatsApp.'),()=>{})}catch(e){}
+}
+
+/* ====================== MODO VIAGEM ====================== */
+function travelCalc(from,to,margin){
+  const days=Math.max(1,dd(to,from)+1),out=[];
+  scheduled().forEach(m=>{
+    let doses;
+    if(m.sched.type==='daily'){doses=(days+margin)*m.sched.times.length}
+    else{doses=dosesDuring(m,from,addDays(to,margin)).length}
+    const need=doses*m.dose;if(!need&&m.sched.type==='interval')return;
+    const has=m.level?null:qty(m);
+    out.push({m,need,has,short:has!=null&&has<need?need-has:0});
+  });
+  const sos=S.meds.filter(m=>m.group==='sos');
+  return {days,out,sos,cold:out.filter(x=>x.m.cold)};
+}
+function travelSheet(){
+  UI.trip??={from:S.where.from&&S.where.city!==S.profile.home?S.where.from:iso(today()),to:S.where.to||iso(addDays(today(),6)),margin:2,got:{}};
+  const T=UI.trip,from=parse(T.from),to=parse(T.to<T.from?T.from:T.to),r=travelCalc(from,to,T.margin);
+  openSheet(`<h2>Mala de remédios</h2><div class="hint">${plural(r.days,'dia')} fora${S.where.city&&S.where.city!==S.profile.home?` em ${esc(S.where.city)}`:''}, com ${plural(T.margin,'dia')} de folga se a volta atrasar.</div>
+    <div class="two"><div class="fld"><label>Saída</label><input type="date" value="${T.from}" onchange="UI.trip.from=this.value;travelSheet()"></div><div class="fld"><label>Volta</label><input type="date" value="${T.to}" onchange="UI.trip.to=this.value;travelSheet()"></div></div>
+    <div class="fld"><label>Folga</label><div class="seg">${[0,1,2,3,5].map(n=>`<button class="${T.margin===n?'on':''}" onclick="UI.trip.margin=${n};travelSheet()">${n?`+${n} dias`:'sem folga'}</button>`).join('')}</div></div>
+    <div class="list">${r.out.map(x=>`<div class="pack" style="--k:${x.m.color}" onclick="UI.trip.got['${x.m.id}']=!UI.trip.got['${x.m.id}'];travelSheet()"><b class="num">${Math.ceil(x.need)}</b>
+      <div style="flex:1"><strong>${esc(x.m.name)} ${esc(x.m.strength||'')}</strong><br><span class="help">${unit(x.m,Math.ceil(x.need))}${x.m.cold?' · na caixa térmica':''}${x.short?` · <b style="color:var(--pink)">faltam ${Math.ceil(x.short)}, compre antes</b>`:x.has!=null?` · tem ${x.has} em casa`:''}</span></div>
+      <span class="chip" style="--k:${T.got[x.m.id]?'var(--mint)':'var(--mut)'}">${T.got[x.m.id]?'na mala':'separar'}</span></div>`).join('')||'<div class="pack"><span class="help">Nenhum remédio com horário nesse período.</span></div>'}</div>
+    ${r.cold.length?`<div class="box k" style="--k:var(--cyan);margin-top:12px">🧊 ${r.cold.map(x=>esc(x.m.name)).join(', ')} vai na caixa térmica com gelo reciclável, sem encostar direto no gelo. Na chegada, direto para a geladeira.</div>`:''}
+    ${r.sos.length?`<div class="sec" style="margin-top:18px"><h3>SOS para levar</h3><small>alguns de cada</small></div><div class="tags">${r.sos.map(m=>`<button class="${T.got[m.id]?'on':''}" style="--k:var(--mint)" onclick="UI.trip.got['${m.id}']=!UI.trip.got['${m.id}'];travelSheet()">${esc(m.name)}</button>`).join('')}</div>`:''}
+    <div class="box" style="margin-top:12px">Leve também a receita dos controlados${S.meds.some(m=>m.source==='sus')?' e o cartão do SUS':''}, e deixe a ficha de urgência atualizada no app.</div>
+    <button class="btn fill block" style="margin-top:14px" onclick="copyTrip()">Copiar a lista</button>`);
+}
+function copyTrip(){
+  const T=UI.trip,r=travelCalc(parse(T.from),parse(T.to<T.from?T.from:T.to),T.margin);
+  const t=[`Mala de remédios (${fD(parse(T.from))} a ${fD(parse(T.to))})`,...r.out.map(x=>`• ${x.m.name} ${x.m.strength||''}: ${Math.ceil(x.need)} ${unit(x.m,2)}${x.m.cold?' (caixa térmica)':''}`),...(r.sos.length?['SOS: '+r.sos.map(m=>m.name).join(', ')]:[])].join('\n');
+  try{navigator.clipboard.writeText(t).then(()=>toast('Lista copiada'),()=>{})}catch(e){}
+}
+
+/* ====================== CÂMERA: LER A CAIXA ====================== */
+let tessP=null;
+function loadTess(){return tessP||(tessP=new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';s.onload=()=>ok(window.Tesseract);s.onerror=()=>{tessP=null;no(new Error('load'))};document.head.appendChild(s)}))}
+function camPick(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.capture='environment';i.onchange=()=>{if(i.files[0])ocrBox(i.files[0])};i.click()}
+const OCR_SKIP=new Set('comprimidos comprimido revestidos revestido capsulas capsula caps uso oral adulto adultos pediatrico venda sob prescricao medica medicamento generico similar referencia contem cada embalagem caixa lote validade fabricacao farmaceutico responsavel industria brasileira laboratorio exija nota fiscal atencao gramas solucao suspensao gotas injetavel liberacao prolongada blister registro ms anvisa sac www com br'.split(' '));
+function ocrParse(txt){
+  const t=txt.replace(/\r/g,''),flat=t.replace(/\s+/g,' ');
+  const strengths=[...new Set((flat.match(/\d+(?:[.,]\d+)?\s?(?:mg|mcg|µg|g|ml|mL|UI|%)(?:\s?\/\s?(?:ml|mL|g))?/gi)||[]).map(s=>s.replace(/\s+/g,' ').replace(/ML/,'ml')))].slice(0,4);
+  const cnt=(flat.match(/(\d{1,3})\s*(?:comprimidos|comp\.?|cápsulas|capsulas|cáps|caps|drágeas|sachês)/i)||[])[1];
+  const words={};t.split(/\n/).forEach((line,li)=>line.split(/[^A-Za-zÀ-ÿ]+/).forEach(w=>{const n=slug(w);if(w.length<4||OCR_SKIP.has(n))return;const score=(w===w.toUpperCase()?3:1)+(w.length>6?1:0)+Math.max(0,3-li*.3);words[w[0].toUpperCase()+w.slice(1).toLowerCase()]=(words[w[0].toUpperCase()+w.slice(1).toLowerCase()]||0)+score}));
+  const names=Object.entries(words).sort((a,b)=>b[1]-a[1]).map(x=>x[0]).slice(0,6);
+  return {names,strengths,cnt:cnt?+cnt:null};
+}
+async function ocrBox(file){
+  openSheet(`<h2>Lendo a caixa…</h2><div class="hint" id="ocrS">Carregando o leitor (só na primeira vez demora um pouco).</div>`);
+  try{
+    const T=await loadTess();
+    const r=await T.recognize(file,'por',{logger:m=>{const e=document.getElementById('ocrS');if(e&&m.status==='recognizing text')e.textContent=`Lendo… ${Math.round(m.progress*100)}%`}});
+    const p=ocrParse(r.data.text||'');UI.ocr=p;ocrPick();
+  }catch(e){openSheet(`<h2>Não consegui ler</h2><div class="hint">Confira a internet (o leitor baixa na primeira vez) e tente de novo, com a caixa bem iluminada e o nome ocupando a foto.</div><button class="btn fill block" onclick="camPick()">Tirar outra foto</button><button class="btn block quiet" style="margin-top:8px" onclick="drawMed()">Voltar</button>`)}
+}
+function ocrPick(){
+  const p=UI.ocr;
+  openSheet(`<h2>O que achei na caixa</h2><div class="hint">Toque no que estiver certo. Dá para corrigir depois.</div>
+    <div class="fld"><label>Nome</label><div class="tags">${p.names.map(n=>`<button class="${md.name===n?'on':''}" style="--k:var(--mint)" onclick="md.name='${n.replace(/'/g,'')}';ocrPick()">${esc(n)}</button>`).join('')||'<span class="help">Não achei um nome claro.</span>'}</div></div>
+    <div class="fld"><label>Concentração</label><div class="tags">${p.strengths.map(s=>`<button class="${md.strength===s?'on':''}" style="--k:var(--cyan)" onclick="md.strength='${s}';ocrPick()">${esc(s)}</button>`).join('')||'<span class="help">Não achei.</span>'}</div></div>
+    ${p.cnt?`<div class="fld"><label>Unidades na caixa</label><div class="tags"><button class="${md.packs.some(x=>x.size===p.cnt)?'on':''}" style="--k:var(--lav)" onclick="if(!md.packs.some(x=>x.size===${p.cnt})){md.packs.push({left:${p.cnt},size:${p.cnt}});md.unknown=false;md._mode='packs'}ocrPick()">Caixa com ${p.cnt}</button></div></div>`:''}
+    <button class="btn fill block" onclick="drawMed()">Continuar o cadastro</button>
+    <button class="btn block quiet" style="margin-top:8px" onclick="camPick()">Tirar outra foto</button>`);
+}
+
+/* ====================== EXAMES: AVISO DE REPETIR ====================== */
+function examNotices(A){
+  const E=AP().filter(a=>a.kind==='exame'),seen=new Set();
+  E.sort((a,b)=>b.date.localeCompare(a.date)).forEach(a=>{
+    const k=slug(a.title);if(seen.has(k))return;seen.add(k);
+    if(parse(a.date)>today())return;
+    if(!a.result&&dd(today(),parse(a.date))<=20)A.push({pri:30,h:`Anotar o resultado: ${esc(a.title)}`,p:'Com o resultado no app ele entra no relatório da próxima consulta.',acts:[['Anotar',`apptSheet('${a.id}')`]]});
+    if(!a.repeatMonths)return;
+    const due=addMonths(parse(a.date),+a.repeatMonths),n=dd(due,today());
+    if(n<=30)A.push({pri:n<0?52:44,h:`${n<0?'Exame atrasado':'Hora de repetir'}: ${esc(a.title)}`,p:`O último foi em ${fD(parse(a.date))}; repetir a cada ${plural(+a.repeatMonths,'mês','meses')}${n<0?'.':`, até ${fD(due)}.`} Peça o pedido na próxima consulta.`,acts:[['Agendar exame',`apptSheet(null,{kind:'exame',title:'${esc(a.title).replace(/'/g,'')}',repeatMonths:${+a.repeatMonths}})`]]});
+  });
+}
+function travelNotice(A){
+  if(!away()||!S.where.to)return;
+  const f=S.where.from?parse(S.where.from):today();
+  if(dd(f,today())<=3&&dd(parse(S.where.to),today())>=0)A.push({pri:52,h:`Mala de remédios para ${esc(S.where.city)}`,p:'O app calcula quanto levar de cada um, com folga.',acts:[['Ver a lista',`travelSheet()`]]});
+}
+
+/* ====================== LEMBRETES NO CELULAR (PUSH) ====================== */
+const VAPID_PUB='BCTukXcVfJLzUcsqhfyOXnAz4U910fNToSyNCu5b7Y8KGgtQ-4o375_OX4xaSQsGqHCs5oxmA6iV0GLrChqmhxM';
+const pushOK=()=>'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
+const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+function b64u(s){const p='='.repeat((4-s.length%4)%4),b=atob((s+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from([...b].map(c=>c.charCodeAt(0)))}
+async function enablePush(){
+  if(!pushOK()){toast(isStandalone()?'Este celular não aceita lembretes.':'Instale o app na tela de início primeiro (no iPhone é obrigatório).');return}
+  if(!sb||!HH){toast('Entre na sua conta para ligar os lembretes');return}
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm!=='granted'){toast('Notificações bloqueadas. Libere nos ajustes do celular.');return}
+    const reg=await navigator.serviceWorker.ready;
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUB)});
+    const {error}=await sb.from('push_subs').upsert({endpoint:sub.endpoint,household_id:HH.id,sub:sub.toJSON(),ua:navigator.userAgent.slice(0,120)});
+    if(error){toast(/relation|does not exist|schema/i.test(error.message)?'Falta rodar o SQL 003 no Supabase':'Erro ao salvar: '+error.message);return}
+    try{localStorage.setItem('dose_push','on')}catch(e){}
+    reg.showNotification('Lembretes ligados',{body:'Vocês vão receber aviso no horário de cada dose.',icon:'icons/icon-192.png',badge:'icons/icon-192.png',tag:'dose-test'});
+    closeSheet();render();toast('Lembretes ligados neste celular');
+  }catch(e){toast('Não deu para ligar: '+(e.message||e))}
+}
+async function disablePush(){
+  try{const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.getSubscription();
+    if(sub){if(sb)await sb.from('push_subs').delete().eq('endpoint',sub.endpoint);await sub.unsubscribe()}
+    localStorage.removeItem('dose_push');closeSheet();render();toast('Lembretes desligados neste celular')}catch(e){toast('Não consegui desligar')}
+}
+const pushOn=()=>pushOK()&&Notification.permission==='granted'&&localStorage.getItem('dose_push')==='on';
+function pushCard(){
+  if(pushOn()||!HH||!scheduled().length||localStorage.getItem('dose_push_hide')==='1')return'';
+  return `<div class="box k" style="--k:var(--cyan);margin:0 0 18px;display:flex;gap:12px;align-items:center"><span style="font-size:22px">🔔</span><div style="flex:1"><b>Avisar no celular na hora de cada dose</b><br><small style="color:var(--mut)">${pushOK()?'Funciona mesmo com o app fechado.':'Instale o app na tela de início para ativar.'}</small></div>
+    <div style="display:flex;flex-direction:column;gap:6px"><button class="btn sm fill" style="--k:var(--cyan)" onclick="enablePush()">Ligar</button><button class="btn sm quiet" onclick="localStorage.setItem('dose_push_hide','1');render()">Agora não</button></div></div>`;
+}
+
+/* ====================== NOVA VERSÃO ====================== */
+const APP_VER='4';
+const CHANGES={'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Dose pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
+function whatsNew(){
+  let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
+  if(v&&v!==APP_VER&&CHANGES[APP_VER])setTimeout(()=>openSheet(`<h2>Novidades</h2><div class="list">${CHANGES[APP_VER].map(t=>`<div class="item"><span style="color:var(--mint)">✦</span><div class="b"><strong style="font-weight:500">${esc(t)}</strong></div></div>`).join('')}</div><button class="btn fill block" style="margin-top:14px" onclick="closeSheet()">Bora</button>`),900);
+}
 
 /* ====================== RENDER ====================== */
 const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1628,8 +2069,8 @@ let ERRN=0,sb=null,SESSION=null,HH=null,SYNC='off',pushT=null,pushing=false,chan
 const SYNC_TXT={ok:'Sincronizado',busy:'Sincronizando',off:'Sem conexão',err:'Erro ao sincronizar'};
 let snap={meds:{},appts:{},log:{},settings:''};
 const stable=v=>Array.isArray(v)?'['+v.map(stable).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).sort().filter(k=>v[k]!==undefined).map(k=>JSON.stringify(k)+':'+stable(v[k])).join(',')+'}':JSON.stringify(v===undefined?null:v);
-const SET_KEYS=['profile','plan','sim','where','apptFrom','sos'];
-const settingsOf=()=>({profile:S.profile,plan:S.plan||null,sim:S.sim||null,where:S.where,apptFrom:S.apptFrom||null,sos:S.sos||null});
+const SET_KEYS=['profile','plan','sim','where','apptFrom','sos','docs'];
+const settingsOf=()=>({profile:S.profile,plan:S.plan||null,sim:S.sim||null,where:S.where,apptFrom:S.apptFrom||null,sos:S.sos||null,docs:S.docs||null});
 const rowToLog=r=>({id:r.id,medId:r.med_id,sched:String(r.sched).slice(0,16),taken:r.taken?String(r.taken).slice(0,16):null,status:r.status,...(r.site?{site:r.site}:{})});
 const logToRow=l=>({id:l.id,household_id:HH.id,med_id:l.medId,sched:l.sched,taken:l.taken,status:l.status,site:l.site||null});
 function setSync(v){SYNC=v;document.querySelectorAll('.sync').forEach(e=>{e.className='sync '+v;e.title=SYNC_TXT[v]})}
@@ -1769,7 +2210,10 @@ async function boot(){
 }
 addEventListener('online',()=>{setSync('busy');schedulePush()});
 addEventListener('offline',()=>setSync('off'));
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register('sw.js').then(reg=>{document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')reg.update().catch(()=>{})})}).catch(()=>{});
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had)showUpd()})}
+whatsNew();
 /* ====================== URGÊNCIA ====================== */
 const telNum=t=>{let d=String(t||'').replace(/\D/g,'');if(!d)return '';if(d.length<=11&&!d.startsWith('55'))d='55'+d;return d};
 const telHref=t=>{const d=String(t||'').replace(/\D/g,'');return d.length<=4?`tel:${d}`:`tel:+${telNum(t)}`};
