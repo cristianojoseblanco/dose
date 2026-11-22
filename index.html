@@ -2092,8 +2092,8 @@ function pushCard(){
 }
 
 /* ====================== NOVA VERSÃO ====================== */
-const APP_VER='9';
-const CHANGES={'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+const APP_VER='10';
+const CHANGES={'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
 function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Suporte pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
 function whatsNew(){
   let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
@@ -2492,7 +2492,7 @@ function invScore(m,x){
   const n=slug(m.name),al=(x.match||[x.name]).map(a=>slug(a));
   if(!al.some(a=>n.includes(a)||a.includes(n)))return 0;
   let sc=1+(n===slug(x.name)?3:0);const dig=t=>(String(t||'').match(/\d+(?:[.,]\d+)?/)||[''])[0].replace(',','.');
-  if(x.strength&&m.strength)sc+=dig(x.strength)===dig(m.strength)?2:-3;
+  if(x.strength&&m.strength){if(dig(x.strength)!==dig(m.strength))return 0;sc+=2}
   const lv=f=>['colírio','spray','pomada','frasco','gota'].includes(f);
   if(x.form&&m.form&&m.form!=='unidade')sc+=lv(x.form)===lv(m.form)?1:-2;
   return sc;
@@ -2506,7 +2506,7 @@ function importInventory(d){
       notes:x.notes||'',...(x.group?{group:x.group}:{}),...(x.kind?{kind:x.kind}:{}),...(x.rx?{rx:true}:{}),...(x.sched!==undefined?{sched:x.sched}:{}),
       ...(x.dose?{dose:x.dose}:{}),...(x.until?{until:x.until}:{}),...(x.cold?{cold:true}:{}),...(x.source?{source:x.source}:{})};
     if(best){const m=best[0];used.add(m.id);Object.assign(m,fields);if(x.sched&&!m.sched)m.autoFrom=iso(today());upd++}
-    else{const nm=normMed(M({...fields,color:COLORS[(S.meds.length+i)%COLORS.length],autoFrom:iso(today())}));S.meds.push(nm);used.add(nm.id);add++}
+    else{const nm=normMed(M({...fields,group:x.group||x.groupNew||'outros',color:COLORS[(S.meds.length+i)%COLORS.length],autoFrom:iso(today())}));S.meds.push(nm);used.add(nm.id);add++}
   });
   const left=S.meds.filter(m=>!used.has(m.id));
   if(d.zeroRest)left.forEach(m=>{m.packs=[];m.stock=0;m.unknown=false;if(m.level||['colírio','spray','pomada','frasco','gota'].includes(m.form))m.level='vazio'});
