@@ -2509,14 +2509,12 @@ function importInventory(d){
     else{const nm=normMed(M({...fields,color:COLORS[(S.meds.length+i)%COLORS.length],autoFrom:iso(today())}));S.meds.push(nm);used.add(nm.id);add++}
   });
   const left=S.meds.filter(m=>!used.has(m.id));
+  if(d.zeroRest)left.forEach(m=>{m.packs=[];m.stock=0;m.unknown=false;if(m.level||['colírio','spray','pomada','frasco','gota'].includes(m.form))m.level='vazio'});
   normalize();save();render();
-  UI.invLeft=new Set();
-  const draw=()=>openSheet(`<h2>Contagem importada</h2><div class="hint">${plural(upd,'remédio atualizado','remédios atualizados')} (o histórico continua) e ${plural(add,'novo','novos')}.</div>
-    ${left.length?`<div class="sec"><h3>Estavam no app e não vieram na lista</h3></div><p class="help" style="margin-bottom:10px">Marque os que não existem mais em casa para tirar do app. Os do SUS geralmente ficam, mesmo zerados.</p>
-      <div class="list">${left.map(m=>`<div class="item tap" onclick="UI.invLeft.has('${m.id}')?UI.invLeft.delete('${m.id}'):UI.invLeft.add('${m.id}');this.querySelector('.chip').textContent=UI.invLeft.has('${m.id}')?'remover':'manter';this.querySelector('.chip').style.setProperty('--k',UI.invLeft.has('${m.id}')?'var(--pink)':'var(--mint)')"><div class="b"><strong>${esc(m.name)} ${esc(m.strength||'')}</strong><span>${m.source==='sus'?'SUS':m.group==='continuo'?'contínuo':GROUPS[m.group]||''}, ${m.level?m.level:qty(m)+' em casa'}</span></div><span class="chip" style="--k:var(--mint)">manter</span></div>`).join('')}</div>
-      <button class="btn fill block" style="margin-top:14px" onclick="if(UI.invLeft.size){S.meds=S.meds.filter(m=>!UI.invLeft.has(m.id));save();render();toast('Removidos: '+UI.invLeft.size)}closeSheet()">Concluir</button>`
-    :`<button class="btn fill block" onclick="closeSheet()">Pronto</button>`}`);
-  draw();
+  openSheet(`<h2>Contagem importada</h2><div class="hint">${plural(upd,'remédio atualizado','remédios atualizados')} (o histórico continua) e ${plural(add,'novo','novos')}.</div>
+    ${left.length?`<div class="sec"><h3>${d.zeroRest?'Ficaram vazios':'Não vieram na lista'}</h3><small>${left.length}</small></div><p class="help" style="margin-bottom:10px">${d.zeroRest?'Estavam no app e não apareceram na contagem, então ficaram com estoque zero. Quando comprar ou retirar, é só atualizar.':'Continuam no app como estavam.'}</p>
+      <div class="list">${left.map(m=>`<div class="item"><div class="b"><strong>${esc(m.name)} ${esc(m.strength||'')}</strong><span>${m.source==='sus'?'SUS':GROUPS[m.group]||''}</span></div><span class="chip" style="--k:var(--mut)">vazio</span></div>`).join('')}</div>`:''}
+    <button class="btn fill block" style="margin-top:14px" onclick="closeSheet()">Pronto</button>`);
 }
 async function boot(){
   if(!window.supabase){processAuto();render();setSync('off');toast('Sem conexão com o servidor: usando os dados deste aparelho.');return}
