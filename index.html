@@ -578,6 +578,20 @@ body.sosmode{background:radial-gradient(70% 40% at 50% 0%,rgba(255,77,141,.28),t
 .pw input{padding-right:64px}
 .pw button{position:absolute;right:8px;top:7px;border:0;background:transparent;color:var(--mut);font:600 12.5px "Instrument Sans",sans-serif;padding:6px 8px;cursor:pointer}
 .forgot{display:block;margin:-4px 0 14px auto;border:0;background:none;color:var(--cyan);font:600 13px "Instrument Sans",sans-serif;cursor:pointer;padding:4px 0}
+/* busca, fotos e bula */
+.search{position:relative;margin:4px 0 12px}
+.search input{width:100%;padding:13px 44px 13px 42px;border-radius:16px;border:1px solid var(--line2);background:rgba(15,20,56,.7);color:var(--txt);font:500 15.5px "Instrument Sans",sans-serif;outline:none}
+.search input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px color-mix(in srgb,var(--cyan) 22%,transparent)}
+.search .ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.7;pointer-events:none}
+.search .x{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:rgba(255,255,255,.08);color:var(--txt);width:30px;height:30px;border-radius:50%;cursor:pointer;display:none}
+.search.has .x{display:block}
+.thumb{flex:none;width:44px;height:44px;border-radius:12px;object-fit:cover;border:1px solid color-mix(in srgb,var(--k) 45%,var(--line2));background:rgba(255,255,255,.05)}
+.thumb.big{width:64px;height:64px;border-radius:16px}
+.ph{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.ph img{width:88px;height:88px;border-radius:18px;object-fit:cover;border:1px solid var(--line2)}
+.ph .empty-ph{width:88px;height:88px;border-radius:18px;border:1.5px dashed var(--line2);display:grid;place-items:center;font-size:26px;color:var(--mut)}
+.photo-full{width:100%;border-radius:18px;display:block}
+mark{background:color-mix(in srgb,var(--cyan) 35%,transparent);color:inherit;border-radius:3px;padding:0 1px}
 </style>
 </head>
 <body>
@@ -964,7 +978,7 @@ function medCard(m){
   const st=m.sched?stockInfo(m):null,nx=m.sched&&m.sched.type==='interval'?nextInterval(m):null,bs=buyStatus(m),[sl,sk]=STATUS[bs];
   const money=m.source==='sus'?`<div class="free">Recebido pelo SUS em <b>${esc(m.sus.city)}</b>, sem custo.${m.sus.nextPickup?` Retirada ${rel(parse(m.sus.nextPickup))}.`:' Falta informar a próxima retirada.'}</div>`:moneyBlock(m);
   return `<div class="med" style="--k:${m.color}">
-    <div class="top" onclick="medSheet('${m.id}')"><div><h2>${esc(m.name)} <span>${esc(m.strength)}</span></h2>
+    <div class="top" onclick="medSheet('${m.id}')">${m.photo?`<img class="thumb big" src="${m.photo}" alt="" loading="lazy" style="margin-right:12px">`:''}<div style="flex:1"><h2>${esc(m.name)} <span>${esc(m.strength)}</span></h2>
       <div class="sched">${m.sched?schedText(m):'<span style="color:var(--lav)">Dose e horário não definidos — toque para definir</span>'}${m.cold?', na geladeira':''}</div></div><span class="chip" style="--k:${sk}">${sl}</span></div>
     <div class="facts">
       <div><b class="num">${m.unknown&&!qty(m)?'?':qty(m)}</b><span>${unit(m,2)} em casa</span></div>
@@ -979,9 +993,9 @@ function medCard(m){
     ${m.notes?`<p class="free">${esc(m.notes)}</p>`:''}
   </div>`;
 }
-function medRow(m,extra=''){
+function medRow(m,extra='',hl){
   const [sl,sk]=STATUS[buyStatus(m)];
-  return `<div class="item tap" onclick="medSheet('${m.id}')" style="--k:${m.color}"><div class="b"><strong>${esc(m.name)}${m.strength?` <span style="color:var(--mut);font-weight:400">${esc(m.strength)}</span>`:''}</strong><span>${stockText(m)}${extra}</span>${packsViz(m)}</div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end"><span class="chip" style="--k:${sk}">${sl}</span>${takeBtn(m,1)}</div></div>`;
+  return `<div class="item tap" onclick="medSheet('${m.id}')" style="--k:${m.color}">${m.photo?`<img class="thumb" src="${m.photo}" alt="" loading="lazy">`:''}<div class="b"><strong>${hl?hl(m.name):esc(m.name)}${m.strength?` <span style="color:var(--mut);font-weight:400">${esc(m.strength)}</span>`:''}</strong><span>${stockText(m)}${extra}</span>${packsViz(m)}</div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end"><span class="chip" style="--k:${sk}">${sl}</span>${takeBtn(m,1)}</div></div>`;
 }
 function vRemedios(){
   UI.medTab??='continuo';
@@ -990,7 +1004,8 @@ function vRemedios(){
   const n=g=>S.meds.filter(m=>m.group===g).length;
   const tabs=[['continuo','Contínuos',n('continuo')],['sos','SOS',n('sos')],['outros','Outros',n('outros')],['comprar','Comprar',buy.length]];
   let body='';
-  if(tab==='comprar'){
+  if((UI.mq||'').trim()){body=remSearch()}
+  else if(tab==='comprar'){
     const tot=buy.reduce((a,m)=>a+(priceInfo(m).est||0),0), sem=buy.filter(m=>!priceInfo(m).est).length;
     body=`<div class="foil" style="padding-bottom:14px"><div class="score"><b class="num" style="color:var(--amber);text-shadow:0 0 22px rgba(255,181,71,.4)">${brl(tot)}</b></div>
         <p class="lede">estimativa para ${plural(buy.length,'item','itens')}, uma caixa de cada${sem?`; ${sem} sem preço ainda`:''}. Preços online, sem frete.</p></div>
@@ -1006,8 +1021,23 @@ function vRemedios(){
     body=L.length?`<div class="list">${L.map(m=>medRow(m,m.notes?`. ${esc(m.notes)}`:'')).join('')}</div>`:'<div class="empty">Nada aqui ainda.</div>';
   }
   return `${header()}<div class="sec" style="margin-top:0"><h1 style="font-size:28px">Remédios</h1><button class="btn sm" onclick="medSheet(null,{group:UI.medTab==='comprar'?'continuo':UI.medTab})">Adicionar</button></div>
-  <div class="seg" style="margin-bottom:16px">${tabs.map(([k,l,c])=>`<button class="tabb ${tab===k?'on':''}" style="--k:${k==='comprar'?'var(--amber)':'var(--cyan)'}" onclick="UI.medTab='${k}';render()">${l}<b>${c}</b></button>`).join('')}</div>
-  ${body}`;
+  <div class="search ${UI.mq?'has':''}"><span class="ic">🔎</span><input id="mq" type="text" enterkeyhint="search" autocomplete="off" placeholder="Buscar em todos os ${S.meds.length} remédios" value="${esc(UI.mq||'')}" oninput="medSearch(this.value)"><button class="x" aria-label="Limpar busca" onclick="medSearch('');document.getElementById('mq').value='';document.getElementById('mq').focus()">✕</button></div>
+  <div class="seg" id="medTabs" style="margin-bottom:16px;${UI.mq?'opacity:.4':''}">${tabs.map(([k,l,c])=>`<button class="tabb ${tab===k?'on':''}" style="--k:${k==='comprar'?'var(--amber)':'var(--cyan)'}" onclick="UI.mq='';UI.medTab='${k}';render()">${l}<b>${c}</b></button>`).join('')}</div>
+  <div id="medBody">${body}</div>`;
+}
+const norm=t=>String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function medSearch(v){
+  UI.mq=v;const b=document.getElementById('medBody'),t=document.getElementById('medTabs'),w=document.querySelector('.search');
+  if(w)w.classList.toggle('has',!!v);if(t)t.style.opacity=v?'.4':'';
+  if(b)b.innerHTML=v.trim()?remSearch():(()=>{const keep=UI.mq;UI.mq='';const h=vRemedios();UI.mq=keep;const x=document.createElement('div');x.innerHTML=h;const nb=x.querySelector('#medBody');return nb?nb.innerHTML:''})();
+}
+function remSearch(){
+  const q=norm(UI.mq).trim(),terms=q.split(/\s+/).filter(Boolean);
+  const hay=m=>norm([m.name,m.strength,m.notes,m.form,GROUPS[m.group],m.source==='sus'?'sus alto custo':'',m.cold?'geladeira':'',m.rx?'controlado receita':''].join(' '));
+  const L=S.meds.filter(m=>terms.every(t=>hay(m).includes(t))).sort((a,b)=>(norm(a.name).startsWith(terms[0])?0:1)-(norm(b.name).startsWith(terms[0])?0:1)||a.name.localeCompare(b.name));
+  if(!L.length)return `<div class="empty">Nada com "${esc(UI.mq)}".<br><button class="btn sm fill" style="margin-top:12px" onclick="medSheet(null,{name:UI.mq.trim()})">Cadastrar "${esc(UI.mq.trim())}"</button></div>`;
+  const hl=t=>{let h=esc(t);terms.forEach(x=>{const i=norm(h).indexOf(x);if(i>=0&&x.length>1)h=h.slice(0,i)+'<mark>'+h.slice(i,i+x.length)+'</mark>'+h.slice(i+x.length)});return h};
+  return `<p class="help" style="margin:-4px 0 10px">${plural(L.length,'resultado','resultados')}</p><div class="list">${L.map(m=>medRow(m,`. ${GROUPS[m.group]||''}${m.source==='sus'?', SUS':''}`,hl)).join('')}</div>`;
 }
 
 const slug=c=>c.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-');
@@ -1552,7 +1582,10 @@ function setSched(t){
 function drawMed(){
   const d=md,s=d.sched,st=s?s.type:'none';
   openSheet(`<h2>${d.id?esc(d.name)||'Editar remédio':'Novo remédio'}</h2>
-    ${!d.id||!d.name?`<button class="btn block" style="--k:var(--cyan);margin-bottom:14px" onclick="camPick()">📷 Ler a caixa com a câmera</button>`:''}
+    <div class="ph">${d.photo?`<img src="${d.photo}" alt="Foto do remédio" onclick="photoView()">`:'<div class="empty-ph">💊</div>'}
+      <div style="display:flex;flex-direction:column;gap:7px;flex:1"><button class="btn sm" style="--k:var(--cyan)" onclick="photoPick()">${d.photo?'Trocar foto':'📷 Pôr foto'}</button>
+        ${!d.id||!d.name?`<button class="btn sm quiet" onclick="camPick()">Ler nome pela caixa</button>`:''}${d.photo?`<button class="btn sm quiet" onclick="md.photo=null;drawMed()">Remover foto</button>`:''}</div></div>
+    ${d.name&&d.kind!=='pele'?bulaRow(d):''}
     <div class="fld"><label>Grupo</label><div class="seg">${Object.entries(GROUPS).map(([k,l])=>`<button class="${d.group===k?'on':''}" onclick="md.group='${k}';drawMed()">${l}</button>`).join('')}</div></div>
     <div class="two"><div class="fld"><label>Nome</label><input value="${esc(d.name)}" placeholder="Ex.: Gabapentina" oninput="md.name=this.value"></div>
       <div class="fld"><label>Concentração</label><input value="${esc(d.strength)}" placeholder="300 mg" oninput="md.strength=this.value"></div></div>
@@ -2024,6 +2057,7 @@ function ocrParse(txt){
   return {names,strengths,cnt:cnt?+cnt:null};
 }
 async function ocrBox(file){
+  if(md&&!md.photo)shrinkPhoto(file).then(u=>{if(u&&!md.photo)md.photo=u}).catch(()=>{});
   openSheet(`<h2>Lendo a caixa…</h2><div class="hint" id="ocrS">Carregando o leitor (só na primeira vez demora um pouco).</div>`);
   try{
     const T=await loadTess();
@@ -2093,8 +2127,8 @@ function pushCard(){
 }
 
 /* ====================== NOVA VERSÃO ====================== */
-const APP_VER='11';
-const CHANGES={'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+const APP_VER='12';
+const CHANGES={'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
 function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Suporte pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
 function whatsNew(){
   let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
@@ -2245,6 +2279,19 @@ function daySheet(k){
       ${k>=T?`<button class="btn sm" style="--k:var(--lav)" onclick="apptSheet(null,{date:'${k}'})">Marcar consulta</button><button class="btn sm" style="--k:var(--cyan)" onclick="apptSheet(null,{kind:'exame',date:'${k}'})">Marcar exame</button>`:''}
       ${k<T?`<button class="btn sm quiet" onclick="skipSheet('${k}')">Pular este dia</button>`:''}
     </div>`);
+}
+
+/* ====================== FOTO E BULA ====================== */
+function shrinkPhoto(file,max=360){return new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.72))};im.onerror=no;im.src=r.result};r.onerror=no;r.readAsDataURL(file)})}
+function photoPick(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async()=>{if(!i.files[0])return;try{md.photo=await shrinkPhoto(i.files[0]);drawMed()}catch(e){toast('Não consegui abrir essa foto')}};i.click()}
+function photoView(){openSheet(`<h2>${esc(md.name)}</h2><img class="photo-full" src="${md.photo}" alt=""><button class="btn fill block" style="margin-top:14px" onclick="drawMed()">Voltar</button>`)}
+const bulaName=d=>(d.name||'').replace(/\s*\(.*?\)/g,'').replace(/\b(colírio|pomada|creme|gel|spray|suspensão|solução|gotas|sublingual|aerosol)\b.*$/i,'').trim()||d.name;
+function bulaRow(d){
+  const n=bulaName(d),gen=((d.name||'').match(/\((.*?)\)/)||[])[1];
+  const L=[['Bula oficial (Anvisa)',`https://consultas.anvisa.gov.br/#/bulario/q/?nomeProduto=${enc(n)}`,'var(--mint)',n,'bulário da Anvisa'],
+    ['Buscar a bula',`https://www.google.com/search?q=${enc('bula '+n+' '+(d.strength||'')+(gen?' '+gen:''))}`,'var(--cyan)']];
+  return `<div class="fld"><label>Bula</label><div class="row">${d.bula?`<a class="btn sm fill" style="--k:var(--lav);text-decoration:none" href="${esc(d.bula)}" target="_blank" rel="noopener">Abrir bula salva</a>`:''}${L.map((l,j)=>linkBtn(l,d.bula?1:j)).join('')}</div>
+    <input style="margin-top:8px" value="${esc(d.bula||'')}" placeholder="Colar o link da bula para guardar (opcional)" oninput="md.bula=this.value.trim()||null"></div>`;
 }
 
 /* ====================== RENDER ====================== */
