@@ -592,6 +592,22 @@ body.sosmode{background:radial-gradient(70% 40% at 50% 0%,rgba(255,77,141,.28),t
 .ph .empty-ph{width:88px;height:88px;border-radius:18px;border:1.5px dashed var(--line2);display:grid;place-items:center;font-size:26px;color:var(--mut)}
 .photo-full{width:100%;border-radius:18px;display:block}
 mark{background:color-mix(in srgb,var(--cyan) 35%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+/* página da bula */
+.bhead{display:flex;gap:14px;align-items:center;margin:6px 0 4px}
+.bhead h1{font:700 26px "Bricolage Grotesque",sans-serif;line-height:1.1}
+.bhead p{color:var(--mut);font-size:13.5px;margin-top:4px}
+.bsec{margin:10px 0;border-radius:var(--r-lg);border:1px solid var(--line);background:rgba(15,20,56,.65);overflow:hidden}
+.bsec summary{list-style:none;cursor:pointer;padding:14px 16px;font:700 16px "Bricolage Grotesque",sans-serif;display:flex;align-items:center;gap:10px}
+.bsec summary::-webkit-details-marker{display:none}
+.bsec summary::after{content:'+';margin-left:auto;color:var(--mut);font-size:20px;font-weight:400}
+.bsec[open] summary::after{content:'–'}
+.bsec summary i{font-style:normal;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.06)}
+.btx{padding:0 16px 14px;font-size:14.5px;line-height:1.6;color:#dfe3ff}
+.btx p{margin:0 0 9px}.btx ul{margin:0 0 9px;padding-left:20px}.btx li{margin:3px 0}
+mark.warn{background:color-mix(in srgb,var(--amber) 28%,transparent);color:#ffe2b0;font-weight:600}
+.bfx{border-left:3px solid var(--k);padding:8px 12px;margin:8px 0;border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--k) 9%,transparent)}
+.bfx b{color:var(--k);font:700 14px "Bricolage Grotesque",sans-serif}.bfx small{color:var(--mut);margin-left:8px;font-size:11.5px}
+.bfx p{margin:4px 0 0}
 </style>
 </head>
 <body>
@@ -987,7 +1003,7 @@ function medCard(m){
     </div>
     ${packsViz(m)}
     ${forecastHTML(m)}
-    <div class="take-row">${takeBtn(m)}${m.bulaFile?`<button class="btn quiet" style="flex:0 0 auto" onclick="bulaOpen('${m.bulaFile}')">📄 Bula</button>`:''}</div>
+    <div class="take-row">${takeBtn(m)}${m.bulaFile?`<button class="btn quiet" style="flex:0 0 auto" onclick="openBula('${m.id}')">📖 Bula</button>`:''}</div>
     ${money}
     ${rxInfo(m)?`<p class="free" style="color:${rxInfo(m).expired?'var(--pink)':rxInfo(m).left<=7?'var(--amber)':'var(--mut)'}">Receita ${rxInfo(m).expired?'venceu em':'vale até'} ${fD(rxInfo(m).end)}</p>`:m.rx&&m.source!=='sus'?`<p class="free">Controlado: <button class="link" onclick="medSheet('${m.id}')">informe a data da receita</button></p>`:''}
     ${m.notes?`<p class="free">${esc(m.notes)}</p>`:''}
@@ -2127,8 +2143,8 @@ function pushCard(){
 }
 
 /* ====================== NOVA VERSÃO ====================== */
-const APP_VER='13';
-const CHANGES={'13':['Anexar o PDF da bula em cada remédio: fica guardado para os dois'],'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+const APP_VER='14';
+const CHANGES={'14':['Página da bula organizada: seções com ícones, efeitos por frequência, palavras de atenção destacadas e busca','Documento oficial sempre a um toque'],'13':['Anexar o PDF da bula em cada remédio: fica guardado para os dois'],'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
 function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Suporte pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
 function whatsNew(){
   let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
@@ -2284,6 +2300,7 @@ function daySheet(k){
 /* ====================== FOTO E BULA ====================== */
 function shrinkPhoto(file,max=360){return new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.72))};im.onerror=no;im.src=r.result};r.onerror=no;r.readAsDataURL(file)})}
 function photoPick(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async()=>{if(!i.files[0])return;try{md.photo=await shrinkPhoto(i.files[0]);drawMed()}catch(e){toast('Não consegui abrir essa foto')}};i.click()}
+function saveMedQuiet(){const m=med(md.id);if(m){Object.assign(m,JSON.parse(JSON.stringify(md)));delete m._mode;delete m._last;save()}}
 function bulaPick(){
   if(!sb||!HH){toast('Entre na sua conta para anexar a bula');return}
   const i=document.createElement('input');i.type='file';i.accept='application/pdf,.pdf';
@@ -2294,8 +2311,10 @@ function bulaPick(){
     const {error}=await sb.storage.from('bulas').upload(path,f,{contentType:'application/pdf',upsert:true});
     if(error){toast(/bucket|not found|policy|security/i.test(error.message)?'Falta rodar o SQL 004 (bulas) no Supabase':'Erro ao enviar: '+error.message);return}
     if(old)sb.storage.from('bulas').remove([old]).catch(()=>{});
-    md.bulaFile=path;md.bulaName=f.name;const m=med(md.id);if(m){m.bulaFile=path;m.bulaName=f.name;save()}
-    drawMed();toast('Bula anexada');};
+    md.bulaFile=path;md.bulaName=f.name;toast('Lendo a bula…');
+    const ok=await bulaBuild(md,await f.arrayBuffer());
+    const m=med(md.id);if(m){m.bulaFile=path;m.bulaName=f.name;m.bulaInfo=md.bulaInfo||null;save()}
+    drawMed();if(ok)toast('Bula anexada e organizada');};
   i.click();
 }
 async function bulaOpen(path){
@@ -2306,7 +2325,7 @@ async function bulaOpen(path){
   if(w)w.location=data.signedUrl;else location.href=data.signedUrl;
 }
 function bulaRemove(){
-  const old=md.bulaFile;md.bulaFile=null;md.bulaName=null;const m=med(md.id);if(m){m.bulaFile=null;m.bulaName=null;save()}
+  const old=md.bulaFile;md.bulaFile=null;md.bulaName=null;md.bulaInfo=null;const m=med(md.id);if(m){m.bulaFile=null;m.bulaName=null;m.bulaInfo=null;save()}
   if(old&&sb)sb.storage.from('bulas').remove([old]).catch(()=>{});drawMed();toast('Bula removida');
 }
 function photoView(){openSheet(`<h2>${esc(md.name)}</h2><img class="photo-full" src="${md.photo}" alt=""><button class="btn fill block" style="margin-top:14px" onclick="drawMed()">Voltar</button>`)}
@@ -2316,10 +2335,91 @@ function bulaRow(d){
   const L=[['Bula oficial (Anvisa)',`https://consultas.anvisa.gov.br/#/bulario/q/?nomeProduto=${enc(n)}`,'var(--mint)',n,'bulário da Anvisa'],
     ['Buscar a bula',`https://www.google.com/search?q=${enc('bula '+n+' '+(d.strength||'')+(gen?' '+gen:''))}`,'var(--cyan)']];
   return `<div class="fld"><label>Bula</label>
-    <div class="row" style="margin-bottom:8px">${d.bulaFile?`<button class="btn sm fill" style="--k:var(--lav)" onclick="bulaOpen()">📄 Abrir bula</button><button class="btn sm quiet" onclick="bulaPick()">Trocar PDF</button><button class="btn sm quiet" onclick="bulaRemove()">Remover</button>`:`<button class="btn sm" style="--k:var(--lav)" onclick="bulaPick()">📎 Anexar PDF da bula</button>`}</div>
+    <div class="row" style="margin-bottom:8px">${d.bulaFile?`${d.bulaInfo?`<button class="btn sm fill" style="--k:var(--lav)" onclick="saveMedQuiet();openBula('${d.id}')">📖 Ver bula</button>`:`<button class="btn sm" style="--k:var(--lav)" onclick="bulaRebuild('${d.id}')">Organizar a bula</button>`}<button class="btn sm quiet" onclick="bulaOpen()">PDF</button><button class="btn sm quiet" onclick="bulaPick()">Trocar PDF</button><button class="btn sm quiet" onclick="bulaRemove()">Remover</button>`:`<button class="btn sm" style="--k:var(--lav)" onclick="bulaPick()">📎 Anexar PDF da bula</button>`}</div>
     ${d.bulaFile?`<p class="help" style="margin:-2px 0 8px">${esc(d.bulaName||'bula.pdf')}</p>`:''}
     <div class="row">${d.bula?`<a class="btn sm fill" style="--k:var(--lav);text-decoration:none" href="${esc(d.bula)}" target="_blank" rel="noopener">Abrir bula salva</a>`:''}${L.map((l,j)=>linkBtn(l,d.bula?1:j)).join('')}</div>
     <input style="margin-top:8px" value="${esc(d.bula||'')}" placeholder="Colar o link da bula para guardar (opcional)" oninput="md.bula=this.value.trim()||null"></div>`;
+}
+
+/* ====================== PÁGINA DA BULA ====================== */
+const PDFJS='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/';
+let pdfP=null;
+function loadPdfJs(){return pdfP||(pdfP=new Promise((ok,no)=>{const s=document.createElement('script');s.src=PDFJS+'pdf.min.js';s.onload=()=>{window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS+'pdf.worker.min.js';ok(window.pdfjsLib)};s.onerror=()=>{pdfP=null;no(new Error('pdfjs'))};document.head.appendChild(s)}))}
+async function pdfText(buf){
+  const lib=await loadPdfJs(),doc=await lib.getDocument({data:buf}).promise;let out='';
+  for(let i=1;i<=doc.numPages;i++){const c=await (await doc.getPage(i)).getTextContent();
+    let lastY=null;c.items.forEach(it=>{const y=it.transform?it.transform[5]:null;if(lastY!==null&&y!==null&&Math.abs(y-lastY)>2&&!out.endsWith('\n'))out+='\n';out+=it.str;if(it.hasEOL)out+='\n';lastY=y});out+='\n';}
+  return out;
+}
+const BULA_SEC=[
+  ['indica','Para que serve','🎯','PARA QUE ESTE MEDICAMENTO E INDICADO',1],
+  ['funciona','Como funciona','⚙️','COMO ESTE MEDICAMENTO FUNCIONA',0],
+  ['naousar','Quando não usar','⛔','QUANDO NAO DEVO USAR ESTE MEDICAMENTO',0],
+  ['antes','Antes de usar: cuidados','⚠️','O QUE DEVO SABER ANTES DE USAR ESTE MEDICAMENTO',0],
+  ['guardar','Como guardar','📦','ONDE, COMO E POR QUANTO TEMPO POSSO GUARDAR',0],
+  ['usar','Como usar','💊','COMO DEVO USAR ESTE MEDICAMENTO',1],
+  ['esqueci','Se esquecer uma dose','⏰','O QUE DEVO FAZER QUANDO EU ME ESQUECER DE USAR',1],
+  ['efeitos','Efeitos que pode causar','🌡️','QUAIS OS MALES QUE ESTE MEDICAMENTO PODE ME CAUSAR',1],
+  ['excesso','Se tomar demais','🚑','O QUE FAZER SE ALGUEM USAR UMA QUANTIDADE MAIOR',0]
+];
+const fold=t=>[...t].map(c=>c.normalize('NFD')[0]).join('').toUpperCase(); // mesmo tamanho do texto original
+function parseBula(raw){
+  const t=raw.replace(/\r/g,'').replace(/(\w)-\n(\w)/g,'$1$2'),F=fold(t);
+  const pos=BULA_SEC.map(([k,,,q])=>{const re=new RegExp('(?:^|\\n)\\s*\\d{0,2}\\s*[.)-]?\\s*'+q.replace(/ /g,'\\s+').replace(/,/g,',?')+'[^\\n]*','g');const m=re.exec(F);return m?{k,i:m.index,e:m.index+m[0].length}:null});
+  const found=pos.filter(Boolean).sort((a,b)=>a.i-b.i);
+  if(found.length<4)return null;
+  let endAll=t.length;const dz=F.search(/\n\s*(III\s*[-–]\s*)?DIZERES LEGAIS/);if(dz>found.at(-1).i)endAll=dz;
+  const sec={};found.forEach((f,j)=>{const end=j+1<found.length?found[j+1].i:endAll;sec[f.k]=cleanTxt(t.slice(f.e,end))});
+  const date=(F.match(/APROVADA PELA ANVISA EM\s*(\d{2}\/\d{2}\/\d{4})/)||[])[1]||null;
+  const lab=((t.slice(endAll).match(/(?:Fabricado|Registrado|Produzido)\s+por:?\s*([^\n.]+)/i)||[])[1]||'').trim()||null;
+  return {sec,date,lab,at:iso(today())};
+}
+function cleanTxt(s){
+  return s.split('\n').map(l=>l.trim()).filter(l=>l&&!/^\d+$/.test(l)).reduce((a,l)=>{
+    const bullet=/^[•\-–▪●]\s*/.test(l);
+    if(!a.length||bullet||/[.:;!?)]$/.test(a.at(-1)))a.push(l.replace(/^[•▪●]\s*/,'- '));else a[a.length-1]+=' '+l;return a},[]).join('\n').trim();
+}
+const BULA_WARN=/(bebidas? alco[óo]lica[s]?|[áa]lcool|gr[áa]vida[s]?|gravidez|amamenta[çc][ãa]o|amamentando|dirigir|operar m[áa]quinas|n[ãa]o (?:deve|pode) ser (?:utilizado|usado)|procure (?:imediatamente|rapidamente) (?:o )?(?:socorro|m[ée]dico))/gi;
+function bulaHTML(s,q){
+  return esc(s).split('\n').map(p=>{let h=p.replace(BULA_WARN,'<mark class="warn">$1</mark>');
+    if(q){const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');h=h.replace(/(<[^>]+>)|([^<]+)/g,(m,tag,txt)=>tag||txt.replace(re,'<mark>$1</mark>'))}
+    return /^- /.test(p)?`<li>${h.slice(2)}</li>`:`<p>${h}</p>`}).join('').replace(/(<li>.*?<\/li>)+/g,m=>`<ul>${m}</ul>`);
+}
+function effectsHTML(s,q){
+  const re=/Rea[çc](?:[ãa]o|[õo]es)\s+(muito\s+comu(?:m|ns)|comu(?:m|ns)|incomu(?:m|ns)|muito\s+raras?|raras?|com\s+frequ[êe]ncia\s+desconhecida)[^:]*:/gi;
+  const parts=[];let m,last=0,cur=null;
+  while((m=re.exec(s))){if(cur)cur.t=s.slice(last,m.index).trim();else if(m.index>0)parts.push({k:null,t:s.slice(0,m.index).trim()});cur={k:fold(m[1]).replace(/\s+/g,' '),t:''};parts.push(cur);last=m.index+m[0].length}
+  if(!cur)return bulaHTML(s,q);cur.t=s.slice(last).trim();
+  const C={'MUITO COMUM':['var(--pink)','Muito comum','mais de 1 em 10'],'COMUM':['var(--amber)','Comum','até 1 em 10'],'INCOMUM':['var(--cyan)','Incomum','até 1 em 100'],'RARA':['var(--lav)','Rara','até 1 em 1.000'],'MUITO RARA':['var(--mut)','Muito rara','menos de 1 em 10.000']};
+  return parts.filter(p=>p.t).map(p=>{const k=p.k&&C[p.k.replace(/NS$/,'M').replace(/AS$/,'A')]||null;
+    return k?`<div class="bfx" style="--k:${k[0]}"><b>${k[1]}</b><small>${k[2]}</small>${bulaHTML(p.t,q)}</div>`:bulaHTML(p.t,q)}).join('');
+}
+async function bulaBuild(m,buf){
+  try{const info=parseBula(await pdfText(buf));
+    if(!info){toast('PDF anexado. Ele não segue o modelo padrão de bula, então fica só o documento.');return false}
+    m.bulaInfo=info;return true}
+  catch(e){toast('PDF anexado, mas não consegui ler o texto dele');return false}
+}
+async function bulaRebuild(id){
+  const m=med(id);if(!m||!m.bulaFile||!sb)return;toast('Lendo a bula…');
+  const {data}=await sb.storage.from('bulas').createSignedUrl(m.bulaFile,600);if(!data){toast('Não consegui baixar a bula');return}
+  const buf=await (await fetch(data.signedUrl)).arrayBuffer();
+  if(await bulaBuild(m,buf)){save();openBula(id);toast('Página da bula pronta')}
+}
+function openBula(id){const m=med(id);if(!m)return;closeSheet();if(!m.bulaInfo&&m.bulaFile){bulaOpen(m.bulaFile);return}UI.bula=id;UI.bq='';go('bula')}
+function vBula(){
+  const m=med(UI.bula);if(!m||!m.bulaInfo)return vRemedios();
+  const B=m.bulaInfo,q=(UI.bq||'').trim();
+  const secs=BULA_SEC.filter(([k])=>B.sec[k]).map(([k,l,ic,,open])=>{const tx=B.sec[k],hit=q&&norm(tx).includes(norm(q));
+    if(q&&!hit)return'';
+    return `<details class="bsec" ${open||hit?'open':''}><summary><i>${ic}</i>${l}</summary><div class="btx">${k==='efeitos'?effectsHTML(tx,q):bulaHTML(tx,q)}</div></details>`}).join('');
+  return `<div class="sec" style="margin-top:0"><button class="btn sm quiet" onclick="go('remedios')">‹ Remédios</button>${m.bulaFile?`<button class="btn sm" style="--k:var(--lav)" onclick="bulaOpen('${m.bulaFile}')">📄 Documento oficial</button>`:''}</div>
+    <div class="bhead" style="--k:${m.color}">${m.photo?`<img class="thumb big" src="${m.photo}" alt="">`:'<div class="thumb big" style="display:grid;place-items:center;font-size:26px">💊</div>'}
+      <div><h1>${esc(m.name)}</h1><p>${esc(m.strength||'')}${B.lab?` · ${esc(B.lab)}`:''}</p></div></div>
+    ${m.sched?`<div class="box k" style="--k:var(--mint);margin:14px 0"><b>Como ${esc(patient())} toma:</b> ${esc(schedText(m))}</div>`:''}
+    <div class="search ${q?'has':''}"><span class="ic">🔎</span><input type="text" enterkeyhint="search" placeholder="Buscar na bula: álcool, esqueci, gravidez…" value="${esc(UI.bq||'')}" onchange="UI.bq=this.value;render()" onkeydown="if(event.key==='Enter'){UI.bq=this.value;render()}"><button class="x" onclick="UI.bq='';render()">✕</button></div>
+    ${secs||`<div class="empty">Nada com "${esc(q)}" nesta bula.</div>`}
+    <p class="fine" style="margin-top:16px">Texto da bula oficial aprovada pela Anvisa${B.date?`, versão de ${B.date}`:''}, organizado pelo app sem alterar o conteúdo. Em caso de dúvida, fale com a médica ou com o farmacêutico.</p>`;
 }
 
 /* ====================== RENDER ====================== */
@@ -2917,7 +3017,7 @@ function vForm(){
     <p class="help" style="margin-top:16px">Para mudar algo que já existe, abra o remédio em Remédios e toque em "Editar passo a passo".</p>`;
 }
 function render(){
-  const V={hoje:vHoje,remedios:vRemedios,retiradas:vRetiradas,consultas:vConsultas,historico:vHistorico,urgencia:vUrgencia,form:vForm,calendario:vCalendario};
+  const V={hoje:vHoje,remedios:vRemedios,retiradas:vRetiradas,consultas:vConsultas,historico:vHistorico,urgencia:vUrgencia,form:vForm,calendario:vCalendario,bula:vBula};
   document.getElementById('app').innerHTML=V[UI.view]();
   document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===UI.view));
   document.body.classList.toggle('sosmode',UI.view==='urgencia');
