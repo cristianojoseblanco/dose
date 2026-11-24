@@ -608,6 +608,12 @@ mark.warn{background:color-mix(in srgb,var(--amber) 28%,transparent);color:#ffe2
 .bfx{border-left:3px solid var(--k);padding:8px 12px;margin:8px 0;border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--k) 9%,transparent)}
 .bfx b{color:var(--k);font:700 14px "Bricolage Grotesque",sans-serif}.bfx small{color:var(--mut);margin-left:8px;font-size:11.5px}
 .bfx p{margin:4px 0 0}
+.trow{display:flex;align-items:center;gap:10px;margin:6px 0}
+.trow input[type=time]{flex:0 0 112px;margin:0}
+.trow .stp{display:flex;align-items:center;border:1px solid var(--line2);border-radius:12px;overflow:hidden}
+.trow .stp button{border:0;background:rgba(255,255,255,.05);color:var(--txt);width:36px;height:40px;font-size:18px;cursor:pointer}
+.trow .stp b{min-width:34px;text-align:center;font:700 16px "Bricolage Grotesque",sans-serif}
+.trow .x{margin-left:auto;border:0;background:rgba(255,255,255,.06);color:var(--mut);width:32px;height:32px;border-radius:50%;cursor:pointer}
 </style>
 </head>
 <body>
@@ -766,6 +772,7 @@ function packsViz(m){
 /* ====================== AGENDA DE DOSES ====================== */
 function schedText(m){
   const s=m.sched,q=`${m.dose} ${unit(m,m.dose)}`;
+  if(s.type==='daily'&&varDose(m))return `${s.times.length} vezes ao dia: ${s.times.map(t=>`${fmtU(slotDose(m,t))} às ${t}`).join(', ')} (${fmtU(dailyUnits(m))} ${unit(m,dailyUnits(m))} por dia)`;
   if(s.type==='daily') return `${q}, ${s.times.length===1?'todo dia às '+s.times[0]:s.times.length+' vezes ao dia ('+s.times.join(', ')+')'}`;
   if(s.every===7) return `${q}, uma vez por semana às ${s.time}`;
   return `${q} a cada ${s.every} dias, às ${s.time}`;
@@ -807,6 +814,9 @@ function delayBlock(m){
   return `<div class="box k" style="--k:${dl?'var(--amber)':'var(--lav)'};margin-top:12px;display:flex;gap:10px;align-items:center;justify-content:space-between"><span>${dl?`Aplicação adiada de <s>${fD(parse(dl.from))}</s> para <b>${fDW(nx)}</b><br><small style="color:var(--mut)">${esc(dl.why)}${dl.note?`: ${esc(dl.note)}`:''}</small>`:`Próxima aplicação <b>${relD(nx)}</b>`}</span>
     <button class="btn sm" style="--k:var(--amber)" onclick="UI.dly=null;delaySheet('${m.id}')">${dl?'Mudar':'Adiar'}</button></div>`;
 }
+const slotDose=(m,t)=>{const d=m.sched&&m.sched.doses;return d&&d[t]!=null&&+d[t]>0?+d[t]:m.dose};
+const dailyUnits=m=>(m.sched.times||[]).reduce((a,t)=>a+slotDose(m,t),0);
+const varDose=m=>m.sched&&m.sched.type==='daily'&&m.sched.times.some(t=>slotDose(m,t)!==slotDose(m,m.sched.times[0]));
 function dueToday(){
   const now=new Date(),T=iso(today()),out=[];
   scheduled().forEach(m=>{
@@ -814,7 +824,7 @@ function dueToday(){
       m.sched.times.forEach(t=>{
         const sched=`${T}T${t}`, e=S.log.find(l=>l.medId===m.id&&l.sched===sched), sd=parse(sched);
         const h=(now-sd)/36e5, late=!e&&h>LATE_HOURS_DAILY;
-        out.push({m,sched,sd,e,late,lateTxt:late?`${Math.floor(h)} h de atraso`:''});
+        out.push({m,sched,sd,e,late,lateTxt:late?`${Math.floor(h)} h de atraso`:'',u:slotDose(m,t)});
       });
     }else{
       const nd=nextInterval(m),diff=dd(today(),nd);
@@ -836,7 +846,7 @@ function capsules(m){
 function stockInfo(m){
   let end;
   const st0=qty(m);
-  if(m.sched.type==='daily') end=addDays(today(),Math.floor(st0/(m.dose*m.sched.times.length))-1);
+  if(m.sched.type==='daily') end=addDays(today(),Math.floor(st0/dailyUnits(m))-1);
   else{const nd=nextInterval(m),k=Math.floor(st0/m.dose); end=k>0?addDays(nd,(k-1)*m.sched.every):addDays(nd,-1)}
   const gap=m.sched.type==='daily'?1:m.sched.every;
   const firstMissing=m.sched.type==='daily'?addDays(end,1):(Math.floor(st0/m.dose)>0?addDays(end,gap):nextInterval(m));
@@ -940,7 +950,7 @@ function vHoje(){
       ${(()=>{const tot=due.length,dn=due.filter(x=>x.e).length,C=2*Math.PI*30;return tot?`<div class="ring" style="--k:${next.late?'var(--pink)':'var(--mint)'}"><svg viewBox="0 0 74 74" width="74" height="74"><circle class="bg" cx="37" cy="37" r="30"/><circle class="fg" cx="37" cy="37" r="30" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-dn/tot)}"/></svg><b>${dn}/${tot}</b><small>hoje</small></div>`:''})()}
       <div class="lede">${next.late?'Opa, ficou pra trás':pend.length>1?`Faltam ${pend.length} doses hoje. A próxima é`:'Próxima dose'}</div>
       <div class="when num">${next.interval&&dd(next.sd,today())!==0?fD(next.sd):next.sd.toTimeString().slice(0,5)}</div>
-      <div class="what">${esc(next.m.name)} <span>${esc(next.m.strength)}, ${next.m.dose} ${unit(next.m,next.m.dose)}</span></div>
+      <div class="what">${esc(next.m.name)} <span>${esc(next.m.strength)}, ${fmtU(next.u||next.m.dose)} ${unit(next.m,next.u||next.m.dose)}</span></div>
       ${next.late?`<div class="late">${next.lateTxt}</div>`:''}
       ${injectable(next.m)&&nextSite(next.m)?`<div class="lede" style="margin-top:6px">Local sugerido: ${nextSite(next.m).next.toLowerCase()} (a última foi no ${nextSite(next.m).last.toLowerCase()})</div>`:''}
       <div class="row"><button class="btn fill" style="--k:${next.late?'var(--pink)':next.m.color}" onclick="quickTake('${next.m.id}','${next.sched}')">${injectable(next.m)?'Apliquei':'Tomei agora'}</button>
@@ -1513,7 +1523,7 @@ function recordTake(medId,sched,taken,site,units){
   const m=med(medId),status=statusFor(m,sched,taken);
   const prev=S.log.find(l=>l.medId===medId&&l.sched===sched);
   S.log=S.log.filter(l=>!(l.medId===medId&&l.sched===sched));
-  const lid=prev?prev.id:uid(),oldT=S.appts.find(a=>a.id==='tk-'+lid),u=+units||(oldT?oldT.units:m.dose);
+  const lid=prev?prev.id:uid(),oldT=S.appts.find(a=>a.id==='tk-'+lid),u=+units||(oldT?oldT.units:(m.sched&&m.sched.type==='daily'?slotDose(m,sched.slice(11,16)):m.dose));
   S.log.push({id:lid,medId,sched,taken,status,...(site?{site}:{})});
   if(taken&&!(prev&&prev.taken))takeUnits(m,u);
   else if(taken&&oldT&&u!==oldT.units){if(u>oldT.units)takeUnits(m,u-oldT.units);else addUnits(m,oldT.units-u)}
@@ -1612,7 +1622,7 @@ function drawMed(){
       <button class="${st==='daily'?'on':''}" onclick="setSched('daily')">Todo dia</button>
       <button class="${st==='interval'?'on':''}" onclick="setSched('interval')">A cada X dias</button>
       <button class="${st==='none'?'on':''}" onclick="setSched('none')">Quando precisa</button></div></div>
-    ${st==='daily'?`<div class="fld"><label>Horários, separados por vírgula</label><input value="${s.times.join(', ')}" placeholder="08:00, 20:00" oninput="md.sched.times=this.value.split(',').map(x=>x.trim()).filter(x=>/^\\d{1,2}:\\d{2}$/.test(x)).map(x=>x.padStart(5,'0'))"></div>`:''}
+    ${st==='daily'?timesEditor(s):''}
     ${st==='interval'?`<div class="two"><div class="fld"><label>A cada quantos dias</label><input type="number" min="2" value="${s.every}" oninput="md.sched.every=+this.value"></div>
         <div class="fld"><label>Horário</label><input type="time" value="${s.time}" oninput="md.sched.time=this.value"></div></div>
         <div class="fld"><label>Data da próxima dose</label><input type="date" value="${s.start}" oninput="md.sched.start=this.value"></div>`:''}
@@ -1637,10 +1647,25 @@ function drawMed(){
     <button class="btn fill block" onclick="saveMed()">Salvar remédio</button>
     ${d.id?`<button class="btn block" style="--k:var(--pink);margin-top:8px" onclick="S.meds=S.meds.filter(m=>m.id!==md.id);S.log=S.log.filter(l=>l.medId!==md.id);S.appts=S.appts.filter(a=>!(a.rec==='take'&&a.medId===md.id));save();closeSheet();render();toast('Remédio apagado')">Apagar remédio</button>`:''}`);
 }
+function timesEditor(s){
+  s.doses=s.doses||{};const T=s.times;
+  const row=(t,i)=>`<div class="trow"><input type="time" value="${t}" onchange="setTime(${i},this.value)"><div class="stp"><button onclick="stepDose('${t}',-.5)" aria-label="Menos">−</button><b>${fmtU(slotDose(md,t))}</b><button onclick="stepDose('${t}',.5)" aria-label="Mais">+</button></div><span class="help">${unit(md,slotDose(md,t))}</span>${T.length>1?`<button class="x" onclick="delTime(${i})" aria-label="Tirar horário">✕</button>`:''}</div>`;
+  return `<div class="fld"><label>Horários e quanto toma em cada um</label>
+    <div class="tags" style="margin-bottom:10px">${[['1x','08:00'],['2x','08:00,20:00'],['3x','08:00,14:00,20:00'],['4x','06:00,12:00,18:00,00:00']].map(([l,v])=>`<button style="--k:var(--cyan)" onclick="presetTimes('${v}')">${l} ao dia</button>`).join('')}</div>
+    ${T.map(row).join('')}
+    <button class="btn sm quiet" style="margin-top:8px" onclick="addTime()">+ Adicionar horário</button>
+    ${T.length?`<p class="help" style="margin-top:8px">Total: ${fmtU(dailyUnits(md))} ${unit(md,dailyUnits(md))} por dia</p>`:''}</div>`;
+}
+function presetTimes(v){md.sched.times=v.split(',');md.sched.doses={};drawMed()}
+function addTime(){const T=md.sched.times,last=T.length?T[T.length-1]:'07:00';let [h,mi]=last.split(':').map(Number);h=(h+4)%24;let t=`${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}`;while(T.includes(t)){h=(h+1)%24;t=`${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}`}T.push(t);T.sort();drawMed()}
+function delTime(i){const t=md.sched.times[i];md.sched.times.splice(i,1);if(md.sched.doses)delete md.sched.doses[t];drawMed()}
+function setTime(i,v){if(!/^\d{2}:\d{2}$/.test(v))return;const T=md.sched.times,old=T[i];if(T.includes(v)&&v!==old){toast('Esse horário já está na lista');drawMed();return}T[i]=v;const D=md.sched.doses||{};if(D[old]!=null){D[v]=D[old];delete D[old]}T.sort();drawMed()}
+function stepDose(t,d){const D=md.sched.doses=md.sched.doses||{};const v=Math.max(.5,+(slotDose(md,t)+d).toFixed(2));D[t]=v;drawMed()}
 function saveMed(){
   const d=md;
   if(!d.name.trim()){toast('Informe o nome do remédio');return}
   if(d.sched&&d.sched.type==='daily'&&!d.sched.times.length){toast('Informe pelo menos um horário');return}
+  if(d.sched&&d.sched.doses){const D={};d.sched.times.forEach(t=>{if(d.sched.doses[t]!=null&&+d.sched.doses[t]!==+d.dose)D[t]=+d.sched.doses[t]});d.sched.doses=Object.keys(D).length?D:undefined;if(!d.sched.doses)delete d.sched.doses}
   d.packs=(d.packs||[]).filter(p=>p.size>0);
   if(d.packs.length||d.level)d.unknown=false;
   if(d.source==='sus'&&!d.sus)d.sus=susBlank(d.cold);
@@ -2030,7 +2055,7 @@ function travelCalc(from,to,margin){
   const days=Math.max(1,dd(to,from)+1),out=[];
   scheduled().forEach(m=>{
     let doses;
-    if(m.sched.type==='daily'){doses=(days+margin)*m.sched.times.length}
+    if(m.sched.type==='daily'){doses=(days+margin)*dailyUnits(m)/m.dose}
     else{doses=dosesDuring(m,from,addDays(to,margin)).length}
     const need=doses*m.dose;if(!need&&m.sched.type==='interval')return;
     const has=m.level?null:qty(m);
@@ -2143,8 +2168,8 @@ function pushCard(){
 }
 
 /* ====================== NOVA VERSÃO ====================== */
-const APP_VER='14';
-const CHANGES={'14':['Página da bula organizada: seções com ícones, efeitos por frequência, palavras de atenção destacadas e busca','Documento oficial sempre a um toque'],'13':['Anexar o PDF da bula em cada remédio: fica guardado para os dois'],'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+const APP_VER='15';
+const CHANGES={'15':['Vários horários por dia, cada um com a sua quantidade (ex.: 1 de manhã e 2 à noite)'],'14':['Página da bula organizada: seções com ícones, efeitos por frequência, palavras de atenção destacadas e busca','Documento oficial sempre a um toque'],'13':['Anexar o PDF da bula em cada remédio: fica guardado para os dois'],'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
 function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Suporte pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
 function whatsNew(){
   let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
@@ -2191,7 +2216,7 @@ function useRate(m,days=14){
   const span=Math.min(days,Math.max(age,1)),u=T.reduce((a,t)=>a+t.units,0);
   return {perDay:u/span,units:u,span,n:T.length,ready:age>=3};
 }
-const planRate=m=>!m.sched?null:m.sched.type==='daily'?m.dose*m.sched.times.length:m.dose/m.sched.every;
+const planRate=m=>!m.sched?null:m.sched.type==='daily'?dailyUnits(m):m.dose/m.sched.every;
 function forecast(m){
   if(m.level)return null;
   const q=qty(m),r=useRate(m),p=planRate(m);
@@ -2812,7 +2837,7 @@ function doSkip(){
   const d=skD.value,ids=[...document.querySelectorAll('.sheet .chk.on')].map(e=>e.dataset.id);let back=0,cnt=0;
   ids.forEach(id=>{const m=med(id);if(!m||!m.sched)return;
     m.sched.times.forEach(t=>{const sched=`${d}T${t}`;const l=S.log.find(x=>x.medId===id&&x.sched===sched);
-      if(l){if(l.status==='skip'||l.status==='miss')return;if(l.taken){addUnits(m,m.dose);back+=m.dose}l.status='skip';l.taken=null;cnt++}
+      if(l){if(l.status==='skip'||l.status==='miss')return;if(l.taken){const u=slotDose(m,t);addUnits(m,u);back+=u}l.status='skip';l.taken=null;cnt++}
       else{S.log.push({id:`s_${id}_${d.replace(/-/g,'')}${t.replace(':','')}`,medId:id,sched,taken:null,status:'skip'});cnt++}});
   });
   save();closeSheet();render();toast(cnt?`${plural(cnt,'dose')} pulada${cnt>1?'s':''}${back?`, ${back} de volta ao estoque`:''}`:'Nada para pular nesse dia');

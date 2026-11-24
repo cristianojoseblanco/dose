@@ -49,7 +49,8 @@ Deno.serve(async (req) => {
       const done = L.some((l) => String(l.sched).slice(0, 16) === sched) || (s.type !== "daily" && L.some((l) => l.taken && String(l.taken).slice(0, 10) === date));
       if (done) continue;
       const name = `${m.name}${m.strength ? " " + m.strength : ""}`, p = who(r.household_id);
-      const qty = `${m.dose} ${unit(m)}`;
+      const n = s.doses && s.doses[t] != null ? +s.doses[t] : m.dose;
+      const qty = `${n} ${unit({ ...m, dose: n })}`;
       if (min >= at && min < at + WINDOW) jobs.push({ key: `${r.id}|${sched}|1`, h: r.household_id, title: `Hora do remédio${p ? " de " + p : ""}`, body: `${name}, ${qty} (${t})` });
       else if (min >= at + NUDGE && min < at + NUDGE + WINDOW) jobs.push({ key: `${r.id}|${sched}|2`, h: r.household_id, title: "Ainda não marcou", body: `${name} das ${t}. Já tomou? Marque no app.` });
     }
