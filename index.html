@@ -674,18 +674,58 @@ mark.warn{background:color-mix(in srgb,var(--amber) 28%,transparent);color:#ffe2
 .pill-g{display:inline-block;padding:1px 8px;border-radius:99px;background:var(--pink);color:#1a0612;font-size:11.5px}
 .mc-viz{grid-area:viz;width:132px}
 .mviz{width:100%;height:auto;display:block;overflow:visible}
-.grow{transform-box:fill-box;transform-origin:bottom;animation:grow .7s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(300ms + var(--i)*55ms)}
-@keyframes grow{from{transform:scaleY(0)}}
+.grow{transform-box:fill-box;transform-origin:bottom;animation:mgrow .7s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(300ms + var(--i)*55ms)}
+@keyframes mgrow{from{transform:scaleY(0)}}
 .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.3s ease forwards;animation-delay:calc(350ms + var(--i,0)*70ms)}
 .draw.d2{stroke-dasharray:.035 .025;stroke-dashoffset:0;animation:fadein .9s .9s both}
 @keyframes draw{to{stroke-dashoffset:0}}@keyframes fadein{from{opacity:0}}
 .beat{animation:beat 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
 @keyframes beat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.8);opacity:.35}}
-.node{animation:pop .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(150ms + var(--i)*45ms);transform-box:fill-box;transform-origin:center;cursor:pointer}
-@keyframes pop{from{transform:scale(0)}}
+.node{animation:mpop .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(150ms + var(--i)*45ms);transform-box:fill-box;transform-origin:center;cursor:pointer}
+@keyframes mpop{from{transform:scale(0)}}
 .molbox{padding:10px 8px 12px}.mol .nl{fill:var(--mut);font:600 10px "Instrument Sans",sans-serif}.mol .nl.on{fill:var(--txt)}
 .wx .wc{margin-left:auto;border:0;background:none;color:var(--mut);font:500 12px "Instrument Sans",sans-serif;cursor:pointer;padding:2px 0}
 @media (prefers-reduced-motion: reduce){.mc.enter,.grow,.draw,.node,.beat,.atom .orb,.mc-glow{animation:none!important;opacity:1;stroke-dashoffset:0}}
+/* vida nas outras telas */
+#app.pgin>.sec:first-of-type h1,#app.pgin>h1:first-of-type,#app.pgin .mhero h1{animation:titleIn .7s cubic-bezier(.16,.9,.24,1) both}
+@keyframes titleIn{from{opacity:0;transform:translateX(-22px);filter:blur(6px);letter-spacing:.06em}}
+.nav button.on svg{animation:navHop .5s cubic-bezier(.3,1.8,.5,1)}
+@keyframes navHop{40%{transform:translateY(-5px) scale(1.15)}}
+.wxi{font-size:20px;display:inline-block}
+.wxi.sun{animation:spin 18s linear infinite}.wxi.cloud{animation:drift 6s ease-in-out infinite alternate}.wxi.rain{animation:bobw 2.4s ease-in-out infinite}.wxi.moon{animation:bobw 5s ease-in-out infinite}
+@keyframes bobw{50%{transform:translateY(-3px) rotate(-6deg)}}
+.wx.anim{animation:wxIn .7s cubic-bezier(.16,.9,.24,1) both}
+@keyframes wxIn{from{opacity:0;transform:translateY(-10px) scale(.97)}}
+.mood button.on{animation:hop .45s cubic-bezier(.3,1.8,.5,1)}
+@keyframes hop{40%{transform:translateY(-7px) scale(1.12)}}
+.week.anim .day,.month.anim .day{animation:dayIn .5s cubic-bezier(.2,1.5,.4,1) backwards;animation-delay:calc(var(--i,0)*35ms + 80ms)}
+.week.anim .wk:nth-child(n) .day{animation-delay:calc(var(--i,0)*0ms)}
+.week.anim .wk:nth-child(2) .day{animation-delay:.06s}.week.anim .wk:nth-child(3) .day{animation-delay:.12s}.week.anim .wk:nth-child(4) .day{animation-delay:.18s}.week.anim .wk:nth-child(5) .day{animation-delay:.24s}.week.anim .wk:nth-child(6) .day{animation-delay:.3s}.week.anim .wk:nth-child(7) .day{animation-delay:.36s}
+@keyframes dayIn{from{opacity:0;transform:scale(.6) translateY(10px)}}
+.day.today::after{content:'';position:absolute;inset:-1px;border-radius:12px;border:1px solid var(--mint);animation:todayP 2.4s ease-out infinite;pointer-events:none}
+@keyframes todayP{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.18)}}
+.spec{transition:transform .25s}
+.spec.anim{animation:specIn .6s cubic-bezier(.16,.9,.24,1) both}
+.specs .spec.anim:nth-child(2n){animation-delay:.08s}
+@keyframes specIn{from{opacity:0;transform:translateY(24px) rotate(-1.5deg)}}
+.spec.anim h4 i{animation:icoPop .6s cubic-bezier(.3,1.8,.5,1) .25s backwards}
+@keyframes icoPop{from{transform:scale(0) rotate(-40deg)}}
+.spec:active{transform:scale(.985)}
+.icard.anim{animation:specIn .55s cubic-bezier(.16,.9,.24,1) both}
+.icard.anim:nth-of-type(2n){animation-delay:.07s}
+.bsec.anim{animation:specIn .5s cubic-bezier(.16,.9,.24,1) both}
+.bsec[open] .btx{animation:fadein .35s ease}
+.tot.anim>div{animation:rkin .6s cubic-bezier(.16,.9,.24,1) backwards}.tot.anim>div:nth-child(2){animation-delay:.08s}.tot.anim>div:nth-child(3){animation-delay:.16s}.tot.anim>div:nth-child(4){animation-delay:.24s}
+.split.anim i{animation:fill 1.1s cubic-bezier(.16,.9,.24,1) backwards}.split.anim i:nth-child(2){animation-delay:.15s}.split.anim i:nth-child(3){animation-delay:.3s}
+.cal.anim i{animation:dayIn .4s cubic-bezier(.2,1.5,.4,1) backwards;animation-delay:calc(var(--i,0)*22ms + 150ms)}
+.foil.anim .moodline i{animation:mgrow .8s cubic-bezier(.2,.9,.3,1.2) backwards;transform-origin:bottom;animation-delay:calc(var(--i,0)*25ms + 200ms)}
+.tabs button.on{animation:hop .4s cubic-bezier(.3,1.8,.5,1)}
+.take-row .btn.fill{position:relative;overflow:hidden}
+.take-row .btn.fill::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);transform:translateX(-120%);animation:sheen 4.5s ease-in-out 1.2s infinite}
+@keyframes sheen{0%,70%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.search input:focus+.x,.search input:focus~.ic{color:var(--cyan)}
+.search .ic{transition:transform .3s}.search:focus-within .ic{transform:translateY(-50%) scale(1.2) rotate(-12deg)}
+@media (prefers-reduced-motion: reduce){#app.pgin h1,.nav button.on svg,.wxi,.mood button.on,.day,.day.today::after,.spec,.spec h4 i,.icard,.bsec,.tot>div,.split i,.cal i,.moodline i,.tabs button,.take-row .btn.fill::after,.wx{animation:none!important}}
 </style>
 </head>
 <body>
@@ -1470,13 +1510,13 @@ function apptRoute(id){
 function vHistorico(){
   const id=UI.hist,a=adherence(id,30),cells=[];
   for(let i=27;i>=0;i--){const d=iso(addDays(today(),-i));const L=S.log.filter(l=>(id==='all'||l.medId===id)&&l.sched.slice(0,10)===d);
-    cells.push(`<i class="${!L.length?'':L.some(l=>l.status==='miss'||l.status==='skip')?'miss':L.some(l=>l.status==='late')?'late':'ok'}" title="${fD(parse(d))}"></i>`)}
+    cells.push(`<i style="--i:${27-i}" class="${!L.length?'':L.some(l=>l.status==='miss'||l.status==='skip')?'miss':L.some(l=>l.status==='late')?'late':'ok'}" title="${fD(parse(d))}"></i>`)}
   const L=S.log.filter(l=>id==='all'||l.medId===id).sort((x,y)=>y.sched.localeCompare(x.sched)).slice(0,30);
   const w=n=>a.total?n/a.total*100:0;
   return `${header()}<h1 style="font-size:28px">Histórico</h1>
   <div class="seg" style="margin:16px 0">${[['all','Todos']].concat(S.meds.map(m=>[m.id,m.name])).map(([k,l])=>`<button class="${id===k?'on':''}" onclick="UI.hist='${k}';render()">${esc(l)}</button>`).join('')}</div>
   <div class="foil" style="padding-bottom:16px">
-    <div class="score"><b class="num">${a.pct}%</b><span class="lede">no horário nos últimos 30 dias, ${a.ok} de ${a.total} doses</span></div>
+    <div class="score"><b class="num"><span data-count="${a.pct}">${a.pct}</span>%</b><span class="lede">no horário nos últimos 30 dias, ${a.ok} de ${a.total} doses</span></div>
     <div class="split"><i style="width:${w(a.ok)}%;background:var(--mint)"></i><i style="width:${w(a.late)}%;background:var(--amber)"></i><i style="width:${w(a.miss)}%;background:var(--pink)"></i></div>
     <div class="legend"><span style="--k:var(--mint)">${a.ok} no horário</span><span style="--k:var(--amber)">${a.late} com atraso</span><span style="--k:var(--pink)">${a.miss} não tomadas</span>${a.none?`<span style="--k:var(--mut)">${a.none} sem registro</span>`:''}</div>
     <div class="cal">${cells.join('')}</div>
@@ -1492,7 +1532,7 @@ function vHistorico(){
 function delay(l){const h=(parse(l.taken)-parse(l.sched))/36e5;return h>=24?`${Math.round(h/24)} d depois`:`${Math.round(h)} h depois`}
 
 /* ====================== AÇÕES ====================== */
-function go(v){UI.view=v;UI.anim=true;scrollTo({top:0});render()}
+function go(v){UI.view=v;UI.anim=true;UI.pgFx=true;UI.mSeen=v==='modelos'?UI.mSeen:false;scrollTo({top:0});render()}
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2400)}
 function openSheet(h){const s=document.getElementById('sheet');s.innerHTML='<div class="grab"></div>'+h;s.classList.add('on');document.getElementById('scrim').classList.add('on')}
 function closeSheet(){document.getElementById('sheet').classList.remove('on');document.getElementById('scrim').classList.remove('on')}
@@ -2248,8 +2288,8 @@ function pushCard(){
 }
 
 /* ====================== NOVA VERSÃO ====================== */
-const APP_VER='17';
-const CHANGES={'17':['Clima pela localização atual do celular (toque na cidade para trocar)','Modelos com cards novos: mapa das interações, barras de gastos e linha do bem-estar animadas','Interações: toque num remédio do mapa para ver só os alertas dele'],'16':['Nova aba Modelos (no lugar de Retiradas): gastos e gastos futuros, interações entre remédios e monitoramento do bem-estar','Bem-estar com duas notas, cabeça e corpo, quantas vezes quiser por dia','Temperatura e umidade na tela Hoje, guardadas em cada registro'],'15':['Vários horários por dia, cada um com a sua quantidade (ex.: 1 de manhã e 2 à noite)'],'14':['Página da bula organizada: seções com ícones, efeitos por frequência, palavras de atenção destacadas e busca','Documento oficial sempre a um toque'],'13':['Anexar o PDF da bula em cada remédio: fica guardado para os dois'],'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+const APP_VER='18';
+const CHANGES={'18':['Mais vida em todas as telas: entradas animadas, calendário em onda, clima com ícone do tempo e números que sobem'],'17':['Clima pela localização atual do celular (toque na cidade para trocar)','Modelos com cards novos: mapa das interações, barras de gastos e linha do bem-estar animadas','Interações: toque num remédio do mapa para ver só os alertas dele'],'16':['Nova aba Modelos (no lugar de Retiradas): gastos e gastos futuros, interações entre remédios e monitoramento do bem-estar','Bem-estar com duas notas, cabeça e corpo, quantas vezes quiser por dia','Temperatura e umidade na tela Hoje, guardadas em cada registro'],'15':['Vários horários por dia, cada um com a sua quantidade (ex.: 1 de manhã e 2 à noite)'],'14':['Página da bula organizada: seções com ícones, efeitos por frequência, palavras de atenção destacadas e busca','Documento oficial sempre a um toque'],'13':['Anexar o PDF da bula em cada remédio: fica guardado para os dois'],'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
 function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Suporte pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
 function whatsNew(){
   let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
@@ -2366,7 +2406,7 @@ function evRange(from,to){ // tudo que acontece entre duas datas, por dia
 function dayBox(d,E,extra=''){
   const k=iso(d),L=E[k]||[],T=iso(today()),icons=L.filter(e=>!e.take&&!(e.dose!=null)&&e.mood==null),dose=L.find(e=>e.dose!=null),mood=L.find(e=>e.mood);
   const show=icons.slice(0,3),more=icons.length-show.length;
-  return `<button class="day ${k===T?'today':''} ${k<T?'past':''} ${L.some(e=>e.warn)?'warn':''} ${extra}" onclick="daySheet('${k}')" aria-label="${fDW(d)}">
+  return `<button class="day ${k===T?'today':''} ${k<T?'past':''} ${L.some(e=>e.warn)?'warn':''} ${extra}" style="--i:${d.getDay()+Math.floor((d.getDate()+6)/7)}" onclick="daySheet('${k}')" aria-label="${fDW(d)}">
     <span class="dn">${d.getDate()}</span>
     <span class="di">${show.map(e=>`<i>${e.ic}</i>`).join('')}${more>0?`<em>+${more}</em>`:''}</span>
     ${dose?`<span class="dbar"><i style="width:${Math.round(dose.dose*100)}%;background:${dose.k}"></i></span>`:''}${mood?`<span class="dm" style="background:${mood.k}"></span>`:''}
@@ -2547,9 +2587,9 @@ async function getWx(force){
   const H=await hereNow(),{c,ll}=H?{c:H.name,ll:H.ll}:wxCity();
   if(WX&&!force&&WX.city===c&&Date.now()-WX.t<30*60e3)return WX;
   try{const ctl=new AbortController();setTimeout(()=>ctl.abort(),5000);
-    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${ll[0].toFixed(3)}&longitude=${ll[1].toFixed(3)}&current=temperature_2m,relative_humidity_2m,apparent_temperature&timezone=America%2FSao_Paulo`,{signal:ctl.signal});
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${ll[0].toFixed(3)}&longitude=${ll[1].toFixed(3)}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,is_day&timezone=America%2FSao_Paulo`,{signal:ctl.signal});
     const j=await r.json(),cu=j.current;
-    WX={t:Date.now(),city:c,geo:!!H,temp:Math.round(cu.temperature_2m*10)/10,hum:Math.round(cu.relative_humidity_2m),feel:Math.round(cu.apparent_temperature)};
+    WX={t:Date.now(),city:c,geo:!!H,code:cu.weather_code,day:cu.is_day,temp:Math.round(cu.temperature_2m*10)/10,hum:Math.round(cu.relative_humidity_2m),feel:Math.round(cu.apparent_temperature)};
     try{localStorage.setItem('dose_wx',JSON.stringify(WX))}catch(e){}
   }catch(e){}
   return WX;
@@ -2560,7 +2600,8 @@ function wxPlace(){
     <button class="btn block quiet" style="margin-top:8px" onclick="localStorage.setItem('dose_wx_geo','off');closeSheet();getWx(true).then(()=>render())">Usar a cidade de Onde estamos (${esc(wxCity().c)})</button>`);
 }
 function wxChip(){
-  const w=WX;return `<div class="wx" id="wx">${w?`<span>🌡️ <b>${Math.round(w.temp)}°</b>${w.feel!=null&&Math.abs(w.feel-w.temp)>=2?` <small>sensação ${w.feel}°</small>`:''}</span><span>💧 <b>${w.hum}%</b> <small>umidade</small></span><button class="wc" onclick="wxPlace()">${w.geo?'📍 ':''}${esc(w.city)} ›</button>`:'<span>🌡️ carregando o clima…</span>'}</div>`;
+  const w=WX,c=w&&w.code,ic=c==null?['🌡️','']:c===0?(w.day?['☀️','sun']:['🌙','moon']):c<=3?(w.day?['⛅','cloud']:['☁️','cloud']):c<=48?['🌫️','cloud']:c>=95?['⛈️','rain']:c>=51?['🌧️','rain']:['☁️','cloud'];
+  return `<div class="wx" id="wx">${w?`<span class="wxi ${ic[1]}" aria-hidden="true">${ic[0]}</span><span><b>${Math.round(w.temp)}°</b>${w.feel!=null&&Math.abs(w.feel-w.temp)>=2?` <small>sensação ${w.feel}°</small>`:''}</span><span>💧 <b>${w.hum}%</b> <small>umidade</small></span><button class="wc" onclick="wxPlace()">${w.geo?'📍 ':''}${esc(w.city)} ›</button>`:'<span>🌡️ carregando o clima…</span>'}</div>`;
 }
 function refreshWx(){getWx().then(()=>{const e=document.getElementById('wx');if(e)e.outerHTML=wxChip()})}
 
@@ -2825,7 +2866,7 @@ function mBem(){
 /* ====================== RENDER ====================== */
 const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const CARDS=['.now','.foil','.notes','.list','.med','.pick'];
-const RVSEL=[...CARDS,'.heat','.packs','.grid2'].map(x=>'#app '+x).join(',');
+const RVSEL=[...CARDS,'.heat','.packs','.grid2','.spec','.icard','.week','.month','.bsec','.wx','.tot','.split','.cal','.specs'].map(x=>'#app '+x).join(',');
 let io=null,ticking=false;
 function countUp(e){
   e.querySelectorAll('.facts b.num').forEach(b=>{const v=parseInt(b.textContent);if(!(v>1))return;const t0=performance.now();
@@ -3422,7 +3463,8 @@ function render(){
   document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===UI.view));
   document.body.classList.toggle('sosmode',UI.view==='urgencia');
   wire();
-  if(UI.view==='modelos')requestAnimationFrame(mAnimate);
+  requestAnimationFrame(mAnimate);
+  const ap=document.getElementById('app');if(UI.pgFx){UI.pgFx=false;ap.classList.remove('pgin');void ap.offsetWidth;ap.classList.add('pgin')}
   const kb=document.getElementById('kits');if(kb){kb.addEventListener('scroll',()=>requestAnimationFrame(kitTick),{passive:true});kitTick()}
 }
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
