@@ -642,6 +642,50 @@ mark.warn{background:color-mix(in srgb,var(--amber) 28%,transparent);color:#ffe2
 .wt{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 10px;background:rgba(15,20,56,.55);border-radius:14px;overflow:hidden}
 .wt th,.wt td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}.wt th{color:var(--mut);font-weight:600;font-size:12px}
 .wt td small{display:block;color:var(--mut);font-size:11px}
+/* modelos v2 */
+.mhero{display:flex;align-items:center;gap:14px;margin:2px 0 18px}
+.mhero h1{font:700 30px "Bricolage Grotesque",sans-serif;line-height:1}.mhero p{color:var(--mut);font-size:13.5px;margin-top:6px}
+.atom{width:78px;height:78px;flex:none;overflow:visible}
+.atom ellipse{fill:none;stroke:rgba(179,155,255,.55);stroke-width:2}
+.atom .e{fill:var(--mint);filter:drop-shadow(0 0 6px var(--mint))}
+.atom .nuc{fill:var(--pink);filter:drop-shadow(0 0 10px var(--pink))}
+.atom .orb{transform-origin:0 0}
+.atom .o1{animation:spin 9s linear infinite}.atom .o2{animation:spin 12s linear infinite reverse}.atom .o3{animation:spin 15s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.mlist{display:grid;gap:16px}
+@media(min-width:620px){.mlist{grid-template-columns:1fr 1fr}.mlist .mc:first-child{grid-column:1/-1}}
+.mc{position:relative;overflow:hidden;text-align:left;font:inherit;color:var(--txt);cursor:pointer;display:grid;grid-template-columns:1fr auto;grid-template-areas:"top top" "mid viz";gap:10px 12px;align-items:end;
+  padding:16px 16px 14px;border-radius:24px;border:1px solid color-mix(in srgb,var(--k) 38%,transparent);
+  background:radial-gradient(120% 90% at 100% 100%,color-mix(in srgb,var(--k) 22%,transparent),transparent 60%),linear-gradient(160deg,#151b52,#0c1034 70%);
+  box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 16px 0 -9px color-mix(in srgb,var(--k) 26%,#050720),0 26px 40px -20px color-mix(in srgb,var(--k) 70%,transparent);transition:transform .2s}
+.mc:active{transform:translateY(3px) scale(.99)}
+.mc.enter{opacity:0;animation:mcIn .7s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*120ms)}
+@keyframes mcIn{from{opacity:0;transform:translateY(26px) rotateX(14deg)}to{opacity:1;transform:none}}
+.mc-glow{position:absolute;inset:-40% -20% auto auto;width:180px;height:180px;border-radius:50%;background:var(--k);opacity:.10;filter:blur(30px);pointer-events:none;animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:translate(-18px,14px)}}
+.mc-top{grid-area:top;display:flex;align-items:center;gap:10px}
+.mc-ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:19px;background:color-mix(in srgb,var(--k) 20%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--k) 40%,transparent)}
+.mc-t{font:700 16.5px "Bricolage Grotesque",sans-serif;flex:1}
+.mc-go{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--k);border:1px solid color-mix(in srgb,var(--k) 45%,transparent);font-size:18px}
+.mc-mid{grid-area:mid;display:flex;flex-direction:column;gap:5px;min-width:0}
+.mc-num{font:800 30px "Bricolage Grotesque",sans-serif;color:var(--k);line-height:1;letter-spacing:-.02em;white-space:nowrap;text-shadow:0 0 22px color-mix(in srgb,var(--k) 45%,transparent)}
+.mc-num small{font-size:14px;font-weight:600;opacity:.8}.mc-num .sep{opacity:.4}
+.mc-sub{font-size:12.5px;color:var(--mut);line-height:1.4}
+.pill-g{display:inline-block;padding:1px 8px;border-radius:99px;background:var(--pink);color:#1a0612;font-size:11.5px}
+.mc-viz{grid-area:viz;width:132px}
+.mviz{width:100%;height:auto;display:block;overflow:visible}
+.grow{transform-box:fill-box;transform-origin:bottom;animation:grow .7s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(300ms + var(--i)*55ms)}
+@keyframes grow{from{transform:scaleY(0)}}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.3s ease forwards;animation-delay:calc(350ms + var(--i,0)*70ms)}
+.draw.d2{stroke-dasharray:.035 .025;stroke-dashoffset:0;animation:fadein .9s .9s both}
+@keyframes draw{to{stroke-dashoffset:0}}@keyframes fadein{from{opacity:0}}
+.beat{animation:beat 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes beat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.8);opacity:.35}}
+.node{animation:pop .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(150ms + var(--i)*45ms);transform-box:fill-box;transform-origin:center;cursor:pointer}
+@keyframes pop{from{transform:scale(0)}}
+.molbox{padding:10px 8px 12px}.mol .nl{fill:var(--mut);font:600 10px "Instrument Sans",sans-serif}.mol .nl.on{fill:var(--txt)}
+.wx .wc{margin-left:auto;border:0;background:none;color:var(--mut);font:500 12px "Instrument Sans",sans-serif;cursor:pointer;padding:2px 0}
+@media (prefers-reduced-motion: reduce){.mc.enter,.grow,.draw,.node,.beat,.atom .orb,.mc-glow{animation:none!important;opacity:1;stroke-dashoffset:0}}
 </style>
 </head>
 <body>
@@ -1108,7 +1152,8 @@ const CITY={'São Carlos':[-22.0175,-47.8908],'São Paulo':[-23.5505,-46.6333],'
  'Araraquara':[-21.7845,-48.178],'Rio Claro':[-22.4149,-47.5651],'Piracicaba':[-22.7253,-47.6492],'Limeira':[-22.5649,-47.4017],'Americana':[-22.7374,-47.3331],
  'Jundiaí':[-23.1857,-46.8978],'Sorocaba':[-23.5015,-47.4526],'Bauru':[-22.3246,-49.0871],'São José dos Campos':[-23.1896,-45.8841],'Santos':[-23.9608,-46.3336],
  'Jaú':[-22.2936,-48.5592],'Ibaté':[-21.955,-47.9967],'Descalvado':[-21.9036,-47.6192],'Porto Ferreira':[-21.8539,-47.4789],'São José do Rio Preto':[-20.8113,-49.3758],
- 'Rio de Janeiro':[-22.9068,-43.1729],'Belo Horizonte':[-19.9167,-43.9345],'Curitiba':[-25.4284,-49.2733],'Brasília':[-15.7939,-47.8828],'Florianópolis':[-27.5954,-48.548]};
+ 'Rio de Janeiro':[-22.9068,-43.1729],'Belo Horizonte':[-19.9167,-43.9345],'Curitiba':[-25.4284,-49.2733],'Brasília':[-15.7939,-47.8828],'Florianópolis':[-27.5954,-48.548],
+ 'São Bernardo do Campo':[-23.6914,-46.5646],'Santo André':[-23.6639,-46.5383],'São Caetano do Sul':[-23.6229,-46.5548],'Diadema':[-23.6861,-46.6228],'Guarulhos':[-23.4538,-46.5333],'Osasco':[-23.5329,-46.7916],'Mauá':[-23.6677,-46.4613]};
 function hav(a,b){const R=6371,r=x=>x*Math.PI/180,dl=r(b[0]-a[0]),dn=r(b[1]-a[1]);const h=Math.sin(dl/2)**2+Math.cos(r(a[0]))*Math.cos(r(b[0]))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
 const fH=h=>h<1?`${Math.round(h*60)} min`:`${Math.floor(h)}h${Math.round((h%1)*60)?String(Math.round((h%1)*60)).padStart(2,'0'):''}`;
 function simSet(k,v){S.sim=S.sim||{};S.sim[k]=v||null;if(k==='from'){S.sim.lat=null;S.sim.lon=null}save();render()}
@@ -2203,8 +2248,8 @@ function pushCard(){
 }
 
 /* ====================== NOVA VERSÃO ====================== */
-const APP_VER='16';
-const CHANGES={'16':['Nova aba Modelos (no lugar de Retiradas): gastos e gastos futuros, interações entre remédios e monitoramento do bem-estar','Bem-estar com duas notas, cabeça e corpo, quantas vezes quiser por dia','Temperatura e umidade na tela Hoje, guardadas em cada registro'],'15':['Vários horários por dia, cada um com a sua quantidade (ex.: 1 de manhã e 2 à noite)'],'14':['Página da bula organizada: seções com ícones, efeitos por frequência, palavras de atenção destacadas e busca','Documento oficial sempre a um toque'],'13':['Anexar o PDF da bula em cada remédio: fica guardado para os dois'],'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+const APP_VER='17';
+const CHANGES={'17':['Clima pela localização atual do celular (toque na cidade para trocar)','Modelos com cards novos: mapa das interações, barras de gastos e linha do bem-estar animadas','Interações: toque num remédio do mapa para ver só os alertas dele'],'16':['Nova aba Modelos (no lugar de Retiradas): gastos e gastos futuros, interações entre remédios e monitoramento do bem-estar','Bem-estar com duas notas, cabeça e corpo, quantas vezes quiser por dia','Temperatura e umidade na tela Hoje, guardadas em cada registro'],'15':['Vários horários por dia, cada um com a sua quantidade (ex.: 1 de manhã e 2 à noite)'],'14':['Página da bula organizada: seções com ícones, efeitos por frequência, palavras de atenção destacadas e busca','Documento oficial sempre a um toque'],'13':['Anexar o PDF da bula em cada remédio: fica guardado para os dois'],'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
 function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Suporte pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
 function whatsNew(){
   let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
@@ -2485,20 +2530,37 @@ function vBula(){
 
 /* ====================== CLIMA (Open-Meteo, sem chave) ====================== */
 let WX=null;try{WX=JSON.parse(localStorage.getItem('dose_wx')||'null')}catch(e){}
+const wxGeoOn=()=>localStorage.getItem('dose_wx_geo')!=='off';
+function hereNow(){return new Promise(ok=>{
+  if(!wxGeoOn()||!navigator.geolocation)return ok(null);
+  let L=null;try{L=JSON.parse(localStorage.getItem('dose_here')||'null')}catch(e){}
+  if(L&&Date.now()-L.t<20*60e3)return ok(L);
+  navigator.geolocation.getCurrentPosition(async p=>{
+    const ll=[p.coords.latitude,p.coords.longitude];let name=null;
+    try{const ctl=new AbortController();setTimeout(()=>ctl.abort(),4000);const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${ll[0]}&longitude=${ll[1]}&localityLanguage=pt`,{signal:ctl.signal});const j=await r.json();name=j.city||j.locality||null}catch(e){}
+    if(!name){let best=null,bd=1e9;for(const [n,c] of Object.entries(CITY)){const d=hav(ll,c);if(d<bd){bd=d;best=n}}name=bd<25?best:'Sua localização'}
+    L={t:Date.now(),ll,name,geo:true};try{localStorage.setItem('dose_here',JSON.stringify(L))}catch(e){}ok(L)},
+    ()=>{localStorage.setItem('dose_wx_geo','off');ok(null)},{timeout:8000,maximumAge:15*60e3});
+})}
 const wxCity=()=>{const c=S.where&&S.where.city&&CITY[S.where.city]?S.where.city:(S.profile.home&&CITY[S.profile.home]?S.profile.home:'São Carlos');return {c,ll:CITY[c]||CITY['São Carlos']}};
 async function getWx(force){
-  const {c,ll}=wxCity();
+  const H=await hereNow(),{c,ll}=H?{c:H.name,ll:H.ll}:wxCity();
   if(WX&&!force&&WX.city===c&&Date.now()-WX.t<30*60e3)return WX;
   try{const ctl=new AbortController();setTimeout(()=>ctl.abort(),5000);
-    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${ll[0]}&longitude=${ll[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature&timezone=America%2FSao_Paulo`,{signal:ctl.signal});
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${ll[0].toFixed(3)}&longitude=${ll[1].toFixed(3)}&current=temperature_2m,relative_humidity_2m,apparent_temperature&timezone=America%2FSao_Paulo`,{signal:ctl.signal});
     const j=await r.json(),cu=j.current;
-    WX={t:Date.now(),city:c,temp:Math.round(cu.temperature_2m*10)/10,hum:Math.round(cu.relative_humidity_2m),feel:Math.round(cu.apparent_temperature)};
+    WX={t:Date.now(),city:c,geo:!!H,temp:Math.round(cu.temperature_2m*10)/10,hum:Math.round(cu.relative_humidity_2m),feel:Math.round(cu.apparent_temperature)};
     try{localStorage.setItem('dose_wx',JSON.stringify(WX))}catch(e){}
   }catch(e){}
   return WX;
 }
+function wxPlace(){
+  openSheet(`<h2>Local do clima</h2><div class="hint">O clima entra em cada registro de bem-estar. Com a localização ligada, ele segue onde o celular está.</div>
+    <button class="btn fill block" onclick="localStorage.setItem('dose_wx_geo','on');localStorage.removeItem('dose_here');closeSheet();getWx(true).then(()=>{render();toast(WX&&WX.geo?'Clima de '+WX.city:'A localização não foi liberada. Libere em Ajustes → Privacidade → Localização.')})">📍 Usar onde estou agora</button>
+    <button class="btn block quiet" style="margin-top:8px" onclick="localStorage.setItem('dose_wx_geo','off');closeSheet();getWx(true).then(()=>render())">Usar a cidade de Onde estamos (${esc(wxCity().c)})</button>`);
+}
 function wxChip(){
-  const w=WX;return `<div class="wx" id="wx">${w?`<span>🌡️ <b>${Math.round(w.temp)}°</b>${w.feel!=null&&Math.abs(w.feel-w.temp)>=2?` <small>sensação ${w.feel}°</small>`:''}</span><span>💧 <b>${w.hum}%</b> <small>umidade</small></span><span class="wc">${esc(w.city)}</span>`:'<span>🌡️ carregando o clima…</span>'}</div>`;
+  const w=WX;return `<div class="wx" id="wx">${w?`<span>🌡️ <b>${Math.round(w.temp)}°</b>${w.feel!=null&&Math.abs(w.feel-w.temp)>=2?` <small>sensação ${w.feel}°</small>`:''}</span><span>💧 <b>${w.hum}%</b> <small>umidade</small></span><button class="wc" onclick="wxPlace()">${w.geo?'📍 ':''}${esc(w.city)} ›</button>`:'<span>🌡️ carregando o clima…</span>'}</div>`;
 }
 function refreshWx(){getWx().then(()=>{const e=document.getElementById('wx');if(e)e.outerHTML=wxChip()})}
 
@@ -2567,18 +2629,61 @@ function vModelos(){
   if(UI.model==='gastos')return mGastos();
   if(UI.model==='interacoes')return mInter();
   if(UI.model==='bemestar')return mBem();
-  const g=costModel(),it=interModel(),P=wellPoints(),last7=P.filter(p=>p.d>=iso(addDays(today(),-6)));
+  const g=costModel(),it=interModel(),P=wellPoints(),l7=P.filter(p=>p.d>=iso(addDays(today(),-6)));
   const avg=(L,k)=>L.length?(L.reduce((a,p)=>a+p[k],0)/L.length):null;
-  const card=(k,ic,t,big,sub,c)=>`<button class="mcard" style="--k:${c}" onclick="UI.model='${k}';render()"><span class="mic">${ic}</span><span class="mt">${t}</span><b>${big}</b><small>${sub}</small><span class="go">Abrir ›</span></button>`;
-  return `${header()}<div class="sec" style="margin-top:0"><h1 style="font-size:28px">Modelos</h1></div>
-    <p class="help" style="margin:-6px 0 14px">Análises feitas com o que vocês registram no app.</p>
-    <div class="mgrid">
-      ${card('gastos','💸','Gastos e gastos futuros',g.month?brl(g.month)+'/mês':'—',g.month?`${brl(g.next60)} nos próximos 60 dias${g.missing.length?`, ${g.missing.length} sem preço`:''}`:'Faltam preços para calcular','var(--amber)')}
-      ${card('interacoes','⚗️','Interações entre remédios',`${it.cards.length} ${it.cards.length===1?'alerta':'alertas'}`,`${it.cards.filter(c=>c.lvl==='grave').length} graves, entre ${it.used.length} remédios em uso`,'var(--pink)')}
-      ${card('bemestar','📈','Monitoramento do bem-estar',last7.length?`🧠 ${fmtU(+avg(last7,'psi').toFixed(1))} · 💪 ${fmtU(+avg(last7,'fis').toFixed(1))}`:'—',last7.length?`média dos últimos 7 dias, ${plural(last7.length,'registro')}`:'Registre na tela Hoje','var(--mint)')}
+  const first=!UI.mSeen;UI.mSeen=true;
+  /* gastos: compras por semana nos próximos 60 dias */
+  const wk=Array.from({length:9},(_,i)=>0);g.buys.forEach(b=>{const i=Math.min(8,Math.floor(dd(b.d,today())/7));wk[i]+=b.cost});const wmx=Math.max(1,...wk);
+  const spark=`<svg viewBox="0 0 180 64" class="mviz" aria-hidden="true">${wk.map((v,i)=>`<rect class="grow" style="--i:${i}" x="${i*20+2}" y="${60-Math.max(3,v/wmx*54)}" width="14" height="${Math.max(3,v/wmx*54)}" rx="3" fill="${v?'var(--amber)':'rgba(255,255,255,.12)'}"/>`).join('')}<line x1="0" x2="180" y1="61" y2="61" stroke="rgba(255,255,255,.15)"/></svg>`;
+  /* interações: molécula */
+  const mol=molecule(it,{w:180,h:110,r:42,labels:false});
+  /* bem-estar: linha de 14 dias */
+  const days=[];for(let i=13;i>=0;i--){const k=iso(addDays(today(),-i)),L=P.filter(p=>p.d===k);days.push({psi:avg(L,'psi'),fis:avg(L,'fis')})}
+  const ln=k=>{let d='',on=false;days.forEach((p,i)=>{if(p[k]==null){on=false;return}d+=(on?'L':'M')+(i*180/13).toFixed(1)+' '+(56-(p[k]-1)*12).toFixed(1);on=true});return d};
+  const lastPt=k=>{for(let i=13;i>=0;i--)if(days[i][k]!=null)return [i*180/13,56-(days[i][k]-1)*12];return null};
+  const lp=lastPt('psi');
+  const wave=`<svg viewBox="-4 -4 188 68" class="mviz" aria-hidden="true"><path class="draw" pathLength="1" d="${ln('psi')}" fill="none" stroke="#b39bff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path class="draw d2" pathLength="1" d="${ln('fis')}" fill="none" stroke="#3dffc5" stroke-width="2.2" stroke-dasharray="1" stroke-linecap="round" stroke-linejoin="round"/>${lp?`<circle class="beat" cx="${lp[0]}" cy="${lp[1]}" r="4" fill="#b39bff"/>`:''}</svg>`;
+  const graves=it.cards.filter(c=>c.lvl==='grave').length;
+  const card=(k,c,ic,t,big,sub,viz,i)=>`<button class="mc ${first?'enter':''}" style="--k:${c};--i:${i}" onclick="UI.model='${k}';render()">
+      <span class="mc-glow"></span>
+      <span class="mc-top"><span class="mc-ic">${ic}</span><span class="mc-t">${t}</span><span class="mc-go">›</span></span>
+      <span class="mc-mid"><span class="mc-num">${big}</span><span class="mc-sub">${sub}</span></span>
+      <span class="mc-viz">${viz}</span></button>`;
+  return `${header()}
+    <div class="mhero"><svg class="atom" viewBox="-60 -60 120 120" aria-hidden="true">
+      <g class="orb o1"><ellipse rx="54" ry="19"/><circle class="e" cx="54" cy="0" r="4"/></g>
+      <g class="orb o2"><ellipse rx="54" ry="19" transform="rotate(60)"/><circle class="e" cx="54" cy="0" r="4" transform="rotate(60)"/></g>
+      <g class="orb o3"><ellipse rx="54" ry="19" transform="rotate(120)"/><circle class="e" cx="54" cy="0" r="4" transform="rotate(120)"/></g>
+      <circle r="7" class="nuc"/></svg>
+      <div><h1>Modelos</h1><p>O que os registros de vocês estão contando.</p></div></div>
+    <div class="mlist">
+      ${card('gastos','var(--amber)','💸','Gastos e gastos futuros',g.month?`<span data-count="${g.month.toFixed(2)}" data-fmt="brl">${brl(g.month)}</span><small>/mês</small>`:'—',g.month?`${brl(g.next60)} previstos nos próximos 60 dias${g.missing.length?` · ${g.missing.length} sem preço`:''}`:'Preencha os preços para calcular',spark,0)}
+      ${card('interacoes',graves?'var(--pink)':'var(--lav)','⚗️','Interações entre remédios',`<span data-count="${it.cards.length}">${it.cards.length}</span><small> ${it.cards.length===1?'alerta':'alertas'}</small>`,`${graves?`<b class="pill-g">${graves} ${graves>1?'graves':'grave'}</b> `:''}entre ${it.used.length} remédios em uso`,mol,1)}
+      ${card('bemestar','var(--mint)','📈','Monitoramento do bem-estar',l7.length?`🧠 <span data-count="${avg(l7,'psi').toFixed(1)}" data-fmt="1">${fmtU(avg(l7,'psi').toFixed(1))}</span> <span class="sep">·</span> 💪 <span data-count="${avg(l7,'fis').toFixed(1)}" data-fmt="1">${fmtU(avg(l7,'fis').toFixed(1))}</span>`:'—',l7.length?`média dos últimos 7 dias · ${plural(l7.length,'registro')}`:'Registre na tela Hoje',wave,2)}
     </div>
-    <p class="fine" style="margin-top:16px">As retiradas do SUS continuam no card de cada remédio do SUS e no botão abaixo.</p>
-    <button class="btn block quiet" onclick="go('retiradas')">Retiradas no SUS</button>`;
+    <button class="btn block quiet" style="margin-top:18px" onclick="go('retiradas')">Retiradas no SUS</button>`;
+}
+/* rede de interações: remédios em círculo, ligações coloridas pela gravidade */
+function molecule(it,o){
+  const sev={grave:3,moderada:2,leve:1},col={3:'#ff4d8d',2:'#ffb547',1:'#45d2ff'},E=new Map(),deg={};
+  it.cards.forEach(c=>{const ids=c.meds.map(m=>m.id);for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++){const k=[ids[i],ids[j]].sort().join('|'),v=sev[c.lvl];if((E.get(k)||0)<v)E.set(k,v)}});
+  E.forEach((v,k)=>k.split('|').forEach(id=>deg[id]=(deg[id]||0)+1));
+  const N=Object.keys(deg).sort((a,b)=>deg[b]-deg[a]).slice(0,o.max||12),cx=o.w/2,cy=o.h/2,P={};
+  N.forEach((id,i)=>{const a=-Math.PI/2+i*2*Math.PI/N.length;P[id]=[cx+Math.cos(a)*o.r*(o.labels?1.2:o.w/o.h>1.3?1.7:1),cy+Math.sin(a)*o.r]});
+  const sel=o.sel;
+  const lines=[...E.entries()].filter(([k])=>k.split('|').every(id=>P[id])).sort((a,b)=>a[1]-b[1]).map(([k,v],i)=>{const [a,b]=k.split('|');const dim=sel&&!k.includes(sel);
+    return `<line class="draw" pathLength="1" style="--i:${i%12}" x1="${P[a][0].toFixed(1)}" y1="${P[a][1].toFixed(1)}" x2="${P[b][0].toFixed(1)}" y2="${P[b][1].toFixed(1)}" stroke="${col[v]}" stroke-width="${v===3?2.2:1.4}" stroke-opacity="${dim?.12:v===3?.95:.6}"/>`}).join('');
+  const nodes=N.map((id,i)=>{const m=med(id);if(!m)return'';const [x,y]=P[id],r=o.labels?7:4+Math.min(3,deg[id]*.5);
+    return `<g class="node" style="--i:${i}" ${o.labels?`onclick="UI.isel=UI.isel==='${id}'?null:'${id}';render()"`:''}><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${m.color}" stroke="#0b1030" stroke-width="2" ${sel&&sel!==id?'opacity=".35"':''}/>${o.labels?(()=>{const dx=x-cx,side=Math.abs(dx)<o.w*.12?'middle':dx>0?'start':'end',tx=side==='middle'?x:x+(dx>0?11:-11),ty=side==='middle'?(y>cy?y+20:y-12):y+4;return `<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" text-anchor="${side}" class="nl ${sel===id?'on':''}">${esc(shortName(m)).slice(0,11)}</text>`})():''}</g>`}).join('');
+  return `<svg viewBox="0 0 ${o.w} ${o.h}" class="mviz mol" ${o.labels?'role="img" aria-label="Mapa das interações: toque num remédio para ver só os alertas dele"':'aria-hidden="true"'}>${lines}${nodes}</svg>`;
+}
+function mAnimate(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  document.querySelectorAll('#app [data-count]').forEach(el=>{
+    if(el.dataset.done)return;el.dataset.done=1;const to=+el.dataset.count,fmt=el.dataset.fmt,t0=performance.now(),D=900;
+    const f=v=>fmt==='brl'?brl(v):fmt==='1'?fmtU(v.toFixed(1)):String(Math.round(v));
+    const step=t=>{const k=Math.min(1,(t-t0)/D),e=1-Math.pow(1-k,3);el.textContent=f(to*e);if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step);
+  });
 }
 const mHead=(t,c)=>`<div class="sec" style="margin-top:0"><button class="btn sm quiet" onclick="UI.model=null;render()">‹ Modelos</button></div><h1 style="font-size:26px;margin:4px 0 12px;color:${c}">${t}</h1>`;
 
@@ -2669,8 +2774,9 @@ function mInter(){
   const it=interModel(),L={grave:['var(--pink)','Grave'],moderada:['var(--amber)','Moderada'],leve:['var(--cyan)','Leve']};
   return `${header()}${mHead('Interações entre remédios','var(--pink)')}
     <div class="box k" style="--k:var(--lav);margin-bottom:12px">Feito com as bulas e referências de interação, para ${plural(it.used.length,'remédio','remédios')} em uso (contínuos e SOS com estoque). Serve para conversar com a médica e o farmacêutico: não pare nem mude nenhum remédio por conta própria.</div>
-    <div class="legend" style="margin-bottom:12px">${Object.values(L).map(([c,l])=>`<span style="--k:${c}">${l} ${it.cards.filter(x=>L[x.lvl][1]===l).length}</span>`).join('')}</div>
-    ${it.cards.length?it.cards.map(c=>`<div class="icard" style="--k:${L[c.lvl][0]}"><div class="ih"><span class="chip" style="--k:${L[c.lvl][0]}">${L[c.lvl][1]}</span><h3>${esc(c.t)}</h3></div>
+    ${it.cards.length?`<div class="foil molbox">${molecule(it,{w:340,h:250,r:92,labels:true,max:14,sel:UI.isel})}<p class="help" style="text-align:center;margin-top:4px">${UI.isel&&med(UI.isel)?`Mostrando os alertas de <b style="color:var(--txt)">${esc(med(UI.isel).name)}</b> · <button class="link" onclick="UI.isel=null;render()">ver todos</button>`:'Cada linha é uma combinação com alerta. Toque num remédio para filtrar.'}</p></div>`:''}
+    <div class="legend" style="margin:12px 0">${Object.values(L).map(([c,l])=>`<span style="--k:${c}">${l} ${it.cards.filter(x=>L[x.lvl][1]===l).length}</span>`).join('')}</div>
+    ${it.cards.length?it.cards.filter(c=>!UI.isel||c.meds.some(m=>m.id===UI.isel)).map(c=>`<div class="icard" style="--k:${L[c.lvl][0]}"><div class="ih"><span class="chip" style="--k:${L[c.lvl][0]}">${L[c.lvl][1]}</span><h3>${esc(c.t)}</h3></div>
       <div class="tags" style="margin:8px 0">${c.meds.map(m=>`<button style="--k:${m.color}" onclick="medSheet('${m.id}')">${esc(shortName(m))}${m.group==='sos'?' <small>SOS</small>':''}</button>`).join('')}</div>
       <p>${esc(c.txt)}</p><p class="obs"><b>O que observar:</b> ${esc(c.obs)}</p></div>`).join('')
       :'<div class="empty">Nenhuma combinação conhecida entre os remédios em uso.<br>Isso não garante que não exista: na dúvida, pergunte ao farmacêutico.</div>'}
@@ -3316,6 +3422,7 @@ function render(){
   document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===UI.view));
   document.body.classList.toggle('sosmode',UI.view==='urgencia');
   wire();
+  if(UI.view==='modelos')requestAnimationFrame(mAnimate);
   const kb=document.getElementById('kits');if(kb){kb.addEventListener('scroll',()=>requestAnimationFrame(kitTick),{passive:true});kitTick()}
 }
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
