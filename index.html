@@ -614,6 +614,34 @@ mark.warn{background:color-mix(in srgb,var(--amber) 28%,transparent);color:#ffe2
 .trow .stp button{border:0;background:rgba(255,255,255,.05);color:var(--txt);width:36px;height:40px;font-size:18px;cursor:pointer}
 .trow .stp b{min-width:34px;text-align:center;font:700 16px "Bricolage Grotesque",sans-serif}
 .trow .x{margin-left:auto;border:0;background:rgba(255,255,255,.06);color:var(--mut);width:32px;height:32px;border-radius:50%;cursor:pointer}
+/* clima, bem-estar, modelos */
+.wx{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:-4px 0 16px;padding:9px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(15,20,56,.55);font-size:13.5px;color:var(--mut)}
+.wx b{color:var(--txt);font:700 16px "Bricolage Grotesque",sans-serif}.wx .wc{margin-left:auto;font-size:12px}
+.wl{display:flex;align-items:center;gap:10px;margin:4px 0}.wl>span{flex:0 0 92px;font-size:12.5px;color:var(--mut);line-height:1.25}
+.mood.sm{margin:0;flex:1;gap:6px}.mood.sm button{font-size:20px;border-radius:13px}
+.wtoday{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.wtoday button{border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--txt);border-radius:10px;padding:6px 9px;font:500 12.5px "Instrument Sans",sans-serif;cursor:pointer}
+.wtoday small{color:var(--mut)}
+.mgrid{display:grid;gap:12px}
+.mcard{position:relative;text-align:left;border:1px solid color-mix(in srgb,var(--k) 35%,var(--line));border-radius:var(--r-lg);padding:16px 16px 14px;color:var(--txt);cursor:pointer;font:inherit;
+  background:linear-gradient(150deg,color-mix(in srgb,var(--k) 14%,rgba(15,20,56,.92)),rgba(12,16,46,.95) 65%);box-shadow:0 1px 0 rgba(255,255,255,.07) inset,0 14px 0 -8px color-mix(in srgb,var(--k) 22%,#050720),0 22px 34px -18px color-mix(in srgb,var(--k) 55%,transparent)}
+.mcard .mic{font-size:22px}.mcard .mt{display:block;font:700 17px "Bricolage Grotesque",sans-serif;margin:6px 0 8px}
+.mcard b{display:block;font:700 24px "Bricolage Grotesque",sans-serif;color:var(--k)}.mcard small{display:block;color:var(--mut);font-size:12.5px;margin-top:3px}
+.mcard .go{position:absolute;top:16px;right:16px;font-size:12.5px;color:var(--k);font-weight:600}
+.hbar{margin:8px 0 10px;cursor:pointer}.hbar .hl{display:flex;justify-content:space-between;font-size:13.5px}.hbar .hl b{font-weight:700}
+.hbar .ht{height:8px;border-radius:4px;background:rgba(255,255,255,.06);margin:5px 0 3px;overflow:hidden}.hbar .ht i{display:block;height:100%;border-radius:4px}
+.hbar small{color:var(--mut);font-size:11.5px}
+.vbars{display:flex;align-items:flex-end;gap:8px;height:150px}
+.vb{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}
+.vb i{width:100%;max-width:34px;border-radius:4px 4px 2px 2px;background:var(--amber)}.vb small{font-size:10px;color:var(--mut);white-space:nowrap}.vb span{font-size:11px;color:var(--mut);text-transform:capitalize}
+.icard{border:1px solid color-mix(in srgb,var(--k) 40%,var(--line));border-left:4px solid var(--k);border-radius:16px;padding:14px;margin:10px 0;background:color-mix(in srgb,var(--k) 6%,rgba(15,20,56,.85))}
+.icard h3{font:700 16px "Bricolage Grotesque",sans-serif;margin-top:6px}.icard p{font-size:14px;line-height:1.55;margin:6px 0;color:#dfe3ff}.icard .obs{color:var(--txt)}.icard .tags small{opacity:.7;font-size:10px}
+.lc{width:100%;height:auto;display:block}.lc text{fill:var(--mut);font-size:9px;font-family:"Instrument Sans",sans-serif}
+.lgd{display:flex;gap:14px;font-size:12px;color:var(--mut);margin:4px 0 0 6px}.lgd i{display:inline-block;width:16px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.lgd i.dash{background:repeating-linear-gradient(90deg,#3dffc5 0 5px,transparent 5px 9px)}
+.wt{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 10px;background:rgba(15,20,56,.55);border-radius:14px;overflow:hidden}
+.wt th,.wt td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}.wt th{color:var(--mut);font-weight:600;font-size:12px}
+.wt td small{display:block;color:var(--mut);font-size:11px}
 </style>
 </head>
 <body>
@@ -623,7 +651,7 @@ mark.warn{background:color-mix(in srgb,var(--amber) 28%,transparent);color:#ffe2
   <button data-v="hoje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Hoje</button>
   <button data-v="remedios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-35 12 12)"/><path d="M9.2 7.9l5.6 8.2"/></svg>Remédios</button>
   <button data-v="form" class="fab" aria-label="Formulário"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>Adicionar</span></button>
-  <button data-v="retiradas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-5 9 5v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-7h6v7"/></svg>Retiradas</button>
+  <button data-v="modelos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>Modelos</button>
   <button data-v="consultas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Consultas</button>
 </nav>
 <div class="scrim" id="scrim"></div>
@@ -944,7 +972,8 @@ function vHoje(){
   const A=notices();
   const upNext=scheduled().filter(m=>m.sched.type==='interval').map(m=>({m,d:nextInterval(m)})).filter(x=>dd(x.d,today())>0).sort((a,b)=>a.d-b.d);
   const appt=AP().filter(a=>parse(a.date)>=today()&&a.kind!=='exame').sort((a,b)=>a.date.localeCompare(b.date))[0];
-  return `${header()}${pushCard()}
+  setTimeout(refreshWx,0);
+  return `${header()}${wxChip()}${pushCard()}
   ${S.example?`<div class="box" style="margin-bottom:18px;--k:var(--lav)">Estes são remédios de exemplo. Quando a lista real chegar, eles saem.</div>`:''}
   ${next?`<div class="now" style="--k:${next.late?'var(--pink)':next.m.color}">
       ${(()=>{const tot=due.length,dn=due.filter(x=>x.e).length,C=2*Math.PI*30;return tot?`<div class="ring" style="--k:${next.late?'var(--pink)':'var(--mint)'}"><svg viewBox="0 0 74 74" width="74" height="74"><circle class="bg" cx="37" cy="37" r="30"/><circle class="fg" cx="37" cy="37" r="30" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-dn/tot)}"/></svg><b>${dn}/${tot}</b><small>hoje</small></div>`:''})()}
@@ -969,7 +998,7 @@ function vHoje(){
 
   ${sosStrip()}
 
-  ${diaryCard()}
+  ${wellCard()}
 
   ${kitsHTML()}
 
@@ -1412,7 +1441,8 @@ function vHistorico(){
     const k=l.status==='ok'?'var(--mint)':l.status==='auto'?'var(--mut)':l.status==='late'?'var(--amber)':'var(--pink)';
     const t=l.status==='skip'?'pulada':l.status==='auto'?'sem registro':l.status==='miss'?'não tomada':l.status==='late'?delay(l):'no horário';
     return `<div class="item tap" onclick="logSheet('${l.id}')"><div class="b"><strong>${esc(m.name)}</strong><span>${l.site?esc(l.site)+'; ':''}prevista ${fDW(parse(l.sched))}, ${l.sched.slice(11,16)}${l.taken?`; tomada ${l.taken.slice(0,10)===l.sched.slice(0,10)?'às '+l.taken.slice(11,16):fD(parse(l.taken))}`:''}</span></div><span class="chip" style="--k:${k}">${t}</span></div>`}).join('')||'<div class="item"><div class="b"><span>Sem registros ainda.</span></div></div>'}</div>
-  ${diaryHist()}`;
+  ${wellHist()}
+  ${diary().length?diaryHist():`<button class="btn block" style="--k:var(--amber);margin-top:12px" onclick="reportSheet()">Relatório para a consulta</button>`}`;
 }
 function delay(l){const h=(parse(l.taken)-parse(l.sched))/36e5;return h>=24?`${Math.round(h/24)} d depois`:`${Math.round(h)} h depois`}
 
@@ -1642,6 +1672,7 @@ function drawMed(){
     ${rxFields(d)}
     <div class="tgrow">Guardar na geladeira<button class="tg ${d.cold?'on':''}" onclick="md.cold=!md.cold;this.classList.toggle('on')" aria-label="Geladeira"></button></div>
     <div class="fld"><label>Observações</label><textarea oninput="md.notes=this.value" placeholder="Ex.: depois do café">${esc(d.notes)}</textarea></div>
+    ${d.id&&med(d.id)&&d.source==='sus'?`<button class="btn block" style="--k:var(--cyan);margin-bottom:8px" onclick="closeSheet();go('retiradas')">Retirada no SUS</button>`:''}
     ${d.id&&med(d.id)&&med(d.id).sched&&med(d.id).sched.type==='interval'?`<button class="btn block" style="--k:var(--amber);margin-bottom:8px" onclick="UI.dly=null;delaySheet('${d.id}')">Adiar a próxima aplicação</button>`:''}
     ${d.id&&med(d.id)?`<button class="btn block" style="--k:var(--cyan);margin-bottom:8px" onclick="editWithForm('${d.id}')">Editar passo a passo</button>`:''}
     <button class="btn fill block" onclick="saveMed()">Salvar remédio</button>
@@ -1995,7 +2026,9 @@ function reportData(days){
   const rows=meds.map(m=>{const L=S.log.filter(l=>l.medId===m.id&&l.sched>=fi),ok=L.filter(l=>l.status==='ok').length,late=L.filter(l=>l.status==='late').length,miss=L.filter(l=>l.status==='miss'||l.status==='auto').length,skip=L.filter(l=>l.status==='skip').length;
     return {m,how:m.sched?schedText(m):'quando precisa',ok,late,miss,skip,n:L.length}});
   const D=diary().filter(e=>e.date>=fi),moods=D.filter(e=>e.mood),pains=D.filter(e=>e.pain!=null);
-  const freq={};D.forEach(e=>e.sx.forEach(s=>freq[s]=(freq[s]||0)+1));
+  const WL=wells().filter(w=>w.at>=fi);
+  const freq={};D.forEach(e=>e.sx.forEach(s=>freq[s]=(freq[s]||0)+1));WL.forEach(e=>(e.sx||[]).forEach(s=>freq[s]=(freq[s]||0)+1));
+  const wavg=k=>WL.length?WL.reduce((a,e)=>a+e[k],0)/WL.length:null,well={n:WL.length,psi:wavg('psi'),fis:wavg('fis'),notes:WL.filter(e=>e.note&&e.note.trim())};
   const sx=Object.entries(freq).sort((a,b)=>b[1]-a[1]);
   const exams=AP().filter(a=>a.kind==='exame'&&parse(a.date)<=today()).sort((a,b)=>b.date.localeCompare(a.date));
   const seen=new Set(),lastEx=exams.filter(a=>{const k=slug(a.title);if(seen.has(k))return false;seen.add(k);return true}).slice(0,10);
@@ -2004,7 +2037,7 @@ function reportData(days){
   const rx=rxNeeds().map(m=>`Receita de ${m.name} ${m.strength||''}`.trim());
   const lme=S.meds.filter(m=>m.source==='sus'&&m.sus&&m.sus.lmeStart&&lmeInfo(m).renew).map(m=>`Novo LME e receita de ${m.name}`);
   const delays=S.meds.flatMap(m=>(m.delays||[]).filter(x=>x.from>=fi).map(x=>({...x,name:m.name})));
-  return {from,days,rows,sosUsed,delays,D,moodAvg:moods.length?moods.reduce((a,e)=>a+e.mood,0)/moods.length:null,painAvg:pains.length?pains.reduce((a,e)=>a+e.pain,0)/pains.length:null,painMax:pains.length?Math.max(...pains.map(e=>e.pain)):null,sx,lastEx,nx,ask:[...new Set([...ask,...rx,...lme])],notes:D.filter(e=>e.note&&e.note.trim())};
+  return {from,days,rows,sosUsed,delays,well,D,moodAvg:moods.length?moods.reduce((a,e)=>a+e.mood,0)/moods.length:null,painAvg:pains.length?pains.reduce((a,e)=>a+e.pain,0)/pains.length:null,painMax:pains.length?Math.max(...pains.map(e=>e.pain)):null,sx,lastEx,nx,ask:[...new Set([...ask,...rx,...lme])],notes:D.filter(e=>e.note&&e.note.trim())};
 }
 function reportSheet(){
   UI.repDays??=30;const r=reportData(UI.repDays);
@@ -2023,6 +2056,7 @@ function reportHTML(r){
   ${r.rows.map(x=>`<tr><td><b>${esc(x.m.name)}</b> ${esc(x.m.strength||'')}</td><td>${esc(x.how)}</td><td>${x.m.source==='sus'?'SUS':'compra'}</td><td>${x.n?`${x.ok} (${pct(x)})`:'—'}</td><td>${x.n?x.late:'—'}</td><td>${x.n?x.miss+(x.skip?` + ${x.skip} pulada${x.skip>1?'s':''}`:''):'—'}</td></tr>`).join('')}</table>
   ${r.delays.length?`<p style="margin-top:8px"><b>Aplicações adiadas:</b> ${r.delays.map(x=>`${esc(x.name)} de ${fD(parse(x.from))} para ${fD(parse(x.to))} (${x.days} dias, ${esc(x.why.toLowerCase())})`).join('; ')}</p>`:''}
   ${r.sosUsed.length?`<p class="muted" style="margin-top:6px">Quando precisa (SOS): ${r.sosUsed.map(esc).join(', ')}</p>`:''}
+  ${r.well.n?`<h2>Bem-estar</h2><p>${r.well.n} registros. Cabeça (emocional): média ${fmtU(r.well.psi.toFixed(1))} de 5. Corpo (físico): média ${fmtU(r.well.fis.toFixed(1))} de 5.</p>${r.well.notes.length?`<ul>${r.well.notes.slice(0,12).map(e=>`<li>${fD(parse(e.at))} ${e.at.slice(11,16)}: ${esc(e.note)}</li>`).join('')}</ul>`:''}`:''}
   <h2>Diário de sintomas</h2>${r.D.length?`<p>${r.D.length} dias anotados.${r.moodAvg?` Humor médio: ${MOODS[Math.round(r.moodAvg)-1][1].toLowerCase()} (${r.moodAvg.toFixed(1)} de 5).`:''}${r.painAvg!=null?` Dor média ${r.painAvg.toFixed(1)}/10, máxima ${r.painMax}/10.`:''}</p>
     ${r.sx.length?`<table><tr><th>Sintoma</th><th>Dias</th></tr>${r.sx.map(([s,n])=>`<tr><td>${esc(s)}</td><td>${n}</td></tr>`).join('')}</table>`:''}
     ${r.notes.length?`<p><b>Anotações</b></p><ul>${r.notes.slice(0,15).map(e=>`<li>${fD(parse(e.date))}: ${esc(e.note)}</li>`).join('')}</ul>`:''}`:'<p class="muted">Nenhum dia anotado no período.</p>'}
@@ -2038,6 +2072,7 @@ function reportText(r){
   const L=[`Relatório — ${patient()}`,`${fD(r.from)} a ${fD(today())}`,'','REMÉDIOS'];
   r.rows.forEach(x=>L.push(`• ${x.m.name} ${x.m.strength||''}: ${x.how}${x.n?` — ${x.ok}/${x.n} no horário, ${x.late} com atraso, ${x.miss} não tomadas`:''}`));
   r.delays.forEach(x=>L.push(`• Adiada: ${x.name} de ${fD(parse(x.from))} para ${fD(parse(x.to))} (${x.days} dias, ${x.why.toLowerCase()})`));
+  if(r.well.n)L.push('','BEM-ESTAR',`${r.well.n} registros — cabeça ${fmtU(r.well.psi.toFixed(1))}/5, corpo ${fmtU(r.well.fis.toFixed(1))}/5`);
   L.push('','SINTOMAS');
   if(r.D.length){L.push(`${r.D.length} dias anotados${r.painAvg!=null?`, dor média ${r.painAvg.toFixed(1)}/10`:''}`);r.sx.slice(0,8).forEach(([s,n])=>L.push(`• ${s}: ${n} dias`))}else L.push('Nada anotado');
   if(r.lastEx.length){L.push('','EXAMES');r.lastEx.forEach(a=>L.push(`• ${a.title} (${fD(parse(a.date))}): ${a.result||'sem resultado'}`))}
@@ -2168,8 +2203,8 @@ function pushCard(){
 }
 
 /* ====================== NOVA VERSÃO ====================== */
-const APP_VER='15';
-const CHANGES={'15':['Vários horários por dia, cada um com a sua quantidade (ex.: 1 de manhã e 2 à noite)'],'14':['Página da bula organizada: seções com ícones, efeitos por frequência, palavras de atenção destacadas e busca','Documento oficial sempre a um toque'],'13':['Anexar o PDF da bula em cada remédio: fica guardado para os dois'],'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
+const APP_VER='16';
+const CHANGES={'16':['Nova aba Modelos (no lugar de Retiradas): gastos e gastos futuros, interações entre remédios e monitoramento do bem-estar','Bem-estar com duas notas, cabeça e corpo, quantas vezes quiser por dia','Temperatura e umidade na tela Hoje, guardadas em cada registro'],'15':['Vários horários por dia, cada um com a sua quantidade (ex.: 1 de manhã e 2 à noite)'],'14':['Página da bula organizada: seções com ícones, efeitos por frequência, palavras de atenção destacadas e busca','Documento oficial sempre a um toque'],'13':['Anexar o PDF da bula em cada remédio: fica guardado para os dois'],'12':['Busca em todos os remédios, na aba Remédios','Foto de cada remédio (câmera ou galeria)','Bula: link para a bula oficial da Anvisa e opção de guardar o link'],'11':['Número da versão aparece no seu perfil','Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'10':['Importar a contagem da casa: atualiza pelo nome, mantém o histórico e zera o que não veio'],'9':['Importar a contagem da casa de uma vez, mantendo o histórico'],'8':['Login avisa na tela quando a senha está errada','Esqueceu a senha? Agora dá para criar uma nova pelo e-mail','Botão para mostrar a senha'],'7':['O app agora se chama Suporte'],'6':['Adiar a aplicação do adalimumabe quando o alto custo atrasa: avisos, calendário e lembretes seguem a nova data','Adiamentos entram no relatório da consulta'],'5':['Botão Tomar em todos os remédios: registra quanto tomou e tira do estoque','Previsão de quando acaba pelo tratamento e pelo consumo real','Doses que ficam sem marcar não saem mais do estoque sozinhas','Calendário: cada dia abre o que acontece (aplicação, retirada, consulta, exame, quando acaba)','Próximos 7 dias e SOS rápido na tela Hoje'],'4':['Consultas em três abas: Agendar, Agendadas e Exames','Especialidades com busca no Dr. Consulta, Doctoralia e Maps, e médico de confiança salvo','Uber direto em cada consulta agendada','Diário de sintomas e relatório em PDF para a consulta','Exames com resultado e aviso de repetir','Validade das receitas dos controlados','Mala de remédios para viagem','Cadastro lendo a caixa pela câmera','Lembretes no celular na hora da dose']};
 function showUpd(){let b=document.getElementById('upd');if(!b){b=document.createElement('div');b.id='upd';b.className='upd';b.innerHTML='<span>✨ Nova versão do Suporte pronta</span><button class="btn sm fill" onclick="location.reload()">Atualizar</button>';document.body.appendChild(b)}requestAnimationFrame(()=>b.classList.add('on'))}
 function whatsNew(){
   let v=null;try{v=localStorage.getItem('dose_ver');localStorage.setItem('dose_ver',APP_VER)}catch(e){}
@@ -2277,6 +2312,7 @@ function evRange(from,to){ // tudo que acontece entre duas datas, por dia
   });
   AP().forEach(a=>{const ex=a.kind==='exame';put(a.date,{ic:ex?'🧪':'🩺',k:ex?'var(--cyan)':'var(--lav)',t:a.title,sub:[a.time,a.who,a.city].filter(Boolean).join(', '),pri:5,act:`apptSheet('${a.id}')`});
     if(ex&&a.repeatMonths)put(addMonths(parse(a.date),+a.repeatMonths),{ic:'🔁',k:'var(--cyan)',t:`Repetir ${a.title}`,sub:`último em ${fD(parse(a.date))}`,pri:3,act:`apptSheet(null,{kind:'exame',title:'${esc(a.title).replace(/'/g,'')}',repeatMonths:${+a.repeatMonths}})`})});
+  const WD={};wells().forEach(w=>{const k=w.at.slice(0,10);(WD[k]=WD[k]||[]).push(w)});Object.entries(WD).forEach(([k,L])=>{const ps=L.reduce((a,w)=>a+w.psi,0)/L.length,fs=L.reduce((a,w)=>a+w.fis,0)/L.length,mm=Math.round((ps+fs)/2);put(k,{ic:WELL[mm-1][0],k:WK[mm-1],t:`Bem-estar: cabeça ${fmtU(ps.toFixed(1))}, corpo ${fmtU(fs.toFixed(1))}`,sub:plural(L.length,'registro'),pri:1,mood:mm,act:`closeSheet();go('historico')`})});
   diary().forEach(e=>put(e.date,{ic:e.mood?MOODS[e.mood-1][0]:'📝',k:e.mood?MOODK[e.mood-1]:'var(--amber)',t:`Diário: ${e.mood?MOODS[e.mood-1][1]:'anotado'}${e.pain!=null?`, dor ${e.pain}/10`:''}`,sub:[e.sx.join(', '),e.note].filter(Boolean).join(' — '),pri:1,mood:e.mood,act:`diarySheet('${e.date}')`}));
   if(S.where.city&&S.where.city!==S.profile.home){if(S.where.from)put(S.where.from,{ic:'🧳',k:'var(--pink)',t:`Viagem para ${S.where.city}`,sub:'confira a mala de remédios',pri:4,act:`travelSheet()`});if(S.where.to)put(S.where.to,{ic:'🏠',k:'var(--pink)',t:`Volta de ${S.where.city}`,sub:'',pri:3})}
   Object.values(E).forEach(L=>L.sort((a,b)=>b.pri-a.pri));
@@ -2445,6 +2481,239 @@ function vBula(){
     <div class="search ${q?'has':''}"><span class="ic">🔎</span><input type="text" enterkeyhint="search" placeholder="Buscar na bula: álcool, esqueci, gravidez…" value="${esc(UI.bq||'')}" onchange="UI.bq=this.value;render()" onkeydown="if(event.key==='Enter'){UI.bq=this.value;render()}"><button class="x" onclick="UI.bq='';render()">✕</button></div>
     ${secs||`<div class="empty">Nada com "${esc(q)}" nesta bula.</div>`}
     <p class="fine" style="margin-top:16px">Texto da bula oficial aprovada pela Anvisa${B.date?`, versão de ${B.date}`:''}, organizado pelo app sem alterar o conteúdo. Em caso de dúvida, fale com a médica ou com o farmacêutico.</p>`;
+}
+
+/* ====================== CLIMA (Open-Meteo, sem chave) ====================== */
+let WX=null;try{WX=JSON.parse(localStorage.getItem('dose_wx')||'null')}catch(e){}
+const wxCity=()=>{const c=S.where&&S.where.city&&CITY[S.where.city]?S.where.city:(S.profile.home&&CITY[S.profile.home]?S.profile.home:'São Carlos');return {c,ll:CITY[c]||CITY['São Carlos']}};
+async function getWx(force){
+  const {c,ll}=wxCity();
+  if(WX&&!force&&WX.city===c&&Date.now()-WX.t<30*60e3)return WX;
+  try{const ctl=new AbortController();setTimeout(()=>ctl.abort(),5000);
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${ll[0]}&longitude=${ll[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature&timezone=America%2FSao_Paulo`,{signal:ctl.signal});
+    const j=await r.json(),cu=j.current;
+    WX={t:Date.now(),city:c,temp:Math.round(cu.temperature_2m*10)/10,hum:Math.round(cu.relative_humidity_2m),feel:Math.round(cu.apparent_temperature)};
+    try{localStorage.setItem('dose_wx',JSON.stringify(WX))}catch(e){}
+  }catch(e){}
+  return WX;
+}
+function wxChip(){
+  const w=WX;return `<div class="wx" id="wx">${w?`<span>🌡️ <b>${Math.round(w.temp)}°</b>${w.feel!=null&&Math.abs(w.feel-w.temp)>=2?` <small>sensação ${w.feel}°</small>`:''}</span><span>💧 <b>${w.hum}%</b> <small>umidade</small></span><span class="wc">${esc(w.city)}</span>`:'<span>🌡️ carregando o clima…</span>'}</div>`;
+}
+function refreshWx(){getWx().then(()=>{const e=document.getElementById('wx');if(e)e.outerHTML=wxChip()})}
+
+/* ====================== BEM-ESTAR: CABEÇA E CORPO ====================== */
+const WELL=[['😣','Muito mal'],['😕','Mal'],['😐','Mais ou menos'],['🙂','Bem'],['😄','Muito bem']];
+const WK=['var(--pink)','#ff8a5c','var(--amber)','var(--cyan)','var(--mint)'];
+const wells=()=>S.appts.filter(a=>a.rec==='well').sort((a,b)=>b.at.localeCompare(a.at));
+UI.wb=UI.wb||{psi:null,fis:null};
+function wellScale(k,lbl,ic){
+  return `<div class="wl"><span>${ic} ${lbl}</span><div class="mood sm">${WELL.map(([e,l],i)=>`<button class="${UI.wb[k]===i+1?'on':''}" style="--k:${WK[i]}" aria-label="${lbl}: ${l}" onclick="UI.wb.${k}=${i+1};drawWell()">${e}</button>`).join('')}</div></div>`;
+}
+function wellCardInner(){
+  const T=iso(today()),L=wells().filter(w=>w.at.slice(0,10)===T),ok=UI.wb.psi&&UI.wb.fis;
+  return `${wellScale('psi','Cabeça (emocional)','🧠')}${wellScale('fis','Corpo (físico)','💪')}
+    <div class="row" style="margin-top:12px"><button class="btn fill" style="--k:var(--mint);flex:1" ${ok?'':'disabled'} onclick="wellSave()">${ok?'Registrar agora':'Escolha as duas notas'}</button><button class="btn quiet" onclick="wellSheet()">+ Sintomas ou nota</button></div>
+    ${L.length?`<div class="wtoday">${L.map(w=>`<button onclick="wellSheet('${w.id}')"><b>${w.at.slice(11,16)}</b> 🧠${w.psi} 💪${w.fis}${w.temp!=null?` <small>${Math.round(w.temp)}° · ${w.hum}%</small>`:''}${w.sx&&w.sx.length?' 📝':''}</button>`).join('')}</div>`:''}`;
+}
+function wellCard(){
+  return `<div class="sec"><h3>Como ${esc(patient())} está agora?</h3><small>quantas vezes quiser</small></div>
+    <div class="foil" id="wellc" style="padding:14px 14px 12px">${wellCardInner()}</div>`;
+}
+function drawWell(){const e=document.getElementById('wellc');if(e)e.innerHTML=wellCardInner()}
+async function wellSave(extra){
+  const w=await getWx();
+  const r=Object.assign({id:'wb-'+uid(),rec:'well',at:isoT(new Date()),psi:UI.wb.psi,fis:UI.wb.fis,sx:[],note:'',temp:w?w.temp:null,hum:w?w.hum:null,feel:w?w.feel:null,city:w?w.city:null},extra||{});
+  const i=S.appts.findIndex(a=>a.id===r.id);if(i>=0)S.appts[i]=r;else S.appts.push(r);
+  UI.wb={psi:null,fis:null};save();closeSheet();render();toast('Registrado'+(r.temp!=null?` com ${Math.round(r.temp)}° e ${r.hum}% de umidade`:''));
+}
+let wd=null;
+function wellSheet(id){
+  const e=id?S.appts.find(a=>a.id===id):null;
+  wd=e?JSON.parse(JSON.stringify(e)):{id:null,at:isoT(new Date()),psi:UI.wb.psi,fis:UI.wb.fis,sx:[],note:''};drawWellSheet();
+}
+function drawWellSheet(){
+  const e=wd,sc=(k,lbl,ic)=>`<div class="fld"><label>${ic} ${lbl}</label><div class="mood">${WELL.map(([em,l],i)=>`<button class="${e[k]===i+1?'on':''}" style="--k:${WK[i]}" onclick="wd.${k}=${i+1};drawWellSheet()">${em}<small>${l}</small></button>`).join('')}</div></div>`;
+  openSheet(`<h2>${e.id?'Registro de bem-estar':'Como está agora'}</h2><div class="hint">Duas notas separadas: como está a cabeça e como está o corpo. Clima e horário entram sozinhos para o monitoramento.</div>
+    ${sc('psi','Cabeça (emocional)','🧠')}${sc('fis','Corpo (físico)','💪')}
+    <div class="fld"><label>Sintomas</label><div class="tags">${SYMPT.concat(e.sx.filter(s=>!SYMPT.includes(s))).map(s=>`<button class="${e.sx.includes(s)?'on':''}" onclick="wd.sx.includes('${s}')?wd.sx=wd.sx.filter(x=>x!=='${s}'):wd.sx.push('${s}');drawWellSheet()">${esc(s)}</button>`).join('')}</div>
+      <div class="addline" style="margin-top:8px"><input id="wX" placeholder="Outro sintoma"><button class="btn sm" onclick="if(wX.value.trim()){wd.sx.push(wX.value.trim());drawWellSheet()}">Adicionar</button></div></div>
+    <div class="fld"><label>Anotação</label><textarea oninput="wd.note=this.value" placeholder="O que aconteceu, o que ajudou">${esc(e.note||'')}</textarea></div>
+    <div class="fld"><label>Quando</label><input type="datetime-local" value="${e.at}" onchange="wd.at=this.value||wd.at"></div>
+    <button class="btn fill block" style="--k:var(--mint)" onclick="wellSheetSave()">Salvar</button>
+    ${e.id?`<button class="btn block quiet" style="margin-top:8px" onclick="S.appts=S.appts.filter(a=>a.id!=='${e.id}');save();closeSheet();render();toast('Registro apagado')">Apagar registro</button>`:''}`);
+}
+function wellSheetSave(){
+  if(!wd.psi||!wd.fis){toast('Escolha as duas notas');return}
+  if(wd.id){const i=S.appts.findIndex(a=>a.id===wd.id);if(i>=0)S.appts[i]=Object.assign(S.appts[i],{psi:wd.psi,fis:wd.fis,sx:wd.sx,note:wd.note,at:wd.at});save();closeSheet();render();toast('Atualizado');return}
+  const now=isoT(new Date()),past=wd.at.slice(0,13)!==now.slice(0,13);
+  UI.wb={psi:wd.psi,fis:wd.fis};wellSave({at:wd.at,sx:wd.sx,note:wd.note,...(past?{temp:null,hum:null,feel:null}:{})});
+}
+/* pontos para análise: registros novos + diário antigo (uma nota só, vale para os dois) */
+function wellPoints(){
+  const P=wells().map(w=>({at:w.at,d:w.at.slice(0,10),h:+w.at.slice(11,13),psi:w.psi,fis:w.fis,temp:w.temp,hum:w.hum,sx:w.sx||[]}));
+  diary().filter(e=>e.mood).forEach(e=>P.push({at:e.date+'T12:00',d:e.date,h:12,psi:e.mood,fis:e.mood,temp:null,hum:null,sx:e.sx||[],old:true}));
+  return P.sort((a,b)=>a.at.localeCompare(b.at));
+}
+function wellHist(){
+  const W=wells();
+  return `<div class="sec"><h3>Bem-estar</h3><button class="link" onclick="UI.model='bemestar';go('modelos')">Ver monitoramento</button></div>
+    ${W.length?`<div class="list">${W.slice(0,14).map(w=>`<div class="item tap" onclick="wellSheet('${w.id}')" style="--k:${WK[Math.round((w.psi+w.fis)/2)-1]}"><div class="t" style="font-size:13px;width:52px">${w.at.slice(11,16)}<small>${fD(parse(w.at))}</small></div><div class="b"><strong>🧠 ${w.psi} · 💪 ${w.fis}${w.temp!=null?` <span style="color:var(--mut);font-weight:400">· ${Math.round(w.temp)}°, ${w.hum}%</span>`:''}</strong><span>${w.sx&&w.sx.length?esc(w.sx.join(', ')):'Sem sintomas'}${w.note?' — '+esc(w.note):''}</span></div></div>`).join('')}</div>`
+    :`<div class="empty">Nenhum registro ainda. Na tela Hoje, duas notas rápidas já valem.</div>`}`;
+}
+
+/* ====================== MODELOS ====================== */
+function vModelos(){
+  if(UI.model==='gastos')return mGastos();
+  if(UI.model==='interacoes')return mInter();
+  if(UI.model==='bemestar')return mBem();
+  const g=costModel(),it=interModel(),P=wellPoints(),last7=P.filter(p=>p.d>=iso(addDays(today(),-6)));
+  const avg=(L,k)=>L.length?(L.reduce((a,p)=>a+p[k],0)/L.length):null;
+  const card=(k,ic,t,big,sub,c)=>`<button class="mcard" style="--k:${c}" onclick="UI.model='${k}';render()"><span class="mic">${ic}</span><span class="mt">${t}</span><b>${big}</b><small>${sub}</small><span class="go">Abrir ›</span></button>`;
+  return `${header()}<div class="sec" style="margin-top:0"><h1 style="font-size:28px">Modelos</h1></div>
+    <p class="help" style="margin:-6px 0 14px">Análises feitas com o que vocês registram no app.</p>
+    <div class="mgrid">
+      ${card('gastos','💸','Gastos e gastos futuros',g.month?brl(g.month)+'/mês':'—',g.month?`${brl(g.next60)} nos próximos 60 dias${g.missing.length?`, ${g.missing.length} sem preço`:''}`:'Faltam preços para calcular','var(--amber)')}
+      ${card('interacoes','⚗️','Interações entre remédios',`${it.cards.length} ${it.cards.length===1?'alerta':'alertas'}`,`${it.cards.filter(c=>c.lvl==='grave').length} graves, entre ${it.used.length} remédios em uso`,'var(--pink)')}
+      ${card('bemestar','📈','Monitoramento do bem-estar',last7.length?`🧠 ${fmtU(+avg(last7,'psi').toFixed(1))} · 💪 ${fmtU(+avg(last7,'fis').toFixed(1))}`:'—',last7.length?`média dos últimos 7 dias, ${plural(last7.length,'registro')}`:'Registre na tela Hoje','var(--mint)')}
+    </div>
+    <p class="fine" style="margin-top:16px">As retiradas do SUS continuam no card de cada remédio do SUS e no botão abaixo.</p>
+    <button class="btn block quiet" onclick="go('retiradas')">Retiradas no SUS</button>`;
+}
+const mHead=(t,c)=>`<div class="sec" style="margin-top:0"><button class="btn sm quiet" onclick="UI.model=null;render()">‹ Modelos</button></div><h1 style="font-size:26px;margin:4px 0 12px;color:${c}">${t}</h1>`;
+
+/* ---------- gastos ---------- */
+function unitPrice(m){const pi=priceInfo(m),u=boxUnits(m);return pi.est&&u?pi.est/u:null}
+function useOf(m){const f=forecast(m);if(!f)return null;return f.real?f.real.perDay:f.plan?f.plan.perDay:(f.r&&f.r.ready?f.r.perDay:null)}
+function costModel(){
+  const rows=[],missing=[];let month=0,sus=0;const T=today(),lim=addDays(T,60),buys=[];
+  S.meds.filter(m=>!m.level).forEach(m=>{
+    const pd=useOf(m);if(!pd)return;const up=unitPrice(m);
+    if(m.source==='sus'){if(up)sus+=pd*30.4*up;return}
+    if(!up){missing.push(m);return}
+    const mc=pd*30.4*up;month+=mc;rows.push({m,pd,up,mc});
+    const box=priceInfo(m).est,u=boxUnits(m);let left=qty(m),d=new Date(T);
+    for(let i=0;i<6;i++){const days=Math.floor(left/pd);d=addDays(d,days);if(d>lim)break;buys.push({m,d:new Date(d),cost:box});left=u}
+  });
+  rows.sort((a,b)=>b.mc-a.mc);buys.sort((a,b)=>a.d-b.d);
+  const spent={};S.meds.forEach(m=>(m.purchases||[]).forEach(p=>{const k=p.date.slice(0,7);spent[k]=(spent[k]||0)+p.price*p.boxes}));
+  return {rows,missing,month,year:month*12,sus,buys,next60:buys.reduce((a,b)=>a+b.cost,0),spent};
+}
+function mGastos(){
+  const g=costModel(),mx=g.rows.length?g.rows[0].mc:1,months=[];for(let i=5;i>=0;i--){const d=new Date(today().getFullYear(),today().getMonth()-i,1);months.push([d,g.spent[iso(d).slice(0,7)]||0])}
+  const mmx=Math.max(1,...months.map(x=>x[1]));
+  const byMonth={};g.buys.forEach(b=>{const k=b.d.toLocaleDateString('pt-BR',{month:'long'});byMonth[k]=(byMonth[k]||0)+b.cost});
+  return `${header()}${mHead('Gastos e gastos futuros','var(--amber)')}
+    <div class="tot" style="grid-template-columns:1fr 1fr"><div><span>Previsto por mês</span><b>${brl(g.month)}</b><small>pelo consumo de cada remédio</small></div><div><span>Previsto por ano</span><b>${brl(g.year)}</b><small>se nada mudar</small></div>
+      <div><span>Próximos 60 dias</span><b>${brl(g.next60)}</b><small>${plural(g.buys.length,'compra prevista','compras previstas')}</small></div><div class="all"><span>O SUS economiza</span><b>${g.sus?brl(g.sus)+'/mês':'—'}</b><small>${g.sus?'valor de mercado do que vem do alto custo':'falta o preço de referência'}</small></div></div>
+    ${g.missing.length?`<div class="box k" style="--k:var(--amber);margin-top:12px"><b>${plural(g.missing.length,'remédio','remédios')} sem preço</b>, por isso ficam fora da conta. Toque para informar o preço da caixa:<div class="tags" style="margin-top:8px">${g.missing.map(m=>`<button style="--k:var(--amber)" onclick="medSheet('${m.id}')">${esc(shortName(m))}</button>`).join('')}</div></div>`:''}
+    <div class="sec"><h3>Próximas compras</h3><small>${Object.entries(byMonth).map(([k,v])=>`${k}: ${brl(v)}`).join(' · ')}</small></div>
+    ${g.buys.length?`<div class="list">${g.buys.map(b=>`<div class="item tap" style="--k:${b.m.color}" onclick="medSheet('${b.m.id}')"><div class="t">${b.d.getDate()}<small>${b.d.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</small></div><div class="b"><strong>${esc(b.m.name)} ${esc(b.m.strength||'')}</strong><span>${rel(b.d)}, quando acaba o que tem em casa</span></div><b class="num">${brl(b.cost)}</b></div>`).join('')}</div>`:'<div class="empty">Nenhuma compra prevista nos próximos 60 dias com os preços que existem.</div>'}
+    <div class="sec"><h3>Quanto cada um custa por mês</h3></div>
+    ${g.rows.length?`<div class="foil" style="padding:12px 14px">${g.rows.map(r=>`<div class="hbar" onclick="medSheet('${r.m.id}')"><div class="hl"><span>${esc(shortName(r.m))}</span><b>${brl(r.mc)}</b></div><div class="ht"><i style="width:${Math.max(3,r.mc/mx*100)}%;background:${r.m.color}"></i></div><small>${perDayTxt(r.m,r.pd)}, ${brl(r.up)} cada</small></div>`).join('')}</div>`:'<div class="empty">Sem remédios com preço e consumo para calcular.</div>'}
+    <div class="sec"><h3>Gasto nos últimos meses</h3><small>pelas compras registradas</small></div>
+    <div class="foil vbars" style="padding:14px">${months.map(([d,v])=>`<div class="vb" title="${brl(v)}"><small>${v?brl(v).replace(',00',''):''}</small><i style="height:${v?Math.max(4,v/mmx*100):2}%"></i><span>${d.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</span></div>`).join('')}</div>
+    <p class="fine" style="margin-top:12px">O consumo usa o que ela realmente toma (botão Tomar) quando há pelo menos 3 dias de registro; senão, a dose do tratamento. O preço por unidade é a média das últimas compras dividida pelas unidades da caixa.</p>`;
+}
+
+/* ---------- interações ---------- */
+const IG={
+  opioide:['targin','oxicodona','tramadol','codeina','tylex','morfina'],
+  benzo:['clonazepam','rivotril','alprazolam','diazepam','lorazepam','bromazepam'],
+  gaba:['gabapentina','pregabalina','lyrica'],
+  relax:['ciclobenzaprina','tandrilax','miosan'],
+  traz:['trazodona','tradep','donaren'],
+  cbd:['canabidiol'],
+  isrs:['fluvoxamina','sertralina','fluoxetina','escitalopram','citalopram','paroxetina','luvox'],
+  bus:['buspirona','ansitec'],
+  estim:['lisdexanfetamina','venvanse','metilfenidato','ritalina','modafinila'],
+  lisdex:['lisdexanfetamina','venvanse'],
+  moda:['modafinila','stavigile'],
+  ondan:['ondansetrona'],
+  aine:['nimesulida','meloxicam','diclofenaco','cetoprofeno','flanax','naproxeno','ibuprofeno','tandrilax','cetorolaco','tromatacol','toragesic'],
+  cortic:['prednisolona','prednisona','predsim','dexametasona','meticorten'],
+  furo:['furosemida','lasix'],
+  aco:['selene','diane','yasmin','anticoncepcional','etinilestradiol'],
+  cipro:['ciprofloxacino','levofloxacino'],
+  quel:['hidroxido de aluminio','sany d','calcio','magnesio','dimalato','sucrafilm','sucralfato'],
+  fexo:['fexofenadina','allegra'],
+  ppi:['pantoprazol','omeprazol','esomeprazol']
+};
+const TOPICAL=['colírio','pomada','spray','gota'];
+function interUsed(){return S.meds.filter(m=>m.kind!=='pele'&&!TOPICAL.includes(m.form)&&(m.group==='continuo'||m.group==='sos'||m.sched)&&(m.level?m.level!=='vazio':qty(m)>0||m.source==='sus'))}
+function interModel(){
+  const used=interUsed(),inG=g=>used.filter(m=>IG[g].some(a=>norm(m.name).includes(a))),has=g=>inG(g).length>0,C=[];
+  const add=(lvl,t,meds,txt,obs)=>{meds=[...new Map(meds.map(m=>[m.id,m])).values()];if(meds.length>=2||lvl==='aviso')C.push({lvl,t,meds,txt,obs})};
+  const dep=[...inG('opioide'),...inG('benzo'),...inG('gaba'),...inG('relax').filter(m=>!/tandrilax/i.test(m.name)),...inG('traz'),...inG('cbd')];
+  if(has('opioide')&&(has('benzo')||has('gaba')))add('grave','Vários remédios que dão sono, junto com opioide',dep,'Opioide (Targin) junto com calmante (clonazepam) e/ou gabapentina: as bulas e as agências de saúde alertam para sonolência intensa e respiração lenta e fraca. O risco sobe com mais remédios do grupo no mesmo dia e com álcool.','Atenção a sonolência difícil de acordar, confusão, fala enrolada, respiração lenta ou lábios arroxeados: é urgência (SAMU 192). Evitar álcool. Conversar com a médica sobre os horários e as doses combinadas.');
+  else if(dep.length>=2)add('moderada','Remédios que dão sono juntos',dep,'Somam o efeito de sono e de lentidão de reflexos.','Cuidado ao dirigir e com quedas à noite. Evitar álcool.');
+  const ser=[...inG('isrs'),...inG('traz'),...inG('bus'),...inG('relax').filter(m=>!/tandrilax/i.test(m.name)),...inG('lisdex'),...inG('opioide'),...inG('ondan')];
+  if(has('isrs')&&ser.length>=2)add('moderada','Remédios que mexem com a serotonina',ser,'Usados juntos, há um risco pequeno, mas sério, de síndrome serotoninérgica, citado nas bulas da fluvoxamina e de vários destes remédios.','Procurar atendimento se aparecerem juntos: agitação, tremor, suor, febre, diarreia, músculos rígidos ou coração acelerado, principalmente depois de mudar uma dose ou somar um SOS.');
+  const fluvo=used.filter(m=>/fluvoxamina|luvox/.test(norm(m.name)));
+  const subs=[...inG('traz'),...inG('bus'),...inG('relax').filter(m=>!/tandrilax/i.test(m.name)),...inG('benzo'),...inG('opioide')];
+  if(fluvo.length&&subs.length)add('moderada','A fluvoxamina deixa outros remédios mais fortes',[...fluvo,...subs],'A fluvoxamina freia enzimas do fígado que eliminam vários remédios. Com isso, o nível deles no sangue pode subir e o efeito ficar mais forte que o esperado.','Se depois de começar ou aumentar a fluvoxamina vier mais sono, tontura ou efeito colateral desses remédios, avisar a médica: pode ser preciso ajustar dose.');
+  const aine=inG('aine');
+  if(aine.length>=2)add('grave','Dois anti-inflamatórios no mesmo dia',aine,'Os anti-inflamatórios da lista não devem ser usados juntos. Somar dois aumenta muito o risco de úlcera, sangramento no estômago e problema nos rins, sem aliviar mais a dor. O Tandrilax já tem diclofenaco na fórmula.','Usar um anti-inflamatório por vez e perguntar à médica o que pode ser combinado para a dor.');
+  if(aine.length&&has('isrs'))add('moderada','Antidepressivo + anti-inflamatório: risco de sangramento',[...fluvo,...aine],'Fluvoxamina e anti-inflamatórios, juntos, aumentam o risco de sangramento, principalmente no estômago.','Observar fezes escuras, vômito com sangue, manchas roxas sem motivo.'+(has('ppi')?' O pantoprazol que ela tem ajuda a proteger o estômago.':''));
+  if(aine.length&&has('cortic'))add('moderada','Corticoide + anti-inflamatório',[...inG('cortic'),...aine],'Somados, aumentam o risco de gastrite, úlcera e sangramento no estômago.','Se precisar usar juntos, com comida e com protetor de estômago, de preferência por pouco tempo.');
+  if(aine.length&&has('furo'))add('moderada','Furosemida + anti-inflamatório',[...inG('furo'),...aine],'O anti-inflamatório diminui o efeito da furosemida e, junto com ela, pesa mais nos rins.','Beber água e evitar uso prolongado junto. Observar inchaço e urina muito reduzida.');
+  if(has('moda')&&has('aco'))add('grave','Modafinila tira a proteção do anticoncepcional',[...inG('moda'),...inG('aco')],'A modafinila acelera a eliminação dos hormônios do anticoncepcional, que pode falhar. A bula da modafinila orienta usar outro método junto durante o uso e por 1 mês depois de parar.','Usar camisinha junto enquanto usar modafinila e por 1 mês após a última dose. Conversar com a ginecologista.');
+  if(has('lisdex')&&has('moda'))add('moderada','Dois estimulantes juntos',[...inG('lisdex'),...inG('moda')],'Lisdexanfetamina e modafinila somam efeitos: insônia, ansiedade, pressão alta e coração acelerado.','Evitar tomar os dois no mesmo dia sem orientação. Observar palpitação e dor de cabeça forte.');
+  if(has('cipro')&&has('quel'))add('moderada','Ciprofloxacino perde efeito com antiácido, cálcio ou magnésio',[...inG('cipro'),...inG('quel')],'Alumínio, cálcio, magnésio e sucralfato se grudam no antibiótico no intestino e ele é pouco absorvido.','Tomar o ciprofloxacino 2 horas antes ou 6 horas depois desses produtos.');
+  if(has('cipro')&&has('cortic'))add('moderada','Ciprofloxacino + corticoide: tendões',[...inG('cipro'),...inG('cortic')],'Juntos, aumentam o risco de inflamação e ruptura de tendão, principalmente o do calcanhar.','Dor ou inchaço em tendão durante o uso: parar o esforço e avisar a médica.');
+  if(has('fexo')&&used.some(m=>/hidroxido de aluminio/.test(norm(m.name))))add('leve','Fexofenadina + antiácido',[...inG('fexo'),...used.filter(m=>/hidroxido de aluminio/.test(norm(m.name)))],'O antiácido com alumínio diminui a absorção da fexofenadina.','Não tomar os dois juntos; deixar algumas horas entre eles.');
+  const ord={grave:0,moderada:1,leve:2};C.sort((a,b)=>ord[a.lvl]-ord[b.lvl]);
+  return {used,cards:C};
+}
+function mInter(){
+  const it=interModel(),L={grave:['var(--pink)','Grave'],moderada:['var(--amber)','Moderada'],leve:['var(--cyan)','Leve']};
+  return `${header()}${mHead('Interações entre remédios','var(--pink)')}
+    <div class="box k" style="--k:var(--lav);margin-bottom:12px">Feito com as bulas e referências de interação, para ${plural(it.used.length,'remédio','remédios')} em uso (contínuos e SOS com estoque). Serve para conversar com a médica e o farmacêutico: não pare nem mude nenhum remédio por conta própria.</div>
+    <div class="legend" style="margin-bottom:12px">${Object.values(L).map(([c,l])=>`<span style="--k:${c}">${l} ${it.cards.filter(x=>L[x.lvl][1]===l).length}</span>`).join('')}</div>
+    ${it.cards.length?it.cards.map(c=>`<div class="icard" style="--k:${L[c.lvl][0]}"><div class="ih"><span class="chip" style="--k:${L[c.lvl][0]}">${L[c.lvl][1]}</span><h3>${esc(c.t)}</h3></div>
+      <div class="tags" style="margin:8px 0">${c.meds.map(m=>`<button style="--k:${m.color}" onclick="medSheet('${m.id}')">${esc(shortName(m))}${m.group==='sos'?' <small>SOS</small>':''}</button>`).join('')}</div>
+      <p>${esc(c.txt)}</p><p class="obs"><b>O que observar:</b> ${esc(c.obs)}</p></div>`).join('')
+      :'<div class="empty">Nenhuma combinação conhecida entre os remédios em uso.<br>Isso não garante que não exista: na dúvida, pergunte ao farmacêutico.</div>'}
+    <p class="fine" style="margin-top:14px">Versão 1, revisada em novembro de 2026. Remédios de pele, colírios, pomadas e sprays ficam de fora. Quando entrar ou sair remédio da lista, o modelo recalcula sozinho; para incluir combinações novas, peça a atualização ao Claude.</p>`;
+}
+
+/* ---------- bem-estar ---------- */
+function pearson(P,kx,ky){const Q=P.filter(p=>p[kx]!=null&&p[ky]!=null);const n=Q.length;if(n<3)return {r:null,n};const mx=Q.reduce((a,p)=>a+p[kx],0)/n,my=Q.reduce((a,p)=>a+p[ky],0)/n;let sxy=0,sx=0,sy=0;Q.forEach(p=>{sxy+=(p[kx]-mx)*(p[ky]-my);sx+=(p[kx]-mx)**2;sy+=(p[ky]-my)**2});return {r:sx&&sy?sxy/Math.sqrt(sx*sy):null,n}}
+const rTxt=r=>r==null?'sem dados':Math.abs(r)<.1?'nenhuma relação':(Math.abs(r)<.3?'relação fraca':Math.abs(r)<.5?'relação moderada':'relação forte')+(r>0?', sobe junto':', vai no sentido oposto');
+function lineChart(days){
+  const W=340,H=150,pl=22,pr=10,pt=10,pb=20,n=days.length,x=i=>pl+(W-pl-pr)*i/Math.max(1,n-1),y=v=>pt+(H-pt-pb)*(1-(v-1)/4);
+  const path=k=>{let d='',on=false;days.forEach((p,i)=>{if(p[k]==null){on=false;return}d+=(on?'L':'M')+x(i).toFixed(1)+' '+y(p[k]).toFixed(1);on=true});return d};
+  const pts=k=>days.map((p,i)=>p[k]==null?'':`<circle cx="${x(i)}" cy="${y(p[k])}" r="3" fill="${k==='psi'?'#b39bff':'#3dffc5'}" stroke="#0f1438" stroke-width="2"><title>${fD(p.d)}: ${k==='psi'?'cabeça':'corpo'} ${fmtU(+p[k].toFixed(1))}</title></circle>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" class="lc" role="img" aria-label="Notas médias por dia nos últimos 30 dias">
+    ${[1,2,3,4,5].map(v=>`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(255,255,255,.07)"/><text x="${pl-6}" y="${y(v)+3}" text-anchor="end">${v}</text>`).join('')}
+    ${[0,Math.floor(n/2),n-1].map(i=>`<text x="${x(i)}" y="${H-5}" text-anchor="middle">${fD(days[i].d)}</text>`).join('')}
+    <path d="${path('psi')}" fill="none" stroke="#b39bff" stroke-width="2" stroke-linejoin="round"/><path d="${path('fis')}" fill="none" stroke="#3dffc5" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round"/>${pts('psi')}${pts('fis')}</svg>`;
+}
+function mBem(){
+  const P=wellPoints(),avg=(L,k)=>L.length?L.reduce((a,p)=>a+p[k],0)/L.length:null,f=v=>v==null?'—':fmtU(+v.toFixed(1));
+  const days=[];for(let i=29;i>=0;i--){const d=addDays(today(),-i),k=iso(d),L=P.filter(p=>p.d===k);days.push({d,psi:avg(L,'psi'),fis:avg(L,'fis'),n:L.length})}
+  const l7=P.filter(p=>p.d>=iso(addDays(today(),-6))),p7=P.filter(p=>p.d>=iso(addDays(today(),-13))&&p.d<iso(addDays(today(),-6)));
+  const per=[['Madrugada',0,6],['Manhã',6,12],['Tarde',12,18],['Noite',18,24]].map(([l,a,b])=>{const L=P.filter(p=>!p.old&&p.h>=a&&p.h<b);return {l,n:L.length,psi:avg(L,'psi'),fis:avg(L,'fis')}});
+  const Wx=P.filter(p=>p.temp!=null);
+  const buck=(k,cuts,labels)=>labels.map((l,i)=>{const L=Wx.filter(p=>p[k]>=(cuts[i-1]??-99)&&p[k]<(cuts[i]??999));return {l,n:L.length,psi:avg(L,'psi'),fis:avg(L,'fis')}});
+  const tb=buck('temp',[18,25],['Frio (menos de 18°)','Ameno (18° a 25°)','Quente (25° ou mais)']),hb=buck('hum',[50,75],['Seco (menos de 50%)','Médio (50% a 75%)','Úmido (75% ou mais)']);
+  const sxc={};P.forEach(p=>p.sx.forEach(s=>sxc[s]=(sxc[s]||0)+1));const sx=Object.entries(sxc).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const sosDays=new Set(takes().filter(t=>!t.logId).map(t=>t.at.slice(0,10)));const ds=P.filter(p=>sosDays.has(p.d)),dn=P.filter(p=>!sosDays.has(p.d));
+  const tbl=(rows,first)=>`<table class="wt"><tr><th>${first}</th><th>🧠</th><th>💪</th><th>registros</th></tr>${rows.map(r=>`<tr><td>${r.l}</td><td>${f(r.psi)}</td><td>${f(r.fis)}</td><td>${r.n}</td></tr>`).join('')}</table>`;
+  const rr=[['Temperatura','temp'],['Umidade','hum']].map(([l,k])=>{const a=pearson(Wx,k,'psi'),b=pearson(Wx,k,'fis');return `<tr><td>${l}</td><td>${a.r==null?'—':fmtU(+a.r.toFixed(2))}<small>${rTxt(a.r)}</small></td><td>${b.r==null?'—':fmtU(+b.r.toFixed(2))}<small>${rTxt(b.r)}</small></td></tr>`}).join('');
+  const dlt=(k)=>{const a=avg(l7,k),b=avg(p7,k);return a!=null&&b!=null?` <small style="color:${a>=b?'var(--mint)':'var(--pink)'}">${a>=b?'▲':'▼'} ${fmtU(Math.abs(a-b).toFixed(1))}</small>`:''};
+  return `${header()}${mHead('Monitoramento do bem-estar','var(--mint)')}
+    <div class="tot" style="grid-template-columns:1fr 1fr 1fr"><div><span>🧠 Cabeça, 7 dias</span><b>${f(avg(l7,'psi'))}${dlt('psi')}</b><small>de 5</small></div><div><span>💪 Corpo, 7 dias</span><b>${f(avg(l7,'fis'))}${dlt('fis')}</b><small>de 5</small></div><div class="all"><span>Registros</span><b>${P.length}</b><small>${Wx.length} com clima</small></div></div>
+    ${P.length?`<div class="sec"><h3>Últimos 30 dias</h3><small>média do dia</small></div>
+    <div class="foil" style="padding:12px 12px 8px">${lineChart(days)}<div class="lgd"><span><i style="background:#b39bff"></i>Cabeça</span><span><i class="dash"></i>Corpo</span></div></div>
+    <div class="sec"><h3>Por horário do dia</h3></div>${tbl(per,'Horário')}
+    <div class="sec"><h3>Clima</h3><small>${Wx.length} registros com temperatura e umidade</small></div>
+    ${Wx.length>=15?`<table class="wt"><tr><th>Relação (r)</th><th>🧠</th><th>💪</th></tr>${rr}</table>`:`<p class="help">Com pelo menos 15 registros com clima o app calcula a relação entre clima e notas. Faltam ${15-Wx.length}.</p>`}
+    ${Wx.length?tbl(tb,'Temperatura')+tbl(hb,'Umidade'):''}
+    <div class="sec"><h3>Dias com SOS</h3></div>${tbl([{l:'Dias em que tomou SOS',n:ds.length,psi:avg(ds,'psi'),fis:avg(ds,'fis')},{l:'Dias sem SOS',n:dn.length,psi:avg(dn,'psi'),fis:avg(dn,'fis')}],'')}
+    ${sx.length?`<div class="sec"><h3>Sintomas mais anotados</h3></div><div class="foil" style="padding:12px 14px">${sx.map(([s,n])=>`<div class="hbar"><div class="hl"><span>${esc(s)}</span><b>${n}</b></div><div class="ht"><i style="width:${n/sx[0][1]*100}%;background:var(--amber)"></i></div></div>`).join('')}</div>`:''}
+    <p class="fine" style="margin-top:12px">Relação não é causa: com poucos registros as médias oscilam muito. Quanto mais vezes por dia registrar, mais confiável fica. Registros antigos do diário (uma nota só) entram como a mesma nota para cabeça e corpo.</p>`
+    :'<div class="empty">Ainda não há registros. Na tela Hoje, escolha as notas de cabeça e corpo e toque em Registrar.</div>'}`;
 }
 
 /* ====================== RENDER ====================== */
@@ -3042,7 +3311,7 @@ function vForm(){
     <p class="help" style="margin-top:16px">Para mudar algo que já existe, abra o remédio em Remédios e toque em "Editar passo a passo".</p>`;
 }
 function render(){
-  const V={hoje:vHoje,remedios:vRemedios,retiradas:vRetiradas,consultas:vConsultas,historico:vHistorico,urgencia:vUrgencia,form:vForm,calendario:vCalendario,bula:vBula};
+  const V={hoje:vHoje,remedios:vRemedios,retiradas:vRetiradas,consultas:vConsultas,historico:vHistorico,urgencia:vUrgencia,form:vForm,calendario:vCalendario,bula:vBula,modelos:vModelos};
   document.getElementById('app').innerHTML=V[UI.view]();
   document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===UI.view));
   document.body.classList.toggle('sosmode',UI.view==='urgencia');
